@@ -6,6 +6,8 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { ReactQueryProvider } from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Header } from '@/components/header';
+import { Footer } from '@/components/footer';
 
 const geistSans = localFont({
   src: '../fonts/GeistVF.woff',
@@ -36,11 +38,15 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+      >
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
+              <Header />
+              <main className="flex-grow overflow-auto">{children}</main>
+              <Footer />
             </ThemeProvider>
           </NextIntlClientProvider>
           <Toaster />
