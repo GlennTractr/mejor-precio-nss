@@ -20,6 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import useDebounce from '@/hooks/use-debounce';
 
 const PER_PAGE_OPTIONS = [10, 20, 50];
 const MAX_VISIBLE_PAGES = 5;
@@ -43,16 +45,19 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '');
+  const debouncedSearch = useDebounce(searchQuery, 300);
 
   const currentPage = parseInt(searchParams?.get('page') || String(initialPage));
   const itemsPerPage = parseInt(searchParams?.get('per_page') || String(initialItemsPerPage));
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const visiblePages = getVisiblePages(currentPage, totalPages);
 
-  const updateUrlParams = (page: number, perPage: number) => {
+  const updateUrlParams = (page: number, perPage: number, query?: string) => {
     const params = new URLSearchParams();
     params.set('page', String(page));
     params.set('per_page', String(perPage));
+    if (query) params.set('q', query);
     router.push(`/category/${categoryId}?${params.toString()}`);
   };
 
@@ -62,7 +67,7 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
       setHasError(false);
       try {
         const response = await fetch(
-          `/api/search?category_id=${categoryId}&page=${currentPage}&per_page=${itemsPerPage}`
+          `/api/search?category_id=${categoryId}&page=${currentPage}&per_page=${itemsPerPage}&q=${debouncedSearch}`
         );
         const data = await response.json();
 
@@ -86,7 +91,7 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
     }
 
     fetchProducts();
-  }, [categoryId, currentPage, itemsPerPage]);
+  }, [categoryId, currentPage, itemsPerPage, debouncedSearch]);
 
   if (hasError) {
     return (
@@ -110,25 +115,38 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
         )}
       </div>
 
-      <div className="mb-6 flex items-center gap-2">
-        <span className="text-sm text-gray-600">Items per page:</span>
-        <Select
-          defaultValue={String(itemsPerPage)}
-          onValueChange={value => {
-            updateUrlParams(1, parseInt(value));
+      <div className="flex flex-col gap-4 mb-6">
+        <Input
+          type="search"
+          placeholder="Search products..."
+          className="max-w-sm"
+          value={searchQuery}
+          onChange={e => {
+            setSearchQuery(e.target.value);
+            updateUrlParams(1, itemsPerPage, e.target.value);
           }}
-        >
-          <SelectTrigger className="w-[100px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {PER_PAGE_OPTIONS.map(option => (
-              <SelectItem key={option} value={String(option)}>
-                {option}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        />
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600">Items per page:</span>
+          <Select
+            defaultValue={String(itemsPerPage)}
+            onValueChange={value => {
+              updateUrlParams(1, parseInt(value));
+            }}
+          >
+            <SelectTrigger className="w-[100px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {PER_PAGE_OPTIONS.map(option => (
+                <SelectItem key={option} value={String(option)}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {isLoading ? (

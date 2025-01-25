@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
   const categoryId = searchParams.get('category_id');
   const page = parseInt(searchParams.get('page') || '1');
   const perPage = parseInt(searchParams.get('per_page') || '20');
+  const query = searchParams.get('q') || '*';
 
   try {
     const searchResults = await typesenseClient
@@ -31,7 +32,8 @@ export async function GET(request: NextRequest) {
       .documents()
       .search(
         {
-          q: '*',
+          q: query,
+          query_by: 'title,brand,model',
           filter_by: `category_slug:=${categoryId}`,
           page,
           per_page: perPage,
