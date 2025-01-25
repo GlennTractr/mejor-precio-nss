@@ -33,6 +33,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { Slider } from '@/components/ui/slider';
 
 const PER_PAGE_OPTIONS = [10, 20, 50];
 const MAX_VISIBLE_PAGES = 5;
@@ -85,7 +86,14 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
   const [selectedModels, setSelectedModels] = useState<string[]>(
     searchParams?.get('models')?.split(',').filter(Boolean) || []
   );
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    parseFloat(searchParams?.get('min_price') || '0'),
+    parseFloat(searchParams?.get('max_price') || '1000'),
+  ]);
+  const [maxPossiblePrice, setMaxPossiblePrice] = useState<number>(1000);
+  const [minPossiblePrice, setMinPossiblePrice] = useState<number>(0);
   const debouncedSearch = useDebounce(searchQuery, 300);
+  const debouncedPriceRange = useDebounce(priceRange, 300);
 
   const currentPage = parseInt(searchParams?.get('page') || String(initialPage));
   const itemsPerPage = parseInt(searchParams?.get('per_page') || String(initialItemsPerPage));
@@ -97,7 +105,9 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
     perPage: number,
     query?: string,
     brands?: string[],
-    models?: string[]
+    models?: string[],
+    minPrice?: number,
+    maxPrice?: number
   ) => {
     const params = new URLSearchParams(searchParams?.toString());
     params.set('page', String(page));
@@ -117,6 +127,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
         params.delete('models');
       }
     }
+    if (minPrice !== undefined && maxPrice !== undefined) {
+      if (minPrice > 0 || maxPrice < maxPossiblePrice) {
+        params.set('min_price', String(minPrice));
+        params.set('max_price', String(maxPrice));
+      } else {
+        params.delete('min_price');
+        params.delete('max_price');
+      }
+    }
     router.replace(`/category/${categoryId}?${params.toString()}`, { scroll: false });
   };
 
@@ -131,6 +150,9 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
         }
         if (selectedModels.length > 0) {
           filterBy += ` && model:=[${selectedModels.map(m => `'${m}'`).join(',')}]`;
+        }
+        if (debouncedPriceRange[0] > 0 || debouncedPriceRange[1] < maxPossiblePrice) {
+          filterBy += ` && best_price_per_unit:>=${debouncedPriceRange[0]} && best_price_per_unit:<=${debouncedPriceRange[1]}`;
         }
 
         const response = await fetch(
@@ -158,6 +180,17 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
           });
         }
 
+        // Update max and min price if it's the first load
+        if (maxPossiblePrice === 1000) {
+          const maxPrice = Math.max(...fetchedProducts.map(p => p.best_price_per_unit));
+          const minPrice = Math.min(...fetchedProducts.map(p => p.best_price_per_unit));
+          setMaxPossiblePrice(Math.ceil(maxPrice));
+          setMinPossiblePrice(Math.floor(minPrice));
+          if (!searchParams?.has('max_price') || !searchParams?.has('min_price')) {
+            setPriceRange([Math.floor(minPrice), Math.ceil(maxPrice)]);
+          }
+        }
+
         if (currentPage === 1 && data.found === 0) {
           notFound();
         }
@@ -179,7 +212,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
     }
 
     fetchProducts();
-  }, [categoryId, currentPage, itemsPerPage, debouncedSearch, selectedBrands, selectedModels]);
+  }, [
+    categoryId,
+    currentPage,
+    itemsPerPage,
+    debouncedSearch,
+    selectedBrands,
+    selectedModels,
+    debouncedPriceRange,
+  ]);
 
   if (hasError) {
     return (
@@ -225,7 +266,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                           ? [...selectedBrands, brand.value]
                           : selectedBrands.filter(b => b !== brand.value);
                         setSelectedBrands(newBrands);
-                        updateUrlParams(1, itemsPerPage, searchQuery, newBrands, selectedModels);
+                        updateUrlParams(
+                          1,
+                          itemsPerPage,
+                          searchQuery,
+                          newBrands,
+                          selectedModels,
+                          priceRange[0],
+                          priceRange[1]
+                        );
                       }}
                     />
                     <label
@@ -264,7 +313,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                           ? [...selectedModels, model.value]
                           : selectedModels.filter(m => m !== model.value);
                         setSelectedModels(newModels);
-                        updateUrlParams(1, itemsPerPage, searchQuery, selectedBrands, newModels);
+                        updateUrlParams(
+                          1,
+                          itemsPerPage,
+                          searchQuery,
+                          selectedBrands,
+                          newModels,
+                          priceRange[0],
+                          priceRange[1]
+                        );
                       }}
                     />
                     <label
@@ -277,6 +334,38 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Price Range Filter */}
+          <div className="space-y-3">
+            <h3 className="font-semibold">Price per unit range</h3>
+            <div className="px-2">
+              <Slider
+                defaultValue={[priceRange[0], priceRange[1]]}
+                min={minPossiblePrice}
+                max={maxPossiblePrice}
+                step={1}
+                value={[priceRange[0], priceRange[1]]}
+                onValueChange={(value: [number, number]) => {
+                  setPriceRange(value);
+                  updateUrlParams(
+                    1,
+                    itemsPerPage,
+                    searchQuery,
+                    selectedBrands,
+                    selectedModels,
+                    value[0],
+                    value[1]
+                  );
+                }}
+                className="my-6"
+                minStepsBetweenThumbs={1}
+              />
+              <div className="flex items-center justify-between">
+                <span className="text-sm">€{priceRange[0].toFixed(2)}/unit</span>
+                <span className="text-sm">€{priceRange[1].toFixed(2)}/unit</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -291,7 +380,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                 value={searchQuery}
                 onChange={e => {
                   setSearchQuery(e.target.value);
-                  updateUrlParams(1, itemsPerPage, e.target.value, selectedBrands, selectedModels);
+                  updateUrlParams(
+                    1,
+                    itemsPerPage,
+                    e.target.value,
+                    selectedBrands,
+                    selectedModels,
+                    priceRange[0],
+                    priceRange[1]
+                  );
                 }}
               />
               {!isLoading && (
@@ -313,7 +410,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                     onClick={() => {
                       const newBrands = selectedBrands.filter(b => b !== brand);
                       setSelectedBrands(newBrands);
-                      updateUrlParams(1, itemsPerPage, searchQuery, newBrands, selectedModels);
+                      updateUrlParams(
+                        1,
+                        itemsPerPage,
+                        searchQuery,
+                        newBrands,
+                        selectedModels,
+                        priceRange[0],
+                        priceRange[1]
+                      );
                     }}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
@@ -333,7 +438,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                     onClick={() => {
                       const newModels = selectedModels.filter(m => m !== model);
                       setSelectedModels(newModels);
-                      updateUrlParams(1, itemsPerPage, searchQuery, selectedBrands, newModels);
+                      updateUrlParams(
+                        1,
+                        itemsPerPage,
+                        searchQuery,
+                        selectedBrands,
+                        newModels,
+                        priceRange[0],
+                        priceRange[1]
+                      );
                     }}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
@@ -342,12 +455,47 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                   </button>
                 </Badge>
               ))}
-              {(selectedBrands.length > 0 || selectedModels.length > 0) && (
+              {(priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice) && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Price per unit: €{priceRange[0].toFixed(2)} - €{priceRange[1].toFixed(2)}
+                  <button
+                    onClick={() => {
+                      setPriceRange([minPossiblePrice, maxPossiblePrice]);
+                      updateUrlParams(
+                        1,
+                        itemsPerPage,
+                        searchQuery,
+                        selectedBrands,
+                        selectedModels,
+                        minPossiblePrice,
+                        maxPossiblePrice
+                      );
+                    }}
+                    className="ml-1 rounded-full hover:bg-secondary/80"
+                  >
+                    <Cross2Icon className="h-3 w-3" />
+                    <span className="sr-only">Remove price per unit filter</span>
+                  </button>
+                </Badge>
+              )}
+              {(selectedBrands.length > 0 ||
+                selectedModels.length > 0 ||
+                priceRange[0] > minPossiblePrice ||
+                priceRange[1] < maxPossiblePrice) && (
                 <button
                   onClick={() => {
                     setSelectedBrands([]);
                     setSelectedModels([]);
-                    updateUrlParams(1, itemsPerPage, searchQuery, [], []);
+                    setPriceRange([minPossiblePrice, maxPossiblePrice]);
+                    updateUrlParams(
+                      1,
+                      itemsPerPage,
+                      searchQuery,
+                      [],
+                      [],
+                      minPossiblePrice,
+                      maxPossiblePrice
+                    );
                   }}
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
@@ -361,7 +509,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
               <Select
                 defaultValue={String(itemsPerPage)}
                 onValueChange={value => {
-                  updateUrlParams(1, parseInt(value), searchQuery, selectedBrands, selectedModels);
+                  updateUrlParams(
+                    1,
+                    parseInt(value),
+                    searchQuery,
+                    selectedBrands,
+                    selectedModels,
+                    priceRange[0],
+                    priceRange[1]
+                  );
                 }}
               >
                 <SelectTrigger className="w-[100px]">
@@ -428,7 +584,9 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                           itemsPerPage,
                           searchQuery,
                           selectedBrands,
-                          selectedModels
+                          selectedModels,
+                          priceRange[0],
+                          priceRange[1]
                         )
                       }
                       aria-disabled={currentPage === 1}
@@ -483,7 +641,9 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                           itemsPerPage,
                           searchQuery,
                           selectedBrands,
-                          selectedModels
+                          selectedModels,
+                          priceRange[0],
+                          priceRange[1]
                         )
                       }
                       aria-disabled={currentPage === totalPages}
