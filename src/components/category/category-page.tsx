@@ -86,12 +86,12 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
   const [selectedModels, setSelectedModels] = useState<string[]>(
     searchParams?.get('models')?.split(',').filter(Boolean) || []
   );
+  const [maxPossiblePrice, setMaxPossiblePrice] = useState<number | null>(null);
+  const [minPossiblePrice, setMinPossiblePrice] = useState<number | null>(null);
   const [priceRange, setPriceRange] = useState<[number, number]>([
     parseFloat(searchParams?.get('min_price') || '0'),
     parseFloat(searchParams?.get('max_price') || '1000'),
   ]);
-  const [maxPossiblePrice, setMaxPossiblePrice] = useState<number>(1000);
-  const [minPossiblePrice, setMinPossiblePrice] = useState<number>(0);
   const debouncedSearch = useDebounce(searchQuery, 300);
   const debouncedPriceRange = useDebounce(priceRange, 300);
 
@@ -99,6 +99,53 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
   const itemsPerPage = parseInt(searchParams?.get('per_page') || String(initialItemsPerPage));
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const visiblePages = getVisiblePages(currentPage, totalPages);
+  console.log('end init');
+
+  // Separate effect to fetch min/max prices
+  useEffect(() => {
+    async function fetchPriceRange() {
+      console.log('fetching price range');
+      try {
+        // Fetch max price
+        const maxResponse = await fetch(
+          `/api/typesense/search?per_page=1&q=&filter_by=${encodeURIComponent(
+            `category_slug:=${categoryId}`
+          )}&sort_by=best_price_per_unit:desc`
+        );
+        const maxData = await maxResponse.json();
+
+        // Fetch min price
+        const minResponse = await fetch(
+          `/api/typesense/search?per_page=1&q=&filter_by=${encodeURIComponent(
+            `category_slug:=${categoryId}`
+          )}&sort_by=best_price_per_unit:asc`
+        );
+        const minData = await minResponse.json();
+
+        if (!maxResponse.ok || !minResponse.ok) {
+          throw new Error('Failed to fetch price range');
+        }
+
+        if (maxData.hits?.[0]?.document && minData.hits?.[0]?.document) {
+          const maxPrice = maxData.hits[0].document.best_price_per_unit;
+          const minPrice = minData.hits[0].document.best_price_per_unit;
+          const roundedMin = Math.floor(minPrice);
+          const roundedMax = Math.ceil(maxPrice);
+          setMaxPossiblePrice(roundedMax);
+          setMinPossiblePrice(roundedMin);
+
+          // Only set the price range if there are no URL parameters
+          if (!searchParams?.has('min_price') && !searchParams?.has('max_price')) {
+            setPriceRange([roundedMin, roundedMax]);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch price range:', error);
+      }
+    }
+
+    fetchPriceRange();
+  }, [categoryId]);
 
   const updateUrlParams = (
     page: number,
@@ -127,7 +174,7 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
         params.delete('models');
       }
     }
-    if (minPrice !== undefined && maxPrice !== undefined) {
+    if (minPrice !== undefined && maxPrice !== undefined && maxPossiblePrice !== null) {
       if (minPrice > 0 || maxPrice < maxPossiblePrice) {
         params.set('min_price', String(minPrice));
         params.set('max_price', String(maxPrice));
@@ -151,7 +198,10 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
         if (selectedModels.length > 0) {
           filterBy += ` && model:=[${selectedModels.map(m => `'${m}'`).join(',')}]`;
         }
-        if (debouncedPriceRange[0] > 0 || debouncedPriceRange[1] < maxPossiblePrice) {
+        if (
+          maxPossiblePrice !== null &&
+          (debouncedPriceRange[0] > 0 || debouncedPriceRange[1] < maxPossiblePrice)
+        ) {
           filterBy += ` && best_price_per_unit:>=${debouncedPriceRange[0]} && best_price_per_unit:<=${debouncedPriceRange[1]}`;
         }
 
@@ -180,24 +230,11 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
           });
         }
 
-        // Update max and min price if it's the first load
-        if (maxPossiblePrice === 1000) {
-          const maxPrice = Math.max(...fetchedProducts.map(p => p.best_price_per_unit));
-          const minPrice = Math.min(...fetchedProducts.map(p => p.best_price_per_unit));
-          setMaxPossiblePrice(Math.ceil(maxPrice));
-          setMinPossiblePrice(Math.floor(minPrice));
-          if (!searchParams?.has('max_price') || !searchParams?.has('min_price')) {
-            setPriceRange([Math.floor(minPrice), Math.ceil(maxPrice)]);
-          }
-        }
-
         if (currentPage === 1 && data.found === 0) {
           notFound();
         }
       } catch (error) {
-        console.log('TTT1', String(error));
         if (error instanceof Error && error.message === 'NEXT_NOT_FOUND') {
-          console.log('TTT2');
           throw error;
         }
 
@@ -221,6 +258,19 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
     selectedModels,
     debouncedPriceRange,
   ]);
+
+  // Add effect for debounced price range updates
+  useEffect(() => {
+    updateUrlParams(
+      1,
+      itemsPerPage,
+      searchQuery,
+      selectedBrands,
+      selectedModels,
+      debouncedPriceRange[0],
+      debouncedPriceRange[1]
+    );
+  }, [debouncedPriceRange]);
 
   if (hasError) {
     return (
@@ -340,31 +390,26 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
           <div className="space-y-3">
             <h3 className="font-semibold">Price per unit range</h3>
             <div className="px-2">
-              <Slider
-                defaultValue={[priceRange[0], priceRange[1]]}
-                min={minPossiblePrice}
-                max={maxPossiblePrice}
-                step={1}
-                value={[priceRange[0], priceRange[1]]}
-                onValueChange={(value: [number, number]) => {
-                  setPriceRange(value);
-                  updateUrlParams(
-                    1,
-                    itemsPerPage,
-                    searchQuery,
-                    selectedBrands,
-                    selectedModels,
-                    value[0],
-                    value[1]
-                  );
-                }}
-                className="my-6"
-                minStepsBetweenThumbs={1}
-              />
-              <div className="flex items-center justify-between">
-                <span className="text-sm">€{priceRange[0].toFixed(2)}/unit</span>
-                <span className="text-sm">€{priceRange[1].toFixed(2)}/unit</span>
-              </div>
+              {minPossiblePrice !== null && maxPossiblePrice !== null && (
+                <>
+                  <Slider
+                    defaultValue={[priceRange[0], priceRange[1]]}
+                    min={minPossiblePrice}
+                    max={maxPossiblePrice}
+                    step={0.01}
+                    value={[priceRange[0], priceRange[1]]}
+                    onValueChange={(value: [number, number]) => {
+                      setPriceRange(value);
+                    }}
+                    className="my-6"
+                    minStepsBetweenThumbs={0.01}
+                  />
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">€{priceRange[0].toFixed(2)}/unit</span>
+                    <span className="text-sm">€{priceRange[1].toFixed(2)}/unit</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -455,47 +500,52 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                   </button>
                 </Badge>
               ))}
-              {(priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice) && (
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  Price per unit: €{priceRange[0].toFixed(2)} - €{priceRange[1].toFixed(2)}
-                  <button
-                    onClick={() => {
+              {minPossiblePrice !== null &&
+                maxPossiblePrice !== null &&
+                (priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice) && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    Price per unit: €{priceRange[0].toFixed(2)} - €{priceRange[1].toFixed(2)}
+                    <button
+                      onClick={() => {
+                        setPriceRange([minPossiblePrice, maxPossiblePrice]);
+                        updateUrlParams(
+                          1,
+                          itemsPerPage,
+                          searchQuery,
+                          selectedBrands,
+                          selectedModels,
+                          minPossiblePrice,
+                          maxPossiblePrice
+                        );
+                      }}
+                      className="ml-1 rounded-full hover:bg-secondary/80"
+                    >
+                      <Cross2Icon className="h-3 w-3" />
+                      <span className="sr-only">Remove price per unit filter</span>
+                    </button>
+                  </Badge>
+                )}
+              {(selectedBrands.length > 0 ||
+                selectedModels.length > 0 ||
+                (minPossiblePrice !== null &&
+                  maxPossiblePrice !== null &&
+                  (priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice))) && (
+                <button
+                  onClick={() => {
+                    setSelectedBrands([]);
+                    setSelectedModels([]);
+                    if (minPossiblePrice !== null && maxPossiblePrice !== null) {
                       setPriceRange([minPossiblePrice, maxPossiblePrice]);
                       updateUrlParams(
                         1,
                         itemsPerPage,
                         searchQuery,
-                        selectedBrands,
-                        selectedModels,
+                        [],
+                        [],
                         minPossiblePrice,
                         maxPossiblePrice
                       );
-                    }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove price per unit filter</span>
-                  </button>
-                </Badge>
-              )}
-              {(selectedBrands.length > 0 ||
-                selectedModels.length > 0 ||
-                priceRange[0] > minPossiblePrice ||
-                priceRange[1] < maxPossiblePrice) && (
-                <button
-                  onClick={() => {
-                    setSelectedBrands([]);
-                    setSelectedModels([]);
-                    setPriceRange([minPossiblePrice, maxPossiblePrice]);
-                    updateUrlParams(
-                      1,
-                      itemsPerPage,
-                      searchQuery,
-                      [],
-                      [],
-                      minPossiblePrice,
-                      maxPossiblePrice
-                    );
+                    }
                   }}
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >

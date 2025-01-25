@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
   const perPage = parseInt(searchParams.get('per_page') || '20');
   const query = searchParams.get('q') || '*';
   const filterBy = searchParams.get('filter_by') || '';
+  const sortBy = searchParams.get('sort_by') || 'best_price_per_unit:asc';
 
   try {
     const searchResults = await typesenseClient.collections('product').documents().search(
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest) {
         filter_by: filterBy,
         page,
         per_page: perPage,
-        sort_by: 'best_price_per_unit:asc',
+        sort_by: sortBy,
         prefix: true,
         facet_by: 'brand,model',
         max_facet_values: 100,
