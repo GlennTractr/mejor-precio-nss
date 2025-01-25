@@ -39,6 +39,8 @@ export async function GET(request: NextRequest) {
           per_page: perPage,
           sort_by: 'best_price_per_unit:asc',
           prefix: true,
+          facet_by: 'brand,model',
+          max_facet_values: 100,
         },
         {}
       );
