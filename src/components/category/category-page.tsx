@@ -67,7 +67,7 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
       setHasError(false);
       try {
         const response = await fetch(
-          `/api/search?category_id=${categoryId}&page=${currentPage}&per_page=${itemsPerPage}&q=${debouncedSearch}`
+          `/api/typesense/search?category_id=${categoryId}&page=${currentPage}&per_page=${itemsPerPage}&q=${debouncedSearch}`
         );
         const data = await response.json();
 
