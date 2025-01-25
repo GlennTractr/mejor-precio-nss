@@ -3,7 +3,7 @@ import { CategoryPage } from '@/components/category/category-page';
 
 interface PageProps {
   params: {
-    category_id: string;
+    category_slug: string;
   };
   searchParams: {
     page?: string;
@@ -13,14 +13,14 @@ interface PageProps {
 
 export default async function Page({ params, searchParams }: PageProps) {
   // Await the params here in the server component
-  const categoryId = (await params).category_id;
+  const categorySlug = (await params).category_slug;
   const searchParamsAwaited = (await searchParams) || {};
   const currentPage = parseInt(searchParamsAwaited.page || '1');
   const itemsPerPage = parseInt(searchParamsAwaited.per_page || '20');
 
   return (
     <CategoryPage
-      categoryId={categoryId}
+      categorySlug={categorySlug}
       initialPage={currentPage}
       initialItemsPerPage={itemsPerPage}
     />
