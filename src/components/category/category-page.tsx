@@ -31,6 +31,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { Cross2Icon } from '@radix-ui/react-icons';
 
 const PER_PAGE_OPTIONS = [10, 20, 50];
 const MAX_VISIBLE_PAGES = 5;
@@ -296,6 +298,61 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                 <p className="text-gray-600">
                   {totalItems} {totalItems === 1 ? 'product' : 'products'} found
                 </p>
+              )}
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {selectedBrands.map(brand => (
+                <Badge
+                  key={`brand-${brand}`}
+                  variant="secondary"
+                  className="flex items-center gap-1"
+                >
+                  Brand: {brand}
+                  <button
+                    onClick={() => {
+                      const newBrands = selectedBrands.filter(b => b !== brand);
+                      setSelectedBrands(newBrands);
+                      updateUrlParams(1, itemsPerPage, searchQuery, newBrands, selectedModels);
+                    }}
+                    className="ml-1 rounded-full hover:bg-secondary/80"
+                  >
+                    <Cross2Icon className="h-3 w-3" />
+                    <span className="sr-only">Remove {brand} filter</span>
+                  </button>
+                </Badge>
+              ))}
+              {selectedModels.map(model => (
+                <Badge
+                  key={`model-${model}`}
+                  variant="secondary"
+                  className="flex items-center gap-1"
+                >
+                  Model: {model}
+                  <button
+                    onClick={() => {
+                      const newModels = selectedModels.filter(m => m !== model);
+                      setSelectedModels(newModels);
+                      updateUrlParams(1, itemsPerPage, searchQuery, selectedBrands, newModels);
+                    }}
+                    className="ml-1 rounded-full hover:bg-secondary/80"
+                  >
+                    <Cross2Icon className="h-3 w-3" />
+                    <span className="sr-only">Remove {model} filter</span>
+                  </button>
+                </Badge>
+              ))}
+              {(selectedBrands.length > 0 || selectedModels.length > 0) && (
+                <button
+                  onClick={() => {
+                    setSelectedBrands([]);
+                    setSelectedModels([]);
+                    updateUrlParams(1, itemsPerPage, searchQuery, [], []);
+                  }}
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                  Clear all filters
+                </button>
               )}
             </div>
 
