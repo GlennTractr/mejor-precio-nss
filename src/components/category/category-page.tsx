@@ -77,8 +77,12 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
   const [hasError, setHasError] = useState(false);
   const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '');
   const [facets, setFacets] = useState<Facets>({ brand: [], model: [] });
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedModels, setSelectedModels] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(
+    searchParams?.get('brands')?.split(',').filter(Boolean) || []
+  );
+  const [selectedModels, setSelectedModels] = useState<string[]>(
+    searchParams?.get('models')?.split(',').filter(Boolean) || []
+  );
   const debouncedSearch = useDebounce(searchQuery, 300);
 
   const currentPage = parseInt(searchParams?.get('page') || String(initialPage));
@@ -86,11 +90,31 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const visiblePages = getVisiblePages(currentPage, totalPages);
 
-  const updateUrlParams = (page: number, perPage: number, query?: string) => {
+  const updateUrlParams = (
+    page: number,
+    perPage: number,
+    query?: string,
+    brands?: string[],
+    models?: string[]
+  ) => {
     const params = new URLSearchParams(searchParams?.toString());
     params.set('page', String(page));
     params.set('per_page', String(perPage));
-    if (query) params.set('q', query);
+    if (query !== undefined) params.set('q', query);
+    if (brands !== undefined) {
+      if (brands.length > 0) {
+        params.set('brands', brands.join(','));
+      } else {
+        params.delete('brands');
+      }
+    }
+    if (models !== undefined) {
+      if (models.length > 0) {
+        params.set('models', models.join(','));
+      } else {
+        params.delete('models');
+      }
+    }
     router.replace(`/category/${categoryId}?${params.toString()}`, { scroll: false });
   };
 
@@ -108,7 +132,7 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
         }
 
         const response = await fetch(
-          `/api/typesense/search?category_id=${categoryId}&page=${currentPage}&per_page=${itemsPerPage}&q=${debouncedSearch}&filter_by=${encodeURIComponent(
+          `/api/typesense/search?page=${currentPage}&per_page=${itemsPerPage}&q=${debouncedSearch}&filter_by=${encodeURIComponent(
             filterBy
           )}`
         );
@@ -136,6 +160,12 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
           notFound();
         }
       } catch (error) {
+        console.log('TTT1', String(error));
+        if (error instanceof Error && error.message === 'NEXT_NOT_FOUND') {
+          console.log('TTT2');
+          throw error;
+        }
+
         console.error(
           'Failed to fetch products:',
           error instanceof Error ? error.message : String(error)
@@ -189,9 +219,11 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                       id={`brand-${brand.value}`}
                       checked={selectedBrands.includes(brand.value)}
                       onCheckedChange={checked => {
-                        setSelectedBrands(prev =>
-                          checked ? [...prev, brand.value] : prev.filter(b => b !== brand.value)
-                        );
+                        const newBrands = checked
+                          ? [...selectedBrands, brand.value]
+                          : selectedBrands.filter(b => b !== brand.value);
+                        setSelectedBrands(newBrands);
+                        updateUrlParams(1, itemsPerPage, searchQuery, newBrands, selectedModels);
                       }}
                     />
                     <label
@@ -226,9 +258,11 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                       id={`model-${model.value}`}
                       checked={selectedModels.includes(model.value)}
                       onCheckedChange={checked => {
-                        setSelectedModels(prev =>
-                          checked ? [...prev, model.value] : prev.filter(m => m !== model.value)
-                        );
+                        const newModels = checked
+                          ? [...selectedModels, model.value]
+                          : selectedModels.filter(m => m !== model.value);
+                        setSelectedModels(newModels);
+                        updateUrlParams(1, itemsPerPage, searchQuery, selectedBrands, newModels);
                       }}
                     />
                     <label
@@ -255,7 +289,7 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                 value={searchQuery}
                 onChange={e => {
                   setSearchQuery(e.target.value);
-                  updateUrlParams(1, itemsPerPage, e.target.value);
+                  updateUrlParams(1, itemsPerPage, e.target.value, selectedBrands, selectedModels);
                 }}
               />
               {!isLoading && (
@@ -270,7 +304,7 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
               <Select
                 defaultValue={String(itemsPerPage)}
                 onValueChange={value => {
-                  updateUrlParams(1, parseInt(value));
+                  updateUrlParams(1, parseInt(value), searchQuery, selectedBrands, selectedModels);
                 }}
               >
                 <SelectTrigger className="w-[100px]">
@@ -331,7 +365,15 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious
-                      onClick={() => updateUrlParams(Math.max(1, currentPage - 1), itemsPerPage)}
+                      onClick={() =>
+                        updateUrlParams(
+                          Math.max(1, currentPage - 1),
+                          itemsPerPage,
+                          searchQuery,
+                          selectedBrands,
+                          selectedModels
+                        )
+                      }
                       aria-disabled={currentPage === 1}
                       className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
                     />
@@ -379,7 +421,13 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
                   <PaginationItem>
                     <PaginationNext
                       onClick={() =>
-                        updateUrlParams(Math.min(totalPages, currentPage + 1), itemsPerPage)
+                        updateUrlParams(
+                          Math.min(totalPages, currentPage + 1),
+                          itemsPerPage,
+                          searchQuery,
+                          selectedBrands,
+                          selectedModels
+                        )
                       }
                       aria-disabled={currentPage === totalPages}
                       className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}

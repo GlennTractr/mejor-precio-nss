@@ -21,29 +21,26 @@ const typesenseClient = typesenseAdapter.typesenseClient;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const categoryId = searchParams.get('category_id');
   const page = parseInt(searchParams.get('page') || '1');
   const perPage = parseInt(searchParams.get('per_page') || '20');
   const query = searchParams.get('q') || '*';
+  const filterBy = searchParams.get('filter_by') || '';
 
   try {
-    const searchResults = await typesenseClient
-      .collections('product')
-      .documents()
-      .search(
-        {
-          q: query,
-          query_by: 'title,brand,model',
-          filter_by: `category_slug:=${categoryId}`,
-          page,
-          per_page: perPage,
-          sort_by: 'best_price_per_unit:asc',
-          prefix: true,
-          facet_by: 'brand,model',
-          max_facet_values: 100,
-        },
-        {}
-      );
+    const searchResults = await typesenseClient.collections('product').documents().search(
+      {
+        q: query,
+        query_by: 'title,brand,model',
+        filter_by: filterBy,
+        page,
+        per_page: perPage,
+        sort_by: 'best_price_per_unit:asc',
+        prefix: true,
+        facet_by: 'brand,model',
+        max_facet_values: 100,
+      },
+      {}
+    );
 
     return Response.json(searchResults);
   } catch (error) {
