@@ -22,6 +22,14 @@ import {
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import useDebounce from '@/hooks/use-debounce';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 const PER_PAGE_OPTIONS = [10, 20, 50];
 const MAX_VISIBLE_PAGES = 5;
@@ -54,11 +62,11 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
   const visiblePages = getVisiblePages(currentPage, totalPages);
 
   const updateUrlParams = (page: number, perPage: number, query?: string) => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams?.toString());
     params.set('page', String(page));
     params.set('per_page', String(perPage));
     if (query) params.set('q', query);
-    router.push(`/category/${categoryId}?${params.toString()}`);
+    router.replace(`/category/${categoryId}?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
@@ -108,24 +116,26 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-2 mb-6">
         <h1 className="text-2xl font-bold">Category: {categoryId}</h1>
-        {!isLoading && (
-          <p className="text-gray-600">
-            {totalItems} {totalItems === 1 ? 'product' : 'products'} found
-          </p>
-        )}
       </div>
 
       <div className="flex flex-col gap-4 mb-6">
-        <Input
-          type="search"
-          placeholder="Search products..."
-          className="max-w-sm"
-          value={searchQuery}
-          onChange={e => {
-            setSearchQuery(e.target.value);
-            updateUrlParams(1, itemsPerPage, e.target.value);
-          }}
-        />
+        <div className="flex items-center gap-4">
+          <Input
+            type="search"
+            placeholder="Search products..."
+            className="max-w-sm"
+            value={searchQuery}
+            onChange={e => {
+              setSearchQuery(e.target.value);
+              updateUrlParams(1, itemsPerPage, e.target.value);
+            }}
+          />
+          {!isLoading && (
+            <p className="text-gray-600">
+              {totalItems} {totalItems === 1 ? 'product' : 'products'} found
+            </p>
+          )}
+        </div>
 
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Items per page:</span>
@@ -150,21 +160,42 @@ export function CategoryPage({ categoryId, initialPage, initialItemsPerPage }: C
       </div>
 
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: itemsPerPage }).map((_, index) => (
+            <Card key={index} className="animate-pulse">
+              <CardHeader>
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2 mt-2"></div>
+              </CardHeader>
+              <CardContent>
+                <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+              </CardContent>
+              <CardFooter>
+                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map(product => (
-              <div key={product.id} className="border rounded-lg p-4 shadow">
-                <h2 className="font-semibold">{product.title}</h2>
-                <p className="text-gray-600">{product.brand}</p>
-                <p className="text-lg font-bold mt-2">
-                  Best Price: €{product.best_price_per_unit.toFixed(2)}
-                </p>
-                <div className="mt-2 text-sm text-gray-500">
-                  Available at: {product.shop_names.join(', ')}
-                </div>
-              </div>
+              <Card key={product.id}>
+                <CardHeader>
+                  <CardTitle>{product.title}</CardTitle>
+                  <CardDescription>{product.brand}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-lg font-bold">
+                    Best Price: €{product.best_price_per_unit.toFixed(2)}
+                  </p>
+                </CardContent>
+                <CardFooter>
+                  <p className="text-sm text-gray-500">
+                    Available at: {product.shop_names.join(', ')}
+                  </p>
+                </CardFooter>
+              </Card>
             ))}
           </div>
 
