@@ -4,6 +4,7 @@ import { Product } from '@/types/product';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import {
   Pagination,
   PaginationContent,
@@ -582,22 +583,28 @@ export function ProductList({
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products.map(product => (
-                  <Card key={product.id}>
-                    <CardHeader>
-                      <CardTitle>{product.title}</CardTitle>
-                      <CardDescription>{product.brand}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-lg font-bold">
-                        Best Price: €{product.best_price_per_unit.toFixed(2)}
-                      </p>
-                    </CardContent>
-                    <CardFooter>
-                      <p className="text-sm text-gray-500">
-                        Available at: {product.shop_names.join(', ')}
-                      </p>
-                    </CardFooter>
-                  </Card>
+                  <Link
+                    key={product.id}
+                    href={`/product/${product.product_slug}`}
+                    className="block transition-transform hover:scale-105"
+                  >
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>{product.title}</CardTitle>
+                        <CardDescription>{product.brand}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-lg font-bold">
+                          Best Price: €{product.best_price_per_unit.toFixed(2)}
+                        </p>
+                      </CardContent>
+                      <CardFooter>
+                        <p className="text-sm text-gray-500">
+                          Available at: {product.shop_names.join(', ')}
+                        </p>
+                      </CardFooter>
+                    </Card>
+                  </Link>
                 ))}
               </div>
 

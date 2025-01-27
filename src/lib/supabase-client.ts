@@ -1,5 +1,6 @@
-import createClient from "./supabase/client";
+import createClient from './supabase/client';
+import { Database } from '@/types/database';
 
-const supabaseClient = createClient();
+const supabaseClient = createClient<Database>();
 
 export default supabaseClient;
