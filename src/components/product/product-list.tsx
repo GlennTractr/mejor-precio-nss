@@ -2,8 +2,7 @@
 
 import { Product } from '@/types/product';
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { notFound } from 'next/navigation';
+import { useRouter, useSearchParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import {
   Pagination,
@@ -31,10 +30,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Slider } from '@/components/ui/slider';
+import { FilterGroup } from '@/components/filter/filter-group';
 
 const PER_PAGE_OPTIONS = [10, 20, 50];
 const MAX_VISIBLE_PAGES = 5;
@@ -326,6 +325,51 @@ export function ProductList({
     });
   }
 
+  const onBrandSelectionChange = (newBrands: string[]) => {
+    setSelectedBrands(newBrands);
+    updateUrlParams(
+      1,
+      itemsPerPage,
+      debouncedSearch,
+      newBrands,
+      selectedModels,
+      debouncedPriceRange[0],
+      debouncedPriceRange[1],
+      selectedSpecTypes,
+      selectedSpecLabels
+    );
+  };
+
+  const onModelSelectionChange = (newModels: string[]) => {
+    setSelectedModels(newModels);
+    updateUrlParams(
+      1,
+      itemsPerPage,
+      debouncedSearch,
+      selectedBrands,
+      newModels,
+      debouncedPriceRange[0],
+      debouncedPriceRange[1],
+      selectedSpecTypes,
+      selectedSpecLabels
+    );
+  };
+
+  const onLabelSelectionChange = (newLabels: string[]) => {
+    setSelectedSpecLabels(newLabels);
+    updateUrlParams(
+      1,
+      itemsPerPage,
+      debouncedSearch,
+      selectedBrands,
+      selectedModels,
+      debouncedPriceRange[0],
+      debouncedPriceRange[1],
+      selectedSpecTypes,
+      newLabels
+    );
+  };
+
   if (hasError) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -347,160 +391,35 @@ export function ProductList({
         {/* Filter Sidebar */}
         <div className="w-64 flex-shrink-0 space-y-6">
           {/* Brands Filter */}
-          <div className="space-y-3">
-            <h3 className="font-semibold">Brands</h3>
-            {isLoading ? (
-              <div className="space-y-2">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <div className="h-4 w-4 rounded bg-gray-200 animate-pulse" />
-                    <div className="h-4 w-24 rounded bg-gray-200 animate-pulse" />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {facets.brand.map(brand => (
-                  <div key={brand.value} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`brand-${brand.value}`}
-                      checked={selectedBrands.includes(brand.value)}
-                      onCheckedChange={checked => {
-                        const newBrands = checked
-                          ? [...selectedBrands, brand.value]
-                          : selectedBrands.filter(b => b !== brand.value);
-                        setSelectedBrands(newBrands);
-                        updateUrlParams(
-                          1,
-                          itemsPerPage,
-                          searchQuery,
-                          newBrands,
-                          selectedModels,
-                          priceRange[0],
-                          priceRange[1],
-                          selectedSpecTypes,
-                          selectedSpecLabels
-                        );
-                      }}
-                    />
-                    <label
-                      htmlFor={`brand-${brand.value}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {brand.value} ({brand.count})
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <FilterGroup
+            title="Brands"
+            options={facets.brand}
+            selectedValues={selectedBrands}
+            onSelectionChange={onBrandSelectionChange}
+            isLoading={isLoading}
+          />
 
           {/* Models Filter */}
-          <div className="space-y-3">
-            <h3 className="font-semibold">Models</h3>
-            {isLoading ? (
-              <div className="space-y-2">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <div className="h-4 w-4 rounded bg-gray-200 animate-pulse" />
-                    <div className="h-4 w-24 rounded bg-gray-200 animate-pulse" />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {facets.model.map(model => (
-                  <div key={model.value} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`model-${model.value}`}
-                      checked={selectedModels.includes(model.value)}
-                      onCheckedChange={checked => {
-                        const newModels = checked
-                          ? [...selectedModels, model.value]
-                          : selectedModels.filter(m => m !== model.value);
-                        setSelectedModels(newModels);
-                        updateUrlParams(
-                          1,
-                          itemsPerPage,
-                          searchQuery,
-                          selectedBrands,
-                          newModels,
-                          priceRange[0],
-                          priceRange[1],
-                          selectedSpecTypes,
-                          selectedSpecLabels
-                        );
-                      }}
-                    />
-                    <label
-                      htmlFor={`model-${model.value}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {model.value} ({model.count})
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <FilterGroup
+            title="Models"
+            options={facets.model}
+            selectedValues={selectedModels}
+            onSelectionChange={onModelSelectionChange}
+            isLoading={isLoading}
+          />
 
           {/* Specs Filters */}
           {specFacets.map(specType => (
-            <div key={specType.type} className="space-y-3">
-              <h3 className="font-semibold capitalize">{specType.type}</h3>
-              {isLoading ? (
-                <div className="space-y-2">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="h-4 w-4 rounded bg-gray-200 animate-pulse" />
-                      <div className="h-4 w-24 rounded bg-gray-200 animate-pulse" />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {specType.labels.map(label => (
-                    <div
-                      key={`${specType.type}-${label.value}`}
-                      className="flex items-center space-x-2"
-                    >
-                      <Checkbox
-                        id={`spec-${specType.type}-${label.value}`}
-                        checked={selectedSpecLabels.includes(label.value)}
-                        onCheckedChange={checked => {
-                          const newSpecLabels = checked
-                            ? [...selectedSpecLabels, label.value]
-                            : selectedSpecLabels.filter(l => l !== label.value);
-                          setSelectedSpecLabels(newSpecLabels);
-                          // Also update the selected spec types if needed
-                          const newSpecTypes = checked
-                            ? Array.from(new Set([...selectedSpecTypes, specType.type]))
-                            : selectedSpecTypes;
-                          setSelectedSpecTypes(newSpecTypes);
-                          updateUrlParams(
-                            1,
-                            itemsPerPage,
-                            searchQuery,
-                            selectedBrands,
-                            selectedModels,
-                            priceRange[0],
-                            priceRange[1],
-                            newSpecTypes,
-                            newSpecLabels
-                          );
-                        }}
-                      />
-                      <label
-                        htmlFor={`spec-${specType.type}-${label.value}`}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {label.value} ({label.count})
-                      </label>
-                    </div>
-                  ))}
-                </div>
+            <FilterGroup
+              key={specType.type}
+              title={specType.type}
+              options={specType.labels}
+              selectedValues={selectedSpecLabels.filter(label =>
+                specType.labels.some(l => l.value === label)
               )}
-            </div>
+              onSelectionChange={onLabelSelectionChange}
+              isLoading={isLoading}
+            />
           ))}
 
           {/* Price Range Filter */}
