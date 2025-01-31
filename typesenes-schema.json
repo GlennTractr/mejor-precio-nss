@@ -1,0 +1,153 @@
+{
+    "name": "product",
+    "fields": [
+        {
+            "name": "product_slug",
+            "type": "string",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": true,
+            "locale": "es",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "price_list",
+            "type": "float[]",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "category",
+            "type": "string",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": true,
+            "locale": "es",
+            "stem": true,
+            "store": true
+        },
+        {
+            "name": "brand",
+            "type": "string",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": true,
+            "locale": "es",
+            "stem": true,
+            "store": true
+        },
+        {
+            "name": "model",
+            "type": "string",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": true,
+            "locale": "es",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "shop_names",
+            "type": "string[]",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": false,
+            "infix": true,
+            "locale": "es",
+            "stem": true,
+            "store": true
+        },
+        {
+            "name": "title",
+            "type": "string",
+            "facet": false,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": true,
+            "locale": "es",
+            "stem": true,
+            "store": true
+        },
+        {
+            "name": "best_price_per_unit",
+            "type": "float",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "category_slug",
+            "type": "string",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": true,
+            "locale": "es",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "specs",
+            "type": "object[]",
+            "facet": true,
+            "optional": true,
+            "index": true,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "specs.type",
+            "type": "string[]",
+            "facet": true,
+            "optional": true,
+            "index": true,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "specs.label",
+            "type": "string[]",
+            "facet": true,
+            "optional": true,
+            "index": true,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        }
+    ],
+    "default_sorting_field": "",
+    "enable_nested_fields": true,
+    "symbols_to_index": [],
+    "token_separators": []
+}

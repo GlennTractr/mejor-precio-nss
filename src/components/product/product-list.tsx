@@ -39,12 +39,53 @@ import { Slider } from '@/components/ui/slider';
 const PER_PAGE_OPTIONS = [10, 20, 50];
 const MAX_VISIBLE_PAGES = 5;
 
+interface FacetValue {
+  value: string;
+  count: number;
+}
+
+interface SpecFacet {
+  type: string;
+  count: number;
+  labels: FacetValue[];
+}
+
+interface Facets {
+  brand: FacetValue[];
+  model: FacetValue[];
+}
+
+interface SearchResponse {
+  hits: Array<{ document: Product }>;
+  found: number;
+  facet_counts?: {
+    brand: FacetValue[];
+    model: FacetValue[];
+  };
+  specs_facets?: SpecFacet[];
+  price_range?: {
+    min: number;
+    max: number;
+  };
+}
+
 interface ProductListProps {
   categorySlug: string;
   initialPage: number;
   initialItemsPerPage: number;
   minPossiblePrice: number;
   maxPossiblePrice: number;
+  initialFilters: {
+    price_range: {
+      min: number;
+      max: number;
+    };
+    facets: {
+      brand: FacetValue[];
+      model: FacetValue[];
+    };
+    specs_facets: SpecFacet[];
+  };
 }
 
 function getVisiblePages(currentPage: number, totalPages: number) {
@@ -53,33 +94,13 @@ function getVisiblePages(currentPage: number, totalPages: number) {
   return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 }
 
-interface FacetValue {
-  value: string;
-  count: number;
-}
-
-interface FacetCount {
-  field_name: string;
-  counts: FacetValue[];
-}
-
-interface Facets {
-  brand: FacetValue[];
-  model: FacetValue[];
-}
-
-interface TypesenseResponse {
-  hits: Array<{ document: Product }>;
-  found: number;
-  facet_counts?: FacetCount[];
-}
-
 export function ProductList({
   categorySlug,
   initialPage,
   initialItemsPerPage,
   minPossiblePrice,
   maxPossiblePrice,
+  initialFilters,
 }: ProductListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -88,19 +109,27 @@ export function ProductList({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '');
-  const [facets, setFacets] = useState<Facets>({ brand: [], model: [] });
+  console.log('t1', initialFilters);
+  const [facets, setFacets] = useState<Facets>(initialFilters.facets);
   const [selectedBrands, setSelectedBrands] = useState<string[]>(
     searchParams?.get('brands')?.split(',').filter(Boolean) || []
   );
   const [selectedModels, setSelectedModels] = useState<string[]>(
     searchParams?.get('models')?.split(',').filter(Boolean) || []
   );
+  const [selectedSpecTypes, setSelectedSpecTypes] = useState<string[]>(
+    searchParams?.get('spec_types')?.split(',').filter(Boolean) || []
+  );
+  const [selectedSpecLabels, setSelectedSpecLabels] = useState<string[]>(
+    searchParams?.get('spec_labels')?.split(',').filter(Boolean) || []
+  );
   const [priceRange, setPriceRange] = useState<[number, number]>([
-    parseFloat(searchParams?.get('min_price') || String(minPossiblePrice)),
-    parseFloat(searchParams?.get('max_price') || String(maxPossiblePrice)),
+    parseFloat(searchParams?.get('min_price') || String(initialFilters.price_range.min)),
+    parseFloat(searchParams?.get('max_price') || String(initialFilters.price_range.max)),
   ]);
   const debouncedSearch = useDebounce(searchQuery, 300);
   const debouncedPriceRange = useDebounce(priceRange, 300);
+  const [specFacets, setSpecFacets] = useState<SpecFacet[]>(initialFilters.specs_facets);
 
   const currentPage = parseInt(searchParams?.get('page') || String(initialPage));
   const itemsPerPage = parseInt(searchParams?.get('per_page') || String(initialItemsPerPage));
@@ -114,7 +143,9 @@ export function ProductList({
     brands?: string[],
     models?: string[],
     minPrice?: number,
-    maxPrice?: number
+    maxPrice?: number,
+    specTypes?: string[],
+    specLabels?: string[]
   ) => {
     const params = new URLSearchParams(searchParams?.toString());
     params.set('page', String(page));
@@ -134,6 +165,20 @@ export function ProductList({
         params.delete('models');
       }
     }
+    if (specTypes !== undefined) {
+      if (specTypes.length > 0) {
+        params.set('spec_types', specTypes.join(','));
+      } else {
+        params.delete('spec_types');
+      }
+    }
+    if (specLabels !== undefined) {
+      if (specLabels.length > 0) {
+        params.set('spec_labels', specLabels.join(','));
+      } else {
+        params.delete('spec_labels');
+      }
+    }
     if (minPrice !== undefined && maxPrice !== undefined) {
       if (minPrice > minPossiblePrice || maxPrice < maxPossiblePrice) {
         params.set('min_price', String(minPrice));
@@ -143,24 +188,8 @@ export function ProductList({
         params.delete('max_price');
       }
     }
-    router.replace(`/category/${categorySlug}?${params.toString()}`, { scroll: false });
+    router.replace(`/categoria/${categorySlug}?${params.toString()}`, { scroll: false });
   };
-
-  // Reset to first page when filters change
-  useEffect(() => {
-    const currentPage = parseInt(searchParams?.get('page') || String(initialPage));
-    if (currentPage > 1) {
-      updateUrlParams(
-        1,
-        itemsPerPage,
-        searchQuery,
-        selectedBrands,
-        selectedModels,
-        priceRange[0],
-        priceRange[1]
-      );
-    }
-  }, [debouncedSearch, selectedBrands, selectedModels, debouncedPriceRange]);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -174,6 +203,33 @@ export function ProductList({
         if (selectedModels.length > 0) {
           filterBy += ` && model:=[${selectedModels.map(m => `'${m}'`).join(',')}]`;
         }
+        if (selectedSpecLabels.length > 0) {
+          // Group spec labels by their type
+          const specLabelsByType = selectedSpecLabels.reduce((acc, label) => {
+            const specType = specFacets.find(spec =>
+              spec.labels.some(l => l.value === label)
+            )?.type;
+            if (specType) {
+              if (!acc[specType]) {
+                acc[specType] = [];
+              }
+              acc[specType].push(label);
+            }
+            return acc;
+          }, {} as Record<string, string[]>);
+
+          // Create filter conditions for each spec type
+          const specFilters = Object.entries(specLabelsByType)
+            .map(
+              ([type, labels]) =>
+                `(specs.type:=${type} && specs.label:=[${labels.map(l => `'${l}'`).join(',')}])`
+            )
+            .join(' || ');
+
+          if (specFilters) {
+            filterBy += ` && (${specFilters})`;
+          }
+        }
         if (
           debouncedPriceRange[0] > minPossiblePrice ||
           debouncedPriceRange[1] < maxPossiblePrice
@@ -181,29 +237,37 @@ export function ProductList({
           filterBy += ` && best_price_per_unit:>=${debouncedPriceRange[0]} && best_price_per_unit:<=${debouncedPriceRange[1]}`;
         }
 
+        console.log('filterBy:', filterBy);
+
+        // Fetch products and updated facet counts
         const response = await fetch(
           `/api/typesense/search?page=${currentPage}&per_page=${itemsPerPage}&q=${debouncedSearch}&filter_by=${encodeURIComponent(
             filterBy
           )}`
         );
-        const data: TypesenseResponse = await response.json();
+        const data: SearchResponse = await response.json();
 
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
 
-        const fetchedProducts = data.hits.map(hit => hit.document) || [];
+        const fetchedProducts = data.hits.map(hit => hit.document);
         setProducts(fetchedProducts);
         setTotalItems(data.found || 0);
 
-        // Update facets
+        // Update facet counts from search response
         if (data.facet_counts) {
-          setFacets({
-            brand:
-              data.facet_counts.find((f: FacetCount) => f.field_name === 'brand')?.counts || [],
-            model:
-              data.facet_counts.find((f: FacetCount) => f.field_name === 'model')?.counts || [],
-          });
+          setFacets(prevFacets => ({
+            brand: updateFacetCounts(prevFacets.brand, data.facet_counts?.brand || []),
+            model: updateFacetCounts(prevFacets.model, data.facet_counts?.model || []),
+          }));
+        }
+
+        // Update spec facet counts
+        if (data.specs_facets) {
+          setSpecFacets(prevSpecFacets =>
+            updateSpecFacetCounts(prevSpecFacets, data.specs_facets || [])
+          );
         }
 
         if (currentPage === 1 && data.found === 0) {
@@ -232,7 +296,35 @@ export function ProductList({
     debouncedSearch,
     minPossiblePrice,
     maxPossiblePrice,
+    selectedSpecTypes,
+    selectedSpecLabels,
   ]);
+
+  // Helper function to update facet counts while preserving order
+  function updateFacetCounts(prevFacets: FacetValue[], newCounts: FacetValue[]): FacetValue[] {
+    return prevFacets.map(facet => {
+      const newCount = newCounts.find(n => n.value === facet.value);
+      return newCount ? { ...facet, count: newCount.count } : { ...facet, count: 0 };
+    });
+  }
+
+  // Helper function to update spec facet counts while preserving structure
+  function updateSpecFacetCounts(prevSpecs: SpecFacet[], newSpecs: SpecFacet[]): SpecFacet[] {
+    return prevSpecs.map(spec => {
+      const newSpec = newSpecs.find(n => n.type === spec.type);
+      if (!newSpec)
+        return { ...spec, count: 0, labels: spec.labels.map(l => ({ ...l, count: 0 })) };
+
+      return {
+        ...spec,
+        count: newSpec.count,
+        labels: spec.labels.map(label => {
+          const newLabel = newSpec.labels.find(l => l.value === label.value);
+          return newLabel ? { ...label, count: newLabel.count } : { ...label, count: 0 };
+        }),
+      };
+    });
+  }
 
   if (hasError) {
     return (
@@ -285,7 +377,9 @@ export function ProductList({
                           newBrands,
                           selectedModels,
                           priceRange[0],
-                          priceRange[1]
+                          priceRange[1],
+                          selectedSpecTypes,
+                          selectedSpecLabels
                         );
                       }}
                     />
@@ -332,7 +426,9 @@ export function ProductList({
                           selectedBrands,
                           newModels,
                           priceRange[0],
-                          priceRange[1]
+                          priceRange[1],
+                          selectedSpecTypes,
+                          selectedSpecLabels
                         );
                       }}
                     />
@@ -347,6 +443,65 @@ export function ProductList({
               </div>
             )}
           </div>
+
+          {/* Specs Filters */}
+          {specFacets.map(specType => (
+            <div key={specType.type} className="space-y-3">
+              <h3 className="font-semibold capitalize">{specType.type}</h3>
+              {isLoading ? (
+                <div className="space-y-2">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="h-4 w-4 rounded bg-gray-200 animate-pulse" />
+                      <div className="h-4 w-24 rounded bg-gray-200 animate-pulse" />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {specType.labels.map(label => (
+                    <div
+                      key={`${specType.type}-${label.value}`}
+                      className="flex items-center space-x-2"
+                    >
+                      <Checkbox
+                        id={`spec-${specType.type}-${label.value}`}
+                        checked={selectedSpecLabels.includes(label.value)}
+                        onCheckedChange={checked => {
+                          const newSpecLabels = checked
+                            ? [...selectedSpecLabels, label.value]
+                            : selectedSpecLabels.filter(l => l !== label.value);
+                          setSelectedSpecLabels(newSpecLabels);
+                          // Also update the selected spec types if needed
+                          const newSpecTypes = checked
+                            ? Array.from(new Set([...selectedSpecTypes, specType.type]))
+                            : selectedSpecTypes;
+                          setSelectedSpecTypes(newSpecTypes);
+                          updateUrlParams(
+                            1,
+                            itemsPerPage,
+                            searchQuery,
+                            selectedBrands,
+                            selectedModels,
+                            priceRange[0],
+                            priceRange[1],
+                            newSpecTypes,
+                            newSpecLabels
+                          );
+                        }}
+                      />
+                      <label
+                        htmlFor={`spec-${specType.type}-${label.value}`}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {label.value} ({label.count})
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
 
           {/* Price Range Filter */}
           <div className="space-y-3">
@@ -390,7 +545,9 @@ export function ProductList({
                     selectedBrands,
                     selectedModels,
                     priceRange[0],
-                    priceRange[1]
+                    priceRange[1],
+                    selectedSpecTypes,
+                    selectedSpecLabels
                   );
                 }}
               />
@@ -415,7 +572,9 @@ export function ProductList({
                         selectedBrands,
                         selectedModels,
                         priceRange[0],
-                        priceRange[1]
+                        priceRange[1],
+                        selectedSpecTypes,
+                        selectedSpecLabels
                       );
                     }}
                     className="ml-1 rounded-full hover:bg-secondary/80"
@@ -443,7 +602,9 @@ export function ProductList({
                         newBrands,
                         selectedModels,
                         priceRange[0],
-                        priceRange[1]
+                        priceRange[1],
+                        selectedSpecTypes,
+                        selectedSpecLabels
                       );
                     }}
                     className="ml-1 rounded-full hover:bg-secondary/80"
@@ -471,13 +632,75 @@ export function ProductList({
                         selectedBrands,
                         newModels,
                         priceRange[0],
-                        priceRange[1]
+                        priceRange[1],
+                        selectedSpecTypes,
+                        selectedSpecLabels
                       );
                     }}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
                     <Cross2Icon className="h-3 w-3" />
                     <span className="sr-only">Remove {model} filter</span>
+                  </button>
+                </Badge>
+              ))}
+              {selectedSpecTypes.map(specType => (
+                <Badge
+                  key={`spec-type-${specType}`}
+                  variant="secondary"
+                  className="flex items-center gap-1"
+                >
+                  Spec Type: {specType}
+                  <button
+                    onClick={() => {
+                      const newSpecTypes = selectedSpecTypes.filter(t => t !== specType);
+                      setSelectedSpecTypes(newSpecTypes);
+                      updateUrlParams(
+                        1,
+                        itemsPerPage,
+                        searchQuery,
+                        selectedBrands,
+                        selectedModels,
+                        priceRange[0],
+                        priceRange[1],
+                        newSpecTypes,
+                        selectedSpecLabels
+                      );
+                    }}
+                    className="ml-1 rounded-full hover:bg-secondary/80"
+                  >
+                    <Cross2Icon className="h-3 w-3" />
+                    <span className="sr-only">Remove {specType} filter</span>
+                  </button>
+                </Badge>
+              ))}
+              {selectedSpecLabels.map(specLabel => (
+                <Badge
+                  key={`spec-label-${specLabel}`}
+                  variant="secondary"
+                  className="flex items-center gap-1"
+                >
+                  Spec Label: {specLabel}
+                  <button
+                    onClick={() => {
+                      const newSpecLabels = selectedSpecLabels.filter(l => l !== specLabel);
+                      setSelectedSpecLabels(newSpecLabels);
+                      updateUrlParams(
+                        1,
+                        itemsPerPage,
+                        searchQuery,
+                        selectedBrands,
+                        selectedModels,
+                        priceRange[0],
+                        priceRange[1],
+                        selectedSpecTypes,
+                        newSpecLabels
+                      );
+                    }}
+                    className="ml-1 rounded-full hover:bg-secondary/80"
+                  >
+                    <Cross2Icon className="h-3 w-3" />
+                    <span className="sr-only">Remove {specLabel} filter</span>
                   </button>
                 </Badge>
               ))}
@@ -494,7 +717,9 @@ export function ProductList({
                         selectedBrands,
                         selectedModels,
                         minPossiblePrice,
-                        maxPossiblePrice
+                        maxPossiblePrice,
+                        selectedSpecTypes,
+                        selectedSpecLabels
                       );
                     }}
                     className="ml-1 rounded-full hover:bg-secondary/80"
@@ -506,6 +731,8 @@ export function ProductList({
               )}
               {(selectedBrands.length > 0 ||
                 selectedModels.length > 0 ||
+                selectedSpecTypes.length > 0 ||
+                selectedSpecLabels.length > 0 ||
                 searchQuery ||
                 priceRange[0] > minPossiblePrice ||
                 priceRange[1] < maxPossiblePrice) && (
@@ -513,6 +740,8 @@ export function ProductList({
                   onClick={() => {
                     setSelectedBrands([]);
                     setSelectedModels([]);
+                    setSelectedSpecTypes([]);
+                    setSelectedSpecLabels([]);
                     setSearchQuery('');
                     setPriceRange([minPossiblePrice, maxPossiblePrice]);
                     updateUrlParams(
@@ -522,7 +751,9 @@ export function ProductList({
                       [],
                       [],
                       minPossiblePrice,
-                      maxPossiblePrice
+                      maxPossiblePrice,
+                      [],
+                      []
                     );
                   }}
                   className="text-sm text-muted-foreground hover:text-foreground"
@@ -544,7 +775,9 @@ export function ProductList({
                     selectedBrands,
                     selectedModels,
                     priceRange[0],
-                    priceRange[1]
+                    priceRange[1],
+                    selectedSpecTypes,
+                    selectedSpecLabels
                   );
                 }}
               >
@@ -620,7 +853,9 @@ export function ProductList({
                           selectedBrands,
                           selectedModels,
                           priceRange[0],
-                          priceRange[1]
+                          priceRange[1],
+                          selectedSpecTypes,
+                          selectedSpecLabels
                         )
                       }
                       aria-disabled={currentPage === 1}
@@ -677,7 +912,9 @@ export function ProductList({
                           selectedBrands,
                           selectedModels,
                           priceRange[0],
-                          priceRange[1]
+                          priceRange[1],
+                          selectedSpecTypes,
+                          selectedSpecLabels
                         )
                       }
                       aria-disabled={currentPage === totalPages}
