@@ -299,6 +299,20 @@ export function ProductList({
     selectedSpecLabels,
   ]);
 
+  useEffect(() => {
+    updateUrlParams(
+      currentPage,
+      itemsPerPage,
+      debouncedSearch,
+      selectedBrands,
+      selectedModels,
+      debouncedPriceRange[0],
+      debouncedPriceRange[1],
+      selectedSpecTypes,
+      selectedSpecLabels
+    );
+  }, [debouncedPriceRange]);
+
   // Helper function to update facet counts while preserving order
   function updateFacetCounts(prevFacets: FacetValue[], newCounts: FacetValue[]): FacetValue[] {
     return prevFacets.map(facet => {

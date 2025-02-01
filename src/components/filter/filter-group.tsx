@@ -22,13 +22,27 @@ export function FilterGroup({
   onSelectionChange,
   isLoading = false,
 }: FilterGroupProps) {
-  // Sort options by count (zero counts at the end) and then by label (ascending)
+  // Sort options into three tiers:
+  // 1. Count > 0: ordered by label
+  // 2. Count = 0 AND selected: ordered by label
+  // 3. Count = 0 AND not selected: ordered by label
   const sortedOptions = [...options].sort((a, b) => {
-    // If one has zero count and the other doesn't, move the zero count to the end
-    if ((a.count === 0) !== (b.count === 0)) {
-      return a.count === 0 ? 1 : -1;
+    const aSelected = selectedValues.includes(a.value);
+    const bSelected = selectedValues.includes(b.value);
+
+    // If one has count > 0 and the other doesn't
+    if (a.count > 0 !== b.count > 0) {
+      return a.count > 0 ? -1 : 1;
     }
-    // If both have count or both don't have count, sort by label
+
+    // If both have count = 0, check if they're selected
+    if (a.count === 0 && b.count === 0) {
+      if (aSelected !== bSelected) {
+        return aSelected ? -1 : 1;
+      }
+    }
+
+    // Within each tier, sort by label
     return a.value.localeCompare(b.value);
   });
 
