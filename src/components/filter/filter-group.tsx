@@ -46,26 +46,32 @@ export function FilterGroup({
         </div>
       ) : (
         <div className="space-y-2">
-          {sortedOptions.map(option => (
-            <div key={option.value} className="flex items-center space-x-2">
-              <Checkbox
-                id={`${title}-${option.value}`}
-                checked={selectedValues.includes(option.value)}
-                onCheckedChange={checked => {
-                  const newValues = checked
-                    ? [...selectedValues, option.value]
-                    : selectedValues.filter(v => v !== option.value);
-                  onSelectionChange(newValues);
-                }}
-              />
-              <label
-                htmlFor={`${title}-${option.value}`}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {option.value} ({option.count})
-              </label>
-            </div>
-          ))}
+          {sortedOptions.map(option => {
+            const isSelected = selectedValues.includes(option.value);
+            return (
+              <div key={option.value} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`${title}-${option.value}`}
+                  checked={isSelected}
+                  disabled={option.count === 0 && !isSelected}
+                  onCheckedChange={checked => {
+                    const newValues = checked
+                      ? [...selectedValues, option.value]
+                      : selectedValues.filter(v => v !== option.value);
+                    onSelectionChange(newValues);
+                  }}
+                />
+                <label
+                  htmlFor={`${title}-${option.value}`}
+                  className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${
+                    option.count === 0 && !isSelected ? 'text-gray-400' : ''
+                  }`}
+                >
+                  {option.value} ({option.count})
+                </label>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
