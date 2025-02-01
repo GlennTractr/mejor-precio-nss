@@ -1,8 +1,7 @@
 'use client';
 
+import { memo } from 'react';
 import { Product } from '@/types/product';
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import {
   Pagination,
@@ -14,15 +13,6 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import useDebounce from '@/hooks/use-debounce';
-import {
   Card,
   CardContent,
   CardDescription,
@@ -30,61 +20,42 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Cross2Icon } from '@radix-ui/react-icons';
-import { Slider } from '@/components/ui/slider';
-import { FilterGroup } from '@/components/filter/filter-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
-const PER_PAGE_OPTIONS = [10, 20, 50];
 const MAX_VISIBLE_PAGES = 5;
-
-interface FacetValue {
-  value: string;
-  count: number;
-}
-
-interface SpecFacet {
-  type: string;
-  count: number;
-  labels: FacetValue[];
-}
-
-interface Facets {
-  brand: FacetValue[];
-  model: FacetValue[];
-}
-
-interface SearchResponse {
-  hits: Array<{ document: Product }>;
-  found: number;
-  facet_counts?: {
-    brand: FacetValue[];
-    model: FacetValue[];
-  };
-  specs_facets?: SpecFacet[];
-  price_range?: {
-    min: number;
-    max: number;
-  };
-}
+const PER_PAGE_OPTIONS = [10, 20, 50];
 
 interface ProductListProps {
-  categorySlug: string;
-  initialPage: number;
-  initialItemsPerPage: number;
-  minPossiblePrice: number;
-  maxPossiblePrice: number;
-  initialFilters: {
-    price_range: {
-      min: number;
-      max: number;
-    };
-    facets: {
-      brand: FacetValue[];
-      model: FacetValue[];
-    };
-    specs_facets: SpecFacet[];
-  };
+  products: Product[];
+  isProductsLoading: boolean;
+  totalItems: number;
+  currentPage: number;
+  itemsPerPage: number;
+  onPageChange: (page: number) => void;
+  onItemsPerPageChange: (itemsPerPage: number) => void;
+}
+
+function ProductSkeleton() {
+  return (
+    <Card className="animate-pulse">
+      <CardHeader>
+        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2 mt-2"></div>
+      </CardHeader>
+      <CardContent>
+        <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+      </CardContent>
+      <CardFooter>
+        <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+      </CardFooter>
+    </Card>
+  );
 }
 
 function getVisiblePages(currentPage: number, totalPages: number) {
@@ -93,773 +64,125 @@ function getVisiblePages(currentPage: number, totalPages: number) {
   return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 }
 
-export function ProductList({
-  categorySlug,
-  initialPage,
-  initialItemsPerPage,
-  minPossiblePrice,
-  maxPossiblePrice,
-  initialFilters,
+function ProductListComponent({
+  products,
+  isProductsLoading,
+  totalItems,
+  currentPage,
+  itemsPerPage,
+  onPageChange,
+  onItemsPerPageChange,
 }: ProductListProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '');
-  console.log('t1', initialFilters);
-  const [facets, setFacets] = useState<Facets>(initialFilters.facets);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(
-    searchParams?.get('brands')?.split(',').filter(Boolean) || []
-  );
-  const [selectedModels, setSelectedModels] = useState<string[]>(
-    searchParams?.get('models')?.split(',').filter(Boolean) || []
-  );
-  const [selectedSpecTypes, setSelectedSpecTypes] = useState<string[]>(
-    searchParams?.get('spec_types')?.split(',').filter(Boolean) || []
-  );
-  const [selectedSpecLabels, setSelectedSpecLabels] = useState<string[]>(
-    searchParams?.get('spec_labels')?.split(',').filter(Boolean) || []
-  );
-  const [priceRange, setPriceRange] = useState<[number, number]>([
-    parseFloat(searchParams?.get('min_price') || String(initialFilters.price_range.min)),
-    parseFloat(searchParams?.get('max_price') || String(initialFilters.price_range.max)),
-  ]);
-  const debouncedSearch = useDebounce(searchQuery, 300);
-  const debouncedPriceRange = useDebounce(priceRange, 300);
-  const [specFacets, setSpecFacets] = useState<SpecFacet[]>(initialFilters.specs_facets);
-
-  const currentPage = parseInt(searchParams?.get('page') || String(initialPage));
-  const itemsPerPage = parseInt(searchParams?.get('per_page') || String(initialItemsPerPage));
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const visiblePages = getVisiblePages(currentPage, totalPages);
 
-  const updateUrlParams = (
-    page: number,
-    perPage: number,
-    query?: string,
-    brands?: string[],
-    models?: string[],
-    minPrice?: number,
-    maxPrice?: number,
-    specTypes?: string[],
-    specLabels?: string[]
-  ) => {
-    const params = new URLSearchParams(searchParams?.toString());
-    params.set('page', String(page));
-    params.set('per_page', String(perPage));
-    if (query !== undefined) params.set('q', query);
-    if (brands !== undefined) {
-      if (brands.length > 0) {
-        params.set('brands', brands.join(','));
-      } else {
-        params.delete('brands');
-      }
-    }
-    if (models !== undefined) {
-      if (models.length > 0) {
-        params.set('models', models.join(','));
-      } else {
-        params.delete('models');
-      }
-    }
-    if (specTypes !== undefined) {
-      if (specTypes.length > 0) {
-        params.set('spec_types', specTypes.join(','));
-      } else {
-        params.delete('spec_types');
-      }
-    }
-    if (specLabels !== undefined) {
-      if (specLabels.length > 0) {
-        params.set('spec_labels', specLabels.join(','));
-      } else {
-        params.delete('spec_labels');
-      }
-    }
-    if (minPrice !== undefined && maxPrice !== undefined) {
-      if (minPrice > minPossiblePrice || maxPrice < maxPossiblePrice) {
-        params.set('min_price', String(minPrice));
-        params.set('max_price', String(maxPrice));
-      } else {
-        params.delete('min_price');
-        params.delete('max_price');
-      }
-    }
-    router.replace(`/categoria/${categorySlug}?${params.toString()}`, { scroll: false });
-  };
-
-  useEffect(() => {
-    async function fetchProducts() {
-      setIsLoading(true);
-      setHasError(false);
-      try {
-        let filterBy = `category_slug:=${categorySlug}`;
-        if (selectedBrands.length > 0) {
-          filterBy += ` && brand:=[${selectedBrands.map(b => `'${b}'`).join(',')}]`;
-        }
-        if (selectedModels.length > 0) {
-          filterBy += ` && model:=[${selectedModels.map(m => `'${m}'`).join(',')}]`;
-        }
-        if (selectedSpecLabels.length > 0) {
-          // Group spec labels by their type
-          const specLabelsByType = selectedSpecLabels.reduce((acc, label) => {
-            const specType = specFacets.find(spec =>
-              spec.labels.some(l => l.value === label)
-            )?.type;
-            if (specType) {
-              if (!acc[specType]) {
-                acc[specType] = [];
-              }
-              acc[specType].push(label);
-            }
-            return acc;
-          }, {} as Record<string, string[]>);
-
-          // Create filter conditions for each spec type
-          const specFilters = Object.entries(specLabelsByType)
-            .map(
-              ([type, labels]) =>
-                `(specs.type:=${type} && specs.label:=[${labels.map(l => `'${l}'`).join(',')}])`
-            )
-            .join(' || ');
-
-          if (specFilters) {
-            filterBy += ` && (${specFilters})`;
-          }
-        }
-        if (
-          debouncedPriceRange[0] > minPossiblePrice ||
-          debouncedPriceRange[1] < maxPossiblePrice
-        ) {
-          filterBy += ` && best_price_per_unit:>=${debouncedPriceRange[0]} && best_price_per_unit:<=${debouncedPriceRange[1]}`;
-        }
-
-        console.log('filterBy:', filterBy);
-
-        // Fetch products and updated facet counts
-        const response = await fetch(
-          `/api/typesense/search?page=${currentPage}&per_page=${itemsPerPage}&q=${debouncedSearch}&filter_by=${encodeURIComponent(
-            filterBy
-          )}`
-        );
-        const data: SearchResponse = await response.json();
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-
-        const fetchedProducts = data.hits.map(hit => hit.document);
-        setProducts(fetchedProducts);
-        setTotalItems(data.found || 0);
-
-        // Update facet counts from search response
-        if (data.facet_counts) {
-          setFacets(prevFacets => ({
-            brand: updateFacetCounts(prevFacets.brand, data.facet_counts?.brand || []),
-            model: updateFacetCounts(prevFacets.model, data.facet_counts?.model || []),
-          }));
-        }
-
-        // Update spec facet counts
-        if (data.specs_facets) {
-          setSpecFacets(prevSpecFacets =>
-            updateSpecFacetCounts(prevSpecFacets, data.specs_facets || [])
-          );
-        }
-
-        if (currentPage === 1 && data.found === 0) {
-          notFound();
-        }
-      } catch (error) {
-        if (error instanceof Error && error.message === 'NEXT_NOT_FOUND') {
-          throw error;
-        }
-
-        console.error(
-          'Failed to fetch products:',
-          error instanceof Error ? error.message : String(error)
-        );
-        setHasError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchProducts();
-  }, [
-    categorySlug,
-    searchParams,
-    debouncedPriceRange,
-    debouncedSearch,
-    minPossiblePrice,
-    maxPossiblePrice,
-    selectedSpecTypes,
-    selectedSpecLabels,
-  ]);
-
-  useEffect(() => {
-    updateUrlParams(
-      currentPage,
-      itemsPerPage,
-      debouncedSearch,
-      selectedBrands,
-      selectedModels,
-      debouncedPriceRange[0],
-      debouncedPriceRange[1],
-      selectedSpecTypes,
-      selectedSpecLabels
-    );
-  }, [debouncedPriceRange]);
-
-  // Helper function to update facet counts while preserving order
-  function updateFacetCounts(prevFacets: FacetValue[], newCounts: FacetValue[]): FacetValue[] {
-    return prevFacets.map(facet => {
-      const newCount = newCounts.find(n => n.value === facet.value);
-      return newCount ? { ...facet, count: newCount.count } : { ...facet, count: 0 };
-    });
-  }
-
-  // Helper function to update spec facet counts while preserving structure
-  function updateSpecFacetCounts(prevSpecs: SpecFacet[], newSpecs: SpecFacet[]): SpecFacet[] {
-    return prevSpecs.map(spec => {
-      const newSpec = newSpecs.find(n => n.type === spec.type);
-      if (!newSpec)
-        return { ...spec, count: 0, labels: spec.labels.map(l => ({ ...l, count: 0 })) };
-
-      return {
-        ...spec,
-        count: newSpec.count,
-        labels: spec.labels.map(label => {
-          const newLabel = newSpec.labels.find(l => l.value === label.value);
-          return newLabel ? { ...label, count: newLabel.count } : { ...label, count: 0 };
-        }),
-      };
-    });
-  }
-
-  const onBrandSelectionChange = (newBrands: string[]) => {
-    setSelectedBrands(newBrands);
-    updateUrlParams(
-      1,
-      itemsPerPage,
-      debouncedSearch,
-      newBrands,
-      selectedModels,
-      debouncedPriceRange[0],
-      debouncedPriceRange[1],
-      selectedSpecTypes,
-      selectedSpecLabels
-    );
-  };
-
-  const onModelSelectionChange = (newModels: string[]) => {
-    setSelectedModels(newModels);
-    updateUrlParams(
-      1,
-      itemsPerPage,
-      debouncedSearch,
-      selectedBrands,
-      newModels,
-      debouncedPriceRange[0],
-      debouncedPriceRange[1],
-      selectedSpecTypes,
-      selectedSpecLabels
-    );
-  };
-
-  const onLabelSelectionChange = (newLabels: string[]) => {
-    setSelectedSpecLabels(newLabels);
-    updateUrlParams(
-      1,
-      itemsPerPage,
-      debouncedSearch,
-      selectedBrands,
-      selectedModels,
-      debouncedPriceRange[0],
-      debouncedPriceRange[1],
-      selectedSpecTypes,
-      newLabels
-    );
-  };
-
-  if (hasError) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Something went wrong</h2>
-          <p className="text-gray-600 mb-4">Failed to load products. Please try again later.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col gap-2 mb-6">
-        <h1 className="text-2xl font-bold">Category: {categorySlug}</h1>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <p className="text-gray-600">
+          {totalItems} {totalItems === 1 ? 'product' : 'products'} found
+        </p>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600">Items per page:</span>
+          <Select
+            defaultValue={String(itemsPerPage)}
+            onValueChange={value => {
+              onItemsPerPageChange(parseInt(value));
+            }}
+          >
+            <SelectTrigger className="w-[100px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {PER_PAGE_OPTIONS.map(option => (
+                <SelectItem key={option} value={String(option)}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
-      <div className="flex gap-8">
-        {/* Filter Sidebar */}
-        <div className="w-64 flex-shrink-0 space-y-6">
-          {/* Brands Filter */}
-          <FilterGroup
-            title="Brands"
-            options={facets.brand}
-            selectedValues={selectedBrands}
-            onSelectionChange={onBrandSelectionChange}
-            isLoading={isLoading}
-          />
-
-          {/* Models Filter */}
-          <FilterGroup
-            title="Models"
-            options={facets.model}
-            selectedValues={selectedModels}
-            onSelectionChange={onModelSelectionChange}
-            isLoading={isLoading}
-          />
-
-          {/* Specs Filters */}
-          {specFacets.map(specType => (
-            <FilterGroup
-              key={specType.type}
-              title={specType.type}
-              options={specType.labels}
-              selectedValues={selectedSpecLabels.filter(label =>
-                specType.labels.some(l => l.value === label)
-              )}
-              onSelectionChange={onLabelSelectionChange}
-              isLoading={isLoading}
-            />
-          ))}
-
-          {/* Price Range Filter */}
-          <div className="space-y-3">
-            <h3 className="font-semibold">Price per unit range</h3>
-            <div className="px-2">
-              <Slider
-                defaultValue={[priceRange[0], priceRange[1]]}
-                min={minPossiblePrice}
-                max={maxPossiblePrice}
-                step={0.01}
-                value={[priceRange[0], priceRange[1]]}
-                onValueChange={(value: [number, number]) => {
-                  setPriceRange(value);
-                }}
-                className="my-6"
-                minStepsBetweenThumbs={0.01}
-              />
-              <div className="flex items-center justify-between">
-                <span className="text-sm">€{priceRange[0].toFixed(2)}/unit</span>
-                <span className="text-sm">€{priceRange[1].toFixed(2)}/unit</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1">
-          <div className="flex flex-col gap-4 mb-6">
-            <div className="flex items-center gap-4">
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="max-w-sm"
-                value={searchQuery}
-                onChange={e => {
-                  setSearchQuery(e.target.value);
-                  updateUrlParams(
-                    1,
-                    itemsPerPage,
-                    e.target.value,
-                    selectedBrands,
-                    selectedModels,
-                    priceRange[0],
-                    priceRange[1],
-                    selectedSpecTypes,
-                    selectedSpecLabels
-                  );
-                }}
-              />
-              {!isLoading && (
-                <p className="text-gray-600">
-                  {totalItems} {totalItems === 1 ? 'product' : 'products'} found
-                </p>
-              )}
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              {searchQuery && (
-                <Badge key="search" variant="secondary" className="flex items-center gap-1">
-                  Search: {searchQuery}
-                  <button
-                    onClick={() => {
-                      setSearchQuery('');
-                      updateUrlParams(
-                        1,
-                        itemsPerPage,
-                        '',
-                        selectedBrands,
-                        selectedModels,
-                        priceRange[0],
-                        priceRange[1],
-                        selectedSpecTypes,
-                        selectedSpecLabels
-                      );
-                    }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Clear search</span>
-                  </button>
-                </Badge>
-              )}
-              {selectedBrands.map(brand => (
-                <Badge
-                  key={`brand-${brand}`}
-                  variant="secondary"
-                  className="flex items-center gap-1"
-                >
-                  Brand: {brand}
-                  <button
-                    onClick={() => {
-                      const newBrands = selectedBrands.filter(b => b !== brand);
-                      setSelectedBrands(newBrands);
-                      updateUrlParams(
-                        1,
-                        itemsPerPage,
-                        searchQuery,
-                        newBrands,
-                        selectedModels,
-                        priceRange[0],
-                        priceRange[1],
-                        selectedSpecTypes,
-                        selectedSpecLabels
-                      );
-                    }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove {brand} filter</span>
-                  </button>
-                </Badge>
-              ))}
-              {selectedModels.map(model => (
-                <Badge
-                  key={`model-${model}`}
-                  variant="secondary"
-                  className="flex items-center gap-1"
-                >
-                  Model: {model}
-                  <button
-                    onClick={() => {
-                      const newModels = selectedModels.filter(m => m !== model);
-                      setSelectedModels(newModels);
-                      updateUrlParams(
-                        1,
-                        itemsPerPage,
-                        searchQuery,
-                        selectedBrands,
-                        newModels,
-                        priceRange[0],
-                        priceRange[1],
-                        selectedSpecTypes,
-                        selectedSpecLabels
-                      );
-                    }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove {model} filter</span>
-                  </button>
-                </Badge>
-              ))}
-              {selectedSpecTypes.map(specType => (
-                <Badge
-                  key={`spec-type-${specType}`}
-                  variant="secondary"
-                  className="flex items-center gap-1"
-                >
-                  Spec Type: {specType}
-                  <button
-                    onClick={() => {
-                      const newSpecTypes = selectedSpecTypes.filter(t => t !== specType);
-                      setSelectedSpecTypes(newSpecTypes);
-                      updateUrlParams(
-                        1,
-                        itemsPerPage,
-                        searchQuery,
-                        selectedBrands,
-                        selectedModels,
-                        priceRange[0],
-                        priceRange[1],
-                        newSpecTypes,
-                        selectedSpecLabels
-                      );
-                    }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove {specType} filter</span>
-                  </button>
-                </Badge>
-              ))}
-              {selectedSpecLabels.map(specLabel => (
-                <Badge
-                  key={`spec-label-${specLabel}`}
-                  variant="secondary"
-                  className="flex items-center gap-1"
-                >
-                  Spec Label: {specLabel}
-                  <button
-                    onClick={() => {
-                      const newSpecLabels = selectedSpecLabels.filter(l => l !== specLabel);
-                      setSelectedSpecLabels(newSpecLabels);
-                      updateUrlParams(
-                        1,
-                        itemsPerPage,
-                        searchQuery,
-                        selectedBrands,
-                        selectedModels,
-                        priceRange[0],
-                        priceRange[1],
-                        selectedSpecTypes,
-                        newSpecLabels
-                      );
-                    }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove {specLabel} filter</span>
-                  </button>
-                </Badge>
-              ))}
-              {(priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice) && (
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  Price per unit: €{priceRange[0].toFixed(2)} - €{priceRange[1].toFixed(2)}
-                  <button
-                    onClick={() => {
-                      setPriceRange([minPossiblePrice, maxPossiblePrice]);
-                      updateUrlParams(
-                        1,
-                        itemsPerPage,
-                        searchQuery,
-                        selectedBrands,
-                        selectedModels,
-                        minPossiblePrice,
-                        maxPossiblePrice,
-                        selectedSpecTypes,
-                        selectedSpecLabels
-                      );
-                    }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove price per unit filter</span>
-                  </button>
-                </Badge>
-              )}
-              {(selectedBrands.length > 0 ||
-                selectedModels.length > 0 ||
-                selectedSpecTypes.length > 0 ||
-                selectedSpecLabels.length > 0 ||
-                searchQuery ||
-                priceRange[0] > minPossiblePrice ||
-                priceRange[1] < maxPossiblePrice) && (
-                <button
-                  onClick={() => {
-                    setSelectedBrands([]);
-                    setSelectedModels([]);
-                    setSelectedSpecTypes([]);
-                    setSelectedSpecLabels([]);
-                    setSearchQuery('');
-                    setPriceRange([minPossiblePrice, maxPossiblePrice]);
-                    updateUrlParams(
-                      1,
-                      itemsPerPage,
-                      '',
-                      [],
-                      [],
-                      minPossiblePrice,
-                      maxPossiblePrice,
-                      [],
-                      []
-                    );
-                  }}
-                  className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                  Clear all filters
-                </button>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">Items per page:</span>
-              <Select
-                defaultValue={String(itemsPerPage)}
-                onValueChange={value => {
-                  updateUrlParams(
-                    1,
-                    parseInt(value),
-                    searchQuery,
-                    selectedBrands,
-                    selectedModels,
-                    priceRange[0],
-                    priceRange[1],
-                    selectedSpecTypes,
-                    selectedSpecLabels
-                  );
-                }}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {isProductsLoading
+          ? Array.from({ length: itemsPerPage }).map((_, index) => <ProductSkeleton key={index} />)
+          : products.map(product => (
+              <Link
+                key={product.id}
+                href={`/product/${product.product_slug}`}
+                className="block transition-transform hover:scale-105"
               >
-                <SelectTrigger className="w-[100px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {PER_PAGE_OPTIONS.map(option => (
-                    <SelectItem key={option} value={String(option)}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: itemsPerPage }).map((_, index) => (
-                <Card key={index} className="animate-pulse">
+                <Card>
                   <CardHeader>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2 mt-2"></div>
+                    <CardTitle>{product.title}</CardTitle>
+                    <CardDescription>{product.brand}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+                    <p className="text-lg font-bold">
+                      Best Price: €{product.best_price_per_unit.toFixed(2)}
+                    </p>
                   </CardContent>
                   <CardFooter>
-                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                    <p className="text-sm text-gray-500">
+                      Available at: {product.shop_names.join(', ')}
+                    </p>
                   </CardFooter>
                 </Card>
-              ))}
-            </div>
-          ) : (
+              </Link>
+            ))}
+      </div>
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+              aria-disabled={currentPage === 1}
+              className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+            />
+          </PaginationItem>
+
+          {visiblePages[0] > 1 && (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map(product => (
-                  <Link
-                    key={product.id}
-                    href={`/product/${product.product_slug}`}
-                    className="block transition-transform hover:scale-105"
-                  >
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>{product.title}</CardTitle>
-                        <CardDescription>{product.brand}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-lg font-bold">
-                          Best Price: €{product.best_price_per_unit.toFixed(2)}
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <p className="text-sm text-gray-500">
-                          Available at: {product.shop_names.join(', ')}
-                        </p>
-                      </CardFooter>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-
-              <Pagination className="mt-8">
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() =>
-                        updateUrlParams(
-                          Math.max(1, currentPage - 1),
-                          itemsPerPage,
-                          searchQuery,
-                          selectedBrands,
-                          selectedModels,
-                          priceRange[0],
-                          priceRange[1],
-                          selectedSpecTypes,
-                          selectedSpecLabels
-                        )
-                      }
-                      aria-disabled={currentPage === 1}
-                      className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
-                    />
-                  </PaginationItem>
-
-                  {visiblePages[0] > 1 && (
-                    <>
-                      <PaginationItem>
-                        <PaginationLink
-                          href={`/category/${categorySlug}?page=1&per_page=${itemsPerPage}`}
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      {visiblePages[0] > 2 && <PaginationEllipsis />}
-                    </>
-                  )}
-
-                  {visiblePages.map(page => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        href={`/category/${categorySlug}?page=${page}&per_page=${itemsPerPage}`}
-                        isActive={currentPage === page}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-
-                  {visiblePages[visiblePages.length - 1] < totalPages && (
-                    <>
-                      {visiblePages[visiblePages.length - 1] < totalPages - 1 && (
-                        <PaginationEllipsis />
-                      )}
-                      <PaginationItem>
-                        <PaginationLink
-                          href={`/category/${categorySlug}?page=${totalPages}&per_page=${itemsPerPage}`}
-                        >
-                          {totalPages}
-                        </PaginationLink>
-                      </PaginationItem>
-                    </>
-                  )}
-
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() =>
-                        updateUrlParams(
-                          Math.min(totalPages, currentPage + 1),
-                          itemsPerPage,
-                          searchQuery,
-                          selectedBrands,
-                          selectedModels,
-                          priceRange[0],
-                          priceRange[1],
-                          selectedSpecTypes,
-                          selectedSpecLabels
-                        )
-                      }
-                      aria-disabled={currentPage === totalPages}
-                      className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+              <PaginationItem>
+                <PaginationLink onClick={() => onPageChange(1)}>1</PaginationLink>
+              </PaginationItem>
+              {visiblePages[0] > 2 && <PaginationEllipsis />}
             </>
           )}
-        </div>
-      </div>
+
+          {visiblePages.map(page => (
+            <PaginationItem key={page}>
+              <PaginationLink onClick={() => onPageChange(page)} isActive={currentPage === page}>
+                {page}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          {visiblePages[visiblePages.length - 1] < totalPages && (
+            <>
+              {visiblePages[visiblePages.length - 1] < totalPages - 1 && <PaginationEllipsis />}
+              <PaginationItem>
+                <PaginationLink onClick={() => onPageChange(totalPages)}>
+                  {totalPages}
+                </PaginationLink>
+              </PaginationItem>
+            </>
+          )}
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+              aria-disabled={currentPage === totalPages}
+              className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }
+
+export const ProductList = memo(ProductListComponent);

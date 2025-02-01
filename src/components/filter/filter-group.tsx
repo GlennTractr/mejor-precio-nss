@@ -13,6 +13,7 @@ interface FilterGroupProps {
   selectedValues: string[];
   onSelectionChange: (newValues: string[]) => void;
   isLoading?: boolean;
+  isInitialLoad?: boolean;
 }
 
 export function FilterGroup({
@@ -21,6 +22,7 @@ export function FilterGroup({
   selectedValues,
   onSelectionChange,
   isLoading = false,
+  isInitialLoad = false,
 }: FilterGroupProps) {
   // Sort options into three tiers:
   // 1. Count > 0: ordered by label
@@ -49,7 +51,7 @@ export function FilterGroup({
   return (
     <div className="space-y-3">
       <h3 className="font-semibold capitalize">{title}</h3>
-      {isLoading ? (
+      {isInitialLoad ? (
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className="flex items-center space-x-2">
@@ -67,7 +69,7 @@ export function FilterGroup({
                 <Checkbox
                   id={`${title}-${option.value}`}
                   checked={isSelected}
-                  disabled={option.count === 0 && !isSelected}
+                  disabled={isLoading || (option.count === 0 && !isSelected)}
                   onCheckedChange={checked => {
                     const newValues = checked
                       ? [...selectedValues, option.value]
@@ -79,7 +81,7 @@ export function FilterGroup({
                   htmlFor={`${title}-${option.value}`}
                   className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${
                     option.count === 0 && !isSelected ? 'text-gray-400' : ''
-                  }`}
+                  } ${isLoading ? 'opacity-50' : ''}`}
                 >
                   {option.value} ({option.count})
                 </label>

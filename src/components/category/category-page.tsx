@@ -1,6 +1,6 @@
 'use client';
 
-import { ProductList } from '@/components/product/product-list';
+import { CategoryProductList } from '@/components/category/category-product-list';
 import type { FacetValue, SpecFacet } from '@/types/product';
 
 interface CategoryPageProps {
@@ -31,7 +31,7 @@ export function CategoryPage({
   maxPossiblePrice,
 }: CategoryPageProps) {
   return (
-    <ProductList
+    <CategoryProductList
       categorySlug={categorySlug}
       initialPage={initialPage}
       initialItemsPerPage={initialItemsPerPage}
