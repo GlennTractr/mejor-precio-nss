@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface ProductSellContextListProps {
   productPackaging: {
@@ -10,8 +11,10 @@ interface ProductSellContextListProps {
     type: string;
     ProductSellContext: {
       price: number;
+      link: string;
       Shop: {
         label: string;
+        img_url: string;
       };
     }[];
   }[];
@@ -20,7 +23,7 @@ interface ProductSellContextListProps {
 export function ProductSellContextList({ productPackaging }: ProductSellContextListProps) {
   const t = useTranslations();
   const [selectedQuantity, setSelectedQuantity] = useState<number | null>(null);
-
+  console.log('y11111', productPackaging);
   if (!productPackaging || productPackaging.length === 0) {
     return null;
   }
@@ -82,19 +85,44 @@ export function ProductSellContextList({ productPackaging }: ProductSellContextL
               key={`${index}-${ctxIndex}`}
               className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
             >
-              <div>
-                <div className="font-medium">{ctx.Shop?.label}</div>
-                <div className="text-sm text-gray-600">
-                  {pkg.quantity} {pkg.type}
+              <div className="flex items-center gap-4">
+                {/* Shop Logo */}
+                <div className="relative w-12 h-12 flex-shrink-0">
+                  <Image
+                    src={ctx.Shop.img_url}
+                    alt={ctx.Shop.label}
+                    fill
+                    className="object-contain"
+                    sizes="48px"
+                  />
+                </div>
+                {/* Shop Info */}
+                <div>
+                  <div className="font-medium">{ctx.Shop.label}</div>
+                  <div className="text-sm text-gray-600">
+                    {pkg.quantity} {pkg.type}
+                  </div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="font-bold">${ctx.price.toFixed(2)}</div>
-                <div className="text-sm text-gray-600">
-                  {t('product.pricePerUnit', {
-                    price: (ctx.price / pkg.quantity).toFixed(2),
-                  })}
+              <div className="flex items-center gap-4">
+                {/* Price Info */}
+                <div className="text-right">
+                  <div className="font-bold">${ctx.price.toFixed(2)}</div>
+                  <div className="text-sm text-gray-600">
+                    {t('product.pricePerUnit', {
+                      price: (ctx.price / pkg.quantity).toFixed(2),
+                    })}
+                  </div>
                 </div>
+                {/* Buy Button */}
+                <a
+                  href={ctx.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  {t('actions.buy')}
+                </a>
               </div>
             </div>
           ))

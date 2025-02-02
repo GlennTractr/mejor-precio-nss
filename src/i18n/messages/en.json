@@ -3,7 +3,8 @@
     "login": "Login",
     "logout": "Logout",
     "openSettings": "Open settings",
-    "add": "Add"
+    "add": "Add",
+    "buy": "Buy"
   },
   "category": {
     "title": "Category: {category}"

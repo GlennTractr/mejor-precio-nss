@@ -98,7 +98,8 @@ export function ProductPage({ productSlug }: ProductPageProps) {
               ProductSellContext (
                 price,
                 Shop (
-                  label
+                  label,
+                  img_url
                 )
               )
             )
