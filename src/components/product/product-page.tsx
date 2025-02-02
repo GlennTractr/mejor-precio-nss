@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import supabaseClient from '@/lib/supabase-client';
 import { Tables } from '@/types/database';
+import { useTranslations } from 'next-intl';
 
 type ProductSellContext = {
   price: number;
@@ -50,6 +51,7 @@ interface PriceContext {
 }
 
 export function ProductPage({ productSlug }: ProductPageProps) {
+  const t = useTranslations();
   const [product, setProduct] = useState<ProductResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -126,9 +128,9 @@ export function ProductPage({ productSlug }: ProductPageProps) {
     fetchProduct();
   }, [productSlug]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!product) return <div>Product not found</div>;
+  if (loading) return <div>{t('product.loading')}</div>;
+  if (error) return <div>{t('product.error', { message: error })}</div>;
+  if (!product) return <div>{t('product.notFound')}</div>;
 
   // Calculate the lowest price and price per unit from ProductPackaging
   const lowestPriceContext = product.ProductPackaging?.reduce<PriceContext | null>(
@@ -197,17 +199,19 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                 <span className="text-3xl font-bold text-gray-900">
                   ${lowestPriceContext.price.toFixed(2)}
                 </span>
-                <span className="text-sm text-gray-500">at {lowestPriceContext.shop}</span>
+                <span className="text-sm text-gray-500">
+                  {t('product.priceAt', { shop: lowestPriceContext.shop })}
+                </span>
               </div>
               <div className="text-sm text-gray-600">
-                (${lowestPriceContext.pricePerUnit.toFixed(2)} per unit)
+                {t('product.pricePerUnit', { price: lowestPriceContext.pricePerUnit.toFixed(2) })}
               </div>
             </div>
           )}
 
           {product.ProductPackaging && product.ProductPackaging.length > 0 && (
             <div className="mt-6">
-              <h2 className="text-lg font-semibold mb-2">Available from</h2>
+              <h2 className="text-lg font-semibold mb-2">{t('product.availableFrom')}</h2>
               <div className="space-y-3">
                 {product.ProductPackaging.map((pkg, index) =>
                   pkg.ProductSellContext?.map((ctx, ctxIndex) => (
@@ -224,7 +228,9 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                       <div className="text-right">
                         <div className="font-bold">${ctx.price.toFixed(2)}</div>
                         <div className="text-sm text-gray-600">
-                          (${(ctx.price / pkg.quantity).toFixed(2)} per unit)
+                          {t('product.pricePerUnit', {
+                            price: (ctx.price / pkg.quantity).toFixed(2),
+                          })}
                         </div>
                       </div>
                     </div>

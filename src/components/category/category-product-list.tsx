@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, notFound } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { ProductListFiltered } from '@/components/product/product-list-filtered';
 import type { FacetValue, SpecFacet, Product } from '@/types/product';
 import useDebounce from '@/hooks/use-debounce';
@@ -48,6 +49,7 @@ export function CategoryProductList({
   initialFilters,
 }: CategoryProductListProps) {
   const searchParams = useSearchParams();
+  const t = useTranslations('category');
 
   // State management
   const [products, setProducts] = useState<Product[]>([]);
@@ -317,7 +319,7 @@ export function CategoryProductList({
   return (
     <div>
       <div className="flex flex-col gap-2 mb-6">
-        <h1 className="text-2xl font-bold">Category: {categorySlug}</h1>
+        <h1 className="text-2xl font-bold">{t('title', { category: categorySlug })}</h1>
       </div>
 
       <ProductListFiltered

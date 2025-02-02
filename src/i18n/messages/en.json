@@ -5,6 +5,17 @@
     "openSettings": "Open settings",
     "add": "Add"
   },
+  "category": {
+    "title": "Category: {category}"
+  },
+  "product": {
+    "loading": "Loading...",
+    "error": "Error: {message}",
+    "notFound": "Product not found",
+    "availableFrom": "Available from",
+    "priceAt": "at {shop}",
+    "pricePerUnit": "${price} per unit"
+  },
   "filters": {
     "brands": "Brands",
     "models": "Models",
