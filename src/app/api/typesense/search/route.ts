@@ -55,11 +55,9 @@ export async function GET(request: NextRequest) {
         {
           q: '*',
           query_by: 'title',
-          filter_by: `category_slug:=${filterBy
-            .split('&&')[0]
-            .trim()
-            .split(':=')[1]
-            .replace(/['"]/g, '')}`,
+          filter_by: filterBy.includes('category_slug')
+            ? `category_slug:=${filterBy.split('&&')[0].trim().split(':=')[1].replace(/['"]/g, '')}`
+            : '', // No filter if not filtering by category
           facet_by: 'brand,model,specs.type,specs.label',
           max_facet_values: 100,
           per_page: 0,
@@ -120,11 +118,13 @@ export async function GET(request: NextRequest) {
             {
               q: '*',
               query_by: 'title',
-              filter_by: `category_slug:=${filterBy
-                .split('&&')[0]
-                .trim()
-                .split(':=')[1]
-                .replace(/['"]/g, '')} && specs.type:=${specType.value}`,
+              filter_by: filterBy.includes('category_slug')
+                ? `category_slug:=${filterBy
+                    .split('&&')[0]
+                    .trim()
+                    .split(':=')[1]
+                    .replace(/['"]/g, '')} && specs.type:=${specType.value}`
+                : `specs.type:=${specType.value}`,
               facet_by: 'specs.label',
               max_facet_values: 100,
               per_page: 0,

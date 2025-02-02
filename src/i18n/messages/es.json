@@ -1,0 +1,35 @@
+{
+    "actions": {
+        "login": "Iniciar sesión",
+        "logout": "Cerrar sesión",
+        "openSettings": "Abrir configuración",
+        "add": "Añadir"
+    },
+    "filters": {
+        "brands": "Marcas",
+        "models": "Modelos",
+        "priceRange": {
+            "title": "Rango de precio por unidad",
+            "unit": "€{value}/unidad",
+            "filter": "Precio por unidad: €{min} - €{max}"
+        },
+        "search": {
+            "placeholder": "Buscar productos...",
+            "label": "Búsqueda: {query}",
+            "clearAria": "Limpiar búsqueda"
+        },
+        "badges": {
+            "brand": "Marca: {name}",
+            "model": "Modelo: {name}",
+            "spec": "{type}: {value}",
+            "removeAria": "Eliminar filtro de {type}",
+            "clearAll": "Limpiar todos los filtros"
+        },
+        "products": {
+            "found": "{count, plural, =0 {No hay productos} =1 {1 producto encontrado} other {# productos encontrados}}",
+            "perPage": "Productos por página:",
+            "bestPrice": "Mejor precio: €{price}",
+            "availableAt": "Disponible en: {shops}"
+        }
+    }
+}

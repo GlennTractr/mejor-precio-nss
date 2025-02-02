@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Checkbox } from '@/components/ui/checkbox';
 
 export interface FilterOption {
@@ -24,6 +25,8 @@ export function FilterGroup({
   isLoading = false,
   isInitialLoad = false,
 }: FilterGroupProps) {
+  const t = useTranslations('filters');
+
   // Sort options into three tiers:
   // 1. Count > 0: ordered by label
   // 2. Count = 0 AND selected: ordered by label
@@ -50,7 +53,7 @@ export function FilterGroup({
 
   return (
     <div className="space-y-3">
-      <h3 className="font-semibold capitalize">{title}</h3>
+      <h3 className="font-semibold capitalize">{t(title.toLowerCase())}</h3>
       {isInitialLoad ? (
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, index) => (

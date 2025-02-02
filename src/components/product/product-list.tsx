@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 import { Product } from '@/types/product';
 import Link from 'next/link';
 import {
@@ -73,18 +74,17 @@ function ProductListComponent({
   onPageChange,
   onItemsPerPageChange,
 }: ProductListProps) {
+  const t = useTranslations('filters.products');
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const visiblePages = getVisiblePages(currentPage, totalPages);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <p className="text-gray-600">
-          {totalItems} {totalItems === 1 ? 'product' : 'products'} found
-        </p>
+        <p className="text-gray-600">{t('found', { count: totalItems })}</p>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">Items per page:</span>
+          <span className="text-sm text-gray-600">{t('perPage')}</span>
           <Select
             defaultValue={String(itemsPerPage)}
             onValueChange={value => {
@@ -121,12 +121,12 @@ function ProductListComponent({
                   </CardHeader>
                   <CardContent>
                     <p className="text-lg font-bold">
-                      Best Price: €{product.best_price_per_unit.toFixed(2)}
+                      {t('bestPrice', { price: product.best_price_per_unit.toFixed(2) })}
                     </p>
                   </CardContent>
                   <CardFooter>
                     <p className="text-sm text-gray-500">
-                      Available at: {product.shop_names.join(', ')}
+                      {t('availableAt', { shops: product.shop_names.join(', ') })}
                     </p>
                   </CardFooter>
                 </Card>

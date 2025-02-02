@@ -5,6 +5,33 @@
     "openSettings": "Open settings",
     "add": "Add"
   },
+  "filters": {
+    "brands": "Brands",
+    "models": "Models",
+    "priceRange": {
+      "title": "Price per unit range",
+      "unit": "€{value}/unit",
+      "filter": "Price per unit: €{min} - €{max}"
+    },
+    "search": {
+      "placeholder": "Search products...",
+      "label": "Search: {query}",
+      "clearAria": "Clear search"
+    },
+    "badges": {
+      "brand": "Brand: {name}",
+      "model": "Model: {name}",
+      "spec": "{type}: {value}",
+      "removeAria": "Remove {type} filter",
+      "clearAll": "Clear all filters"
+    },
+    "products": {
+      "found": "{count, plural, =0 {No products found} =1 {1 product found} other {# products found}}",
+      "perPage": "Items per page:",
+      "bestPrice": "Best Price: €{price}",
+      "availableAt": "Available at: {shops}"
+    }
+  },
   "auth": {
     "signInTitle": "Sign in to your account",
     "emailLabel": "Email address",

@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 import { Slider } from '@/components/ui/slider';
 import { FilterGroup } from '@/components/filter/filter-group';
 import type { FacetValue, SpecFacet } from '@/types/product';
@@ -41,11 +42,13 @@ function FilterPanelComponent({
   onSpecLabelSelectionChange,
   onPriceRangeChange,
 }: FilterPanelProps) {
+  const t = useTranslations('filters');
+
   return (
     <div className="w-64 flex-shrink-0 space-y-6">
       {/* Brands Filter */}
       <FilterGroup
-        title="Brands"
+        title="brands"
         options={facets.brand}
         selectedValues={selectedBrands}
         onSelectionChange={onBrandSelectionChange}
@@ -55,7 +58,7 @@ function FilterPanelComponent({
 
       {/* Models Filter */}
       <FilterGroup
-        title="Models"
+        title="models"
         options={facets.model}
         selectedValues={selectedModels}
         onSelectionChange={onModelSelectionChange}
@@ -80,7 +83,7 @@ function FilterPanelComponent({
 
       {/* Price Range Filter */}
       <div className="space-y-3">
-        <h3 className="font-semibold">Price per unit range</h3>
+        <h3 className="font-semibold">{t('priceRange.title')}</h3>
         <div className="px-2">
           <Slider
             defaultValue={[priceRange[0], priceRange[1]]}
@@ -95,8 +98,12 @@ function FilterPanelComponent({
             minStepsBetweenThumbs={0.01}
           />
           <div className="flex items-center justify-between">
-            <span className="text-sm">€{priceRange[0].toFixed(2)}/unit</span>
-            <span className="text-sm">€{priceRange[1].toFixed(2)}/unit</span>
+            <span className="text-sm">
+              {t('priceRange.unit', { value: priceRange[0].toFixed(2) })}
+            </span>
+            <span className="text-sm">
+              {t('priceRange.unit', { value: priceRange[1].toFixed(2) })}
+            </span>
           </div>
         </div>
       </div>

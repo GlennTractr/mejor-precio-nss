@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Product } from '@/types/product';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -89,6 +90,8 @@ export function ProductListFiltered({
   onPriceRangeChange,
   onClearAllFilters,
 }: ProductListFilteredProps) {
+  const t = useTranslations('filters');
+
   const hasActiveFilters =
     selectedBrands.length > 0 ||
     selectedModels.length > 0 ||
@@ -125,7 +128,7 @@ export function ProductListFiltered({
             <div className="flex items-center gap-4">
               <Input
                 type="search"
-                placeholder="Search products..."
+                placeholder={t('search.placeholder')}
                 className="max-w-sm"
                 value={searchQuery}
                 onChange={e => onSearchQueryChange(e.target.value)}
@@ -136,13 +139,13 @@ export function ProductListFiltered({
             <div className="flex flex-wrap gap-2">
               {searchQuery && (
                 <Badge key="search" variant="secondary" className="flex items-center gap-1">
-                  Search: {searchQuery}
+                  {t('search.label', { query: searchQuery })}
                   <button
                     onClick={() => onSearchQueryChange('')}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
                     <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Clear search</span>
+                    <span className="sr-only">{t('search.clearAria')}</span>
                   </button>
                 </Badge>
               )}
@@ -152,7 +155,7 @@ export function ProductListFiltered({
                   variant="secondary"
                   className="flex items-center gap-1"
                 >
-                  Brand: {brand}
+                  {t('badges.brand', { name: brand })}
                   <button
                     onClick={() => {
                       const newBrands = selectedBrands.filter(b => b !== brand);
@@ -161,7 +164,7 @@ export function ProductListFiltered({
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
                     <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove {brand} filter</span>
+                    <span className="sr-only">{t('badges.removeAria', { type: brand })}</span>
                   </button>
                 </Badge>
               ))}
@@ -171,7 +174,7 @@ export function ProductListFiltered({
                   variant="secondary"
                   className="flex items-center gap-1"
                 >
-                  Model: {model}
+                  {t('badges.model', { name: model })}
                   <button
                     onClick={() => {
                       const newModels = selectedModels.filter(m => m !== model);
@@ -180,39 +183,46 @@ export function ProductListFiltered({
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
                     <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove {model} filter</span>
+                    <span className="sr-only">{t('badges.removeAria', { type: model })}</span>
                   </button>
                 </Badge>
               ))}
-              {selectedSpecLabels.map(specLabel => (
-                <Badge
-                  key={`spec-label-${specLabel}`}
-                  variant="secondary"
-                  className="flex items-center gap-1"
-                >
-                  {specFacets.find(spec => spec.labels.some(l => l.value === specLabel))?.type}:{' '}
-                  {specLabel}
-                  <button
-                    onClick={() => {
-                      const newSpecLabels = selectedSpecLabels.filter(l => l !== specLabel);
-                      onSpecLabelSelectionChange(newSpecLabels);
-                    }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
+              {selectedSpecLabels.map(specLabel => {
+                const specType = specFacets.find(spec =>
+                  spec.labels.some(l => l.value === specLabel)
+                )?.type;
+                return (
+                  <Badge
+                    key={`spec-label-${specLabel}`}
+                    variant="secondary"
+                    className="flex items-center gap-1"
                   >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove {specLabel} filter</span>
-                  </button>
-                </Badge>
-              ))}
+                    {t('badges.spec', { type: specType, value: specLabel })}
+                    <button
+                      onClick={() => {
+                        const newSpecLabels = selectedSpecLabels.filter(l => l !== specLabel);
+                        onSpecLabelSelectionChange(newSpecLabels);
+                      }}
+                      className="ml-1 rounded-full hover:bg-secondary/80"
+                    >
+                      <Cross2Icon className="h-3 w-3" />
+                      <span className="sr-only">{t('badges.removeAria', { type: specType })}</span>
+                    </button>
+                  </Badge>
+                );
+              })}
               {(priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice) && (
                 <Badge variant="secondary" className="flex items-center gap-1">
-                  Price per unit: €{priceRange[0].toFixed(2)} - €{priceRange[1].toFixed(2)}
+                  {t('priceRange.filter', {
+                    min: priceRange[0].toFixed(2),
+                    max: priceRange[1].toFixed(2),
+                  })}
                   <button
                     onClick={() => onPriceRangeChange([minPossiblePrice, maxPossiblePrice])}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
                     <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">Remove price per unit filter</span>
+                    <span className="sr-only">{t('badges.removeAria', { type: 'price' })}</span>
                   </button>
                 </Badge>
               )}
@@ -221,7 +231,7 @@ export function ProductListFiltered({
                   onClick={onClearAllFilters}
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  Clear all filters
+                  {t('badges.clearAll')}
                 </button>
               )}
             </div>
