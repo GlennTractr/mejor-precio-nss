@@ -6,6 +6,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { ReactQueryProvider } from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
+import { TopBar } from '@/components/top-bar';
 
 const geistSans = localFont({
   src: '../fonts/GeistVF.woff',
@@ -19,8 +20,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'NSS Boilerplate',
-  description: 'A simple boilerplate for Next.js, Supabase and Shadcn/UI',
+  title: 'MejorPrecio',
+  description: 'Find the best prices for your favorite products',
 };
 
 export default async function RootLayout({
@@ -39,6 +40,7 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
+            <TopBar />
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>

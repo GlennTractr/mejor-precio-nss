@@ -17,7 +17,10 @@
     "priceAt": "at {shop}",
     "pricePerUnit": "${price} per unit",
     "filterByQuantity": "Filter by quantity",
-    "showAll": "All"
+    "showAll": "All",
+    "units": {
+      "unit": "{count, plural, =1 {unit} other {units}}"
+    }
   },
   "filters": {
     "brands": "Brands",
