@@ -14,7 +14,9 @@
         "notFound": "Producto no encontrado",
         "availableFrom": "Disponible en",
         "priceAt": "en {shop}",
-        "pricePerUnit": "${price} por unidad"
+        "pricePerUnit": "${price} por unidad",
+        "filterByQuantity": "Filtrar por cantidad",
+        "showAll": "Todos"
     },
     "filters": {
         "brands": "Marcas",

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import supabaseClient from '@/lib/supabase-client';
 import { Tables } from '@/types/database';
 import { useTranslations } from 'next-intl';
+import { ProductSellContextList } from './product-sell-context-list';
 
 type ProductSellContext = {
   price: number;
@@ -209,36 +210,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
             </div>
           )}
 
-          {product.ProductPackaging && product.ProductPackaging.length > 0 && (
-            <div className="mt-6">
-              <h2 className="text-lg font-semibold mb-2">{t('product.availableFrom')}</h2>
-              <div className="space-y-3">
-                {product.ProductPackaging.map((pkg, index) =>
-                  pkg.ProductSellContext?.map((ctx, ctxIndex) => (
-                    <div
-                      key={`${index}-${ctxIndex}`}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                    >
-                      <div>
-                        <div className="font-medium">{ctx.Shop?.label}</div>
-                        <div className="text-sm text-gray-600">
-                          {pkg.quantity} {pkg.type}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-bold">${ctx.price.toFixed(2)}</div>
-                        <div className="text-sm text-gray-600">
-                          {t('product.pricePerUnit', {
-                            price: (ctx.price / pkg.quantity).toFixed(2),
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          )}
+          <ProductSellContextList productPackaging={product.ProductPackaging} />
         </div>
       </div>
     </div>
