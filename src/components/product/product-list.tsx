@@ -111,7 +111,7 @@ function ProductListComponent({
           : products.map(product => (
               <Link
                 key={product.id}
-                href={`/product/${product.product_slug}`}
+                href={`/producto/${product.product_slug}`}
                 className="block transition-transform hover:scale-105"
               >
                 <Card>
