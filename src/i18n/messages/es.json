@@ -8,6 +8,8 @@
     "filters": {
         "brands": "Marcas",
         "models": "Modelos",
+        "step": "Etapa",
+        "gender": "Género",
         "priceRange": {
             "title": "Rango de precio por unidad",
             "unit": "€{value}/unidad",

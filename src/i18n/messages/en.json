@@ -8,6 +8,8 @@
   "filters": {
     "brands": "Brands",
     "models": "Models",
+    "step": "Step",
+    "gender": "Gender",
     "priceRange": {
       "title": "Price per unit range",
       "unit": "€{value}/unit",
