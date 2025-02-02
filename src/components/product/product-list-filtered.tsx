@@ -2,7 +2,6 @@
 
 import { useTranslations } from 'next-intl';
 import { Product } from '@/types/product';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { FilterPanel } from '@/components/filter/filter-panel';
@@ -92,6 +91,37 @@ export function ProductListFiltered({
 }: ProductListFilteredProps) {
   const t = useTranslations('filters');
 
+  // Handlers that reset pagination
+  const handleSearchQueryChange = (query: string) => {
+    onSearchQueryChange(query);
+    onPageChange(1);
+  };
+
+  const handleBrandSelectionChange = (brands: string[]) => {
+    onBrandSelectionChange(brands);
+    onPageChange(1);
+  };
+
+  const handleModelSelectionChange = (models: string[]) => {
+    onModelSelectionChange(models);
+    onPageChange(1);
+  };
+
+  const handleSpecLabelSelectionChange = (labels: string[]) => {
+    onSpecLabelSelectionChange(labels);
+    onPageChange(1);
+  };
+
+  const handlePriceRangeChange = (range: [number, number]) => {
+    onPriceRangeChange(range);
+    onPageChange(1);
+  };
+
+  const handleClearAllFilters = () => {
+    onClearAllFilters();
+    onPageChange(1);
+  };
+
   const hasActiveFilters =
     selectedBrands.length > 0 ||
     selectedModels.length > 0 ||
@@ -116,32 +146,24 @@ export function ProductListFiltered({
           maxPossiblePrice={maxPossiblePrice}
           isFacetsLoading={isFacetsLoading}
           isInitialLoad={isInitialLoad}
-          onBrandSelectionChange={onBrandSelectionChange}
-          onModelSelectionChange={onModelSelectionChange}
-          onSpecLabelSelectionChange={onSpecLabelSelectionChange}
-          onPriceRangeChange={onPriceRangeChange}
+          searchQuery={searchQuery}
+          onSearchQueryChange={handleSearchQueryChange}
+          onBrandSelectionChange={handleBrandSelectionChange}
+          onModelSelectionChange={handleModelSelectionChange}
+          onSpecLabelSelectionChange={handleSpecLabelSelectionChange}
+          onPriceRangeChange={handlePriceRangeChange}
         />
 
         {/* Main Content */}
         <div className="flex-1">
           <div className="flex flex-col gap-4 mb-6">
-            <div className="flex items-center gap-4">
-              <Input
-                type="search"
-                placeholder={t('search.placeholder')}
-                className="max-w-sm"
-                value={searchQuery}
-                onChange={e => onSearchQueryChange(e.target.value)}
-              />
-            </div>
-
             {/* Active Filters */}
             <div className="flex flex-wrap gap-2">
               {searchQuery && (
                 <Badge key="search" variant="secondary" className="flex items-center gap-1">
                   {t('search.label', { query: searchQuery })}
                   <button
-                    onClick={() => onSearchQueryChange('')}
+                    onClick={() => handleSearchQueryChange('')}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
                     <Cross2Icon className="h-3 w-3" />
@@ -159,7 +181,7 @@ export function ProductListFiltered({
                   <button
                     onClick={() => {
                       const newBrands = selectedBrands.filter(b => b !== brand);
-                      onBrandSelectionChange(newBrands);
+                      handleBrandSelectionChange(newBrands);
                     }}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
@@ -178,7 +200,7 @@ export function ProductListFiltered({
                   <button
                     onClick={() => {
                       const newModels = selectedModels.filter(m => m !== model);
-                      onModelSelectionChange(newModels);
+                      handleModelSelectionChange(newModels);
                     }}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
@@ -201,7 +223,7 @@ export function ProductListFiltered({
                     <button
                       onClick={() => {
                         const newSpecLabels = selectedSpecLabels.filter(l => l !== specLabel);
-                        onSpecLabelSelectionChange(newSpecLabels);
+                        handleSpecLabelSelectionChange(newSpecLabels);
                       }}
                       className="ml-1 rounded-full hover:bg-secondary/80"
                     >
@@ -218,7 +240,7 @@ export function ProductListFiltered({
                     max: priceRange[1].toFixed(2),
                   })}
                   <button
-                    onClick={() => onPriceRangeChange([minPossiblePrice, maxPossiblePrice])}
+                    onClick={() => handlePriceRangeChange([minPossiblePrice, maxPossiblePrice])}
                     className="ml-1 rounded-full hover:bg-secondary/80"
                   >
                     <Cross2Icon className="h-3 w-3" />
@@ -228,7 +250,7 @@ export function ProductListFiltered({
               )}
               {hasActiveFilters && (
                 <button
-                  onClick={onClearAllFilters}
+                  onClick={handleClearAllFilters}
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
                   {t('badges.clearAll')}

@@ -55,6 +55,9 @@ export function CategoryProductList({
   const [isProductsLoading, setIsProductsLoading] = useState(true);
   const [isFacetsLoading, setIsFacetsLoading] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [currentPageState, setCurrentPageState] = useState(
+    parseInt(searchParams?.get('page') || String(initialPage))
+  );
   const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '');
   const [selectedBrands, setSelectedBrands] = useState<string[]>(
     searchParams?.get('brands')?.split(',').filter(Boolean) || []
@@ -78,7 +81,6 @@ export function CategoryProductList({
   }>(initialFilters.facets);
   const [specFacets, setSpecFacets] = useState<SpecFacet[]>(initialFilters.specs_facets);
 
-  const currentPage = parseInt(searchParams?.get('page') || String(initialPage));
   const itemsPerPage = parseInt(searchParams?.get('per_page') || String(initialItemsPerPage));
   const debouncedSearch = useDebounce(searchQuery, 300);
   const debouncedPriceRange = useDebounce(priceRange, 300);
@@ -137,7 +139,7 @@ export function CategoryProductList({
       }
     }
 
-    // Use history.replaceState to update URL without triggering a navigation
+    // Replace the URL without navigation
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     window.history.replaceState({ path: newUrl }, '', newUrl);
   };
@@ -253,22 +255,9 @@ export function CategoryProductList({
       try {
         const filterBy = buildFilterString();
 
-        // Update URL first
-        updateUrlParams(
-          currentPage,
-          itemsPerPage,
-          debouncedSearch,
-          selectedBrands,
-          selectedModels,
-          debouncedPriceRange[0],
-          debouncedPriceRange[1],
-          selectedSpecTypes,
-          selectedSpecLabels
-        );
-
         // Then fetch data
         const productsResponse = await fetch(
-          `/api/typesense/search?page=${currentPage}&per_page=${itemsPerPage}&q=${debouncedSearch}&filter_by=${encodeURIComponent(
+          `/api/typesense/search?page=${currentPageState}&per_page=${itemsPerPage}&q=${debouncedSearch}&filter_by=${encodeURIComponent(
             filterBy
           )}`
         );
@@ -296,7 +285,7 @@ export function CategoryProductList({
           );
         }
 
-        if (currentPage === 1 && productsData.found === 0) {
+        if (currentPageState === 1 && productsData.found === 0) {
           notFound();
         }
       } catch (error) {
@@ -314,7 +303,7 @@ export function CategoryProductList({
     fetchData();
   }, [
     categorySlug,
-    currentPage,
+    currentPageState,
     itemsPerPage,
     debouncedSearch,
     selectedBrands,
@@ -337,7 +326,7 @@ export function CategoryProductList({
         isProductsLoading={isProductsLoading}
         isFacetsLoading={isFacetsLoading}
         isInitialLoad={isInitialLoad}
-        currentPage={currentPage}
+        currentPage={currentPageState}
         itemsPerPage={itemsPerPage}
         searchQuery={searchQuery}
         selectedBrands={selectedBrands}
@@ -351,6 +340,7 @@ export function CategoryProductList({
         facets={facets}
         specFacets={specFacets}
         onPageChange={page => {
+          setCurrentPageState(page);
           updateUrlParams(
             page,
             itemsPerPage,
@@ -364,6 +354,7 @@ export function CategoryProductList({
           );
         }}
         onItemsPerPageChange={perPage => {
+          setCurrentPageState(1);
           updateUrlParams(
             1,
             perPage,
@@ -378,18 +369,78 @@ export function CategoryProductList({
         }}
         onSearchQueryChange={query => {
           setSearchQuery(query);
+          setCurrentPageState(1);
+          updateUrlParams(
+            1,
+            itemsPerPage,
+            query,
+            selectedBrands,
+            selectedModels,
+            priceRange[0],
+            priceRange[1],
+            selectedSpecTypes,
+            selectedSpecLabels
+          );
         }}
         onBrandSelectionChange={brands => {
           setSelectedBrands(brands);
+          setCurrentPageState(1);
+          updateUrlParams(
+            1,
+            itemsPerPage,
+            searchQuery,
+            brands,
+            selectedModels,
+            priceRange[0],
+            priceRange[1],
+            selectedSpecTypes,
+            selectedSpecLabels
+          );
         }}
         onModelSelectionChange={models => {
           setSelectedModels(models);
+          setCurrentPageState(1);
+          updateUrlParams(
+            1,
+            itemsPerPage,
+            searchQuery,
+            selectedBrands,
+            models,
+            priceRange[0],
+            priceRange[1],
+            selectedSpecTypes,
+            selectedSpecLabels
+          );
         }}
         onSpecLabelSelectionChange={labels => {
           setSelectedSpecLabels(labels);
+          setCurrentPageState(1);
+          updateUrlParams(
+            1,
+            itemsPerPage,
+            searchQuery,
+            selectedBrands,
+            selectedModels,
+            priceRange[0],
+            priceRange[1],
+            selectedSpecTypes,
+            labels
+          );
         }}
         onPriceRangeChange={range => {
           setPriceRange(range);
+          setCurrentPageState(1);
+          updateUrlParams(
+            1,
+            itemsPerPage,
+            searchQuery,
+            selectedBrands,
+            selectedModels,
+            range[0],
+            range[1],
+            selectedSpecTypes,
+            selectedSpecLabels
+          );
         }}
         onClearAllFilters={() => {
           setSelectedBrands([]);
@@ -398,6 +449,8 @@ export function CategoryProductList({
           setSelectedSpecLabels([]);
           setSearchQuery('');
           setPriceRange([minPossiblePrice, maxPossiblePrice]);
+          setCurrentPageState(1);
+          updateUrlParams(1, itemsPerPage, '', [], [], minPossiblePrice, maxPossiblePrice, [], []);
         }}
       />
     </div>

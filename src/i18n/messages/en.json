@@ -16,6 +16,7 @@
       "filter": "Price per unit: €{min} - €{max}"
     },
     "search": {
+      "title": "Search",
       "placeholder": "Search products...",
       "label": "Search: {query}",
       "clearAria": "Clear search"

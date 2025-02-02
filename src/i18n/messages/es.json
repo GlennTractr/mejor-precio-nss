@@ -16,6 +16,7 @@
             "filter": "Precio por unidad: €{min} - €{max}"
         },
         "search": {
+            "title": "Buscar",
             "placeholder": "Buscar productos...",
             "label": "Búsqueda: {query}",
             "clearAria": "Limpiar búsqueda"

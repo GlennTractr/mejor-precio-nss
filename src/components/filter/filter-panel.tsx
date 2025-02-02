@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Slider } from '@/components/ui/slider';
 import { FilterGroup } from '@/components/filter/filter-group';
 import type { FacetValue, SpecFacet } from '@/types/product';
+import { Input } from '@/components/ui/input';
 
 interface FilterPanelProps {
   facets: {
@@ -20,6 +21,8 @@ interface FilterPanelProps {
   maxPossiblePrice: number;
   isFacetsLoading: boolean;
   isInitialLoad: boolean;
+  searchQuery: string;
+  onSearchQueryChange: (query: string) => void;
   onBrandSelectionChange: (newBrands: string[]) => void;
   onModelSelectionChange: (newModels: string[]) => void;
   onSpecLabelSelectionChange: (newLabels: string[]) => void;
@@ -37,6 +40,8 @@ function FilterPanelComponent({
   maxPossiblePrice,
   isFacetsLoading,
   isInitialLoad,
+  searchQuery,
+  onSearchQueryChange,
   onBrandSelectionChange,
   onModelSelectionChange,
   onSpecLabelSelectionChange,
@@ -46,6 +51,17 @@ function FilterPanelComponent({
 
   return (
     <div className="w-64 flex-shrink-0 space-y-6">
+      {/* Search Filter */}
+      <div className="space-y-3">
+        <h3 className="font-semibold">{t('search.title')}</h3>
+        <Input
+          type="search"
+          placeholder={t('search.placeholder')}
+          value={searchQuery}
+          onChange={e => onSearchQueryChange(e.target.value)}
+        />
+      </div>
+
       {/* Brands Filter */}
       <FilterGroup
         title="brands"
