@@ -39,7 +39,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className="container py-8 space-y-8">
+    <div className="py-8 space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">{t('categories')}</h2>
         <Suspense fallback={<CategoryCarouselSkeleton />}>

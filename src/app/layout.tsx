@@ -45,7 +45,9 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <TopBar />
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <main className="flex-1">{children}</main>
+              <main className="flex-1">
+                <div className="container mx-auto px-4">{children}</div>
+              </main>
             </ThemeProvider>
             <Footer />
           </NextIntlClientProvider>

@@ -156,62 +156,64 @@ export function ProductPage({ productSlug }: ProductPageProps) {
   );
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left column - Image */}
-        <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-sm">
-          {imageUrl && (
-            <Image
-              src={imageUrl}
-              alt={product?.title || ''}
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority
-            />
-          )}
-        </div>
-
-        {/* Right column - Product details */}
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-gray-900">{product.title}</h1>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              {product.model?.category?.label && (
-                <>
-                  <span>{product.model.category.label}</span>
-                  <span>•</span>
-                </>
-              )}
-              {product.model?.brand?.label && (
-                <>
-                  <span className="text-blue-600 hover:text-blue-800 cursor-pointer">
-                    {product.model.brand.label}
-                  </span>
-                  <span>•</span>
-                </>
-              )}
-              {product.model?.label && <span>{product.model.label}</span>}
-            </div>
+    <div className="py-8">
+      <div className="container mx-auto py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Left column - Image */}
+          <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-sm">
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt={product?.title || ''}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
+              />
+            )}
           </div>
 
-          {lowestPriceContext && (
-            <div className="border-t border-b py-4 space-y-2">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-gray-900">
-                  ${lowestPriceContext.price.toFixed(2)}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {t('product.priceAt', { shop: lowestPriceContext.shop })}
-                </span>
-              </div>
-              <div className="text-sm text-gray-600">
-                {t('product.pricePerUnit', { price: lowestPriceContext.pricePerUnit.toFixed(2) })}
+          {/* Right column - Product details */}
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold text-gray-900">{product.title}</h1>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                {product.model?.category?.label && (
+                  <>
+                    <span>{product.model.category.label}</span>
+                    <span>•</span>
+                  </>
+                )}
+                {product.model?.brand?.label && (
+                  <>
+                    <span className="text-blue-600 hover:text-blue-800 cursor-pointer">
+                      {product.model.brand.label}
+                    </span>
+                    <span>•</span>
+                  </>
+                )}
+                {product.model?.label && <span>{product.model.label}</span>}
               </div>
             </div>
-          )}
 
-          <ProductSellContextList productPackaging={product.ProductPackaging} />
+            {lowestPriceContext && (
+              <div className="border-t border-b py-4 space-y-2">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-gray-900">
+                    ${lowestPriceContext.price.toFixed(2)}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {t('product.priceAt', { shop: lowestPriceContext.shop })}
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600">
+                  {t('product.pricePerUnit', { price: lowestPriceContext.pricePerUnit.toFixed(2) })}
+                </div>
+              </div>
+            )}
+
+            <ProductSellContextList productPackaging={product.ProductPackaging} />
+          </div>
         </div>
       </div>
     </div>

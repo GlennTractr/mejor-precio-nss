@@ -132,7 +132,7 @@ export function ProductListFiltered({
     priceRange[1] < maxPossiblePrice;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="px-4 py-8">
       <div className="flex gap-8">
         {/* Filter Panel */}
         <FilterPanel
