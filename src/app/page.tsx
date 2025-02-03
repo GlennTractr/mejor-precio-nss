@@ -1,6 +1,8 @@
+'use server';
+
 import { Suspense } from 'react';
 import { CategoryCarousel } from '@/components/category/category-carousel';
-import { ClientProducts } from '@/components/product/client-products';
+import { HomeProductList } from '@/components/product/home-product-list';
 import { typesenseClient } from '@/lib/typesense-client';
 import { getTranslations } from 'next-intl/server';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
@@ -48,7 +50,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       <section>
         <h2 className="text-2xl font-bold mb-4">{t('allProducts')}</h2>
         <HydrationBoundary state={dehydratedState}>
-          <ClientProducts currentPage={currentPage} itemsPerPage={itemsPerPage} />
+          <HomeProductList currentPage={currentPage} itemsPerPage={itemsPerPage} />
         </HydrationBoundary>
       </section>
     </div>

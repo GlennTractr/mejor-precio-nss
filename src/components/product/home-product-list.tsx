@@ -6,7 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { typesenseClient } from '@/lib/typesense-client';
 import type { Product, SearchResponse } from '@/types/product';
 
-interface ClientProductsProps {
+interface HomeProductListProps {
   currentPage: number;
   itemsPerPage: number;
 }
@@ -23,7 +23,7 @@ async function getProducts(page: number, perPage: number): Promise<SearchRespons
   return typesenseClient.collections('product').documents().search(searchParameters, {});
 }
 
-export function ClientProducts({ currentPage, itemsPerPage }: ClientProductsProps) {
+export function HomeProductList({ currentPage, itemsPerPage }: HomeProductListProps) {
   const router = useRouter();
   const pathname = usePathname();
 
