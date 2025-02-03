@@ -7,6 +7,7 @@ import { ReactQueryProvider } from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { TopBar } from '@/components/top-bar';
+import { Footer } from '@/components/footer';
 
 const geistSans = localFont({
   src: '../fonts/GeistVF.woff',
@@ -37,13 +38,16 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+      >
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
             <TopBar />
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
+              <main className="flex-1">{children}</main>
             </ThemeProvider>
+            <Footer />
           </NextIntlClientProvider>
           <Toaster />
         </ReactQueryProvider>

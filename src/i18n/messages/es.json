@@ -57,5 +57,17 @@
         "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!",
         "categories": "Categorías",
         "allProducts": "Todos los Productos"
+    },
+    "footer": {
+        "description": "Encuentra los mejores precios para tus productos favoritos",
+        "quickLinks": "Enlaces Rápidos",
+        "legal": "Legal",
+        "connect": "Conectar",
+        "home": "Inicio",
+        "about": "Acerca de",
+        "contact": "Contacto",
+        "privacyPolicy": "Política de Privacidad",
+        "termsOfService": "Términos de Servicio",
+        "allRightsReserved": "Todos los derechos reservados"
     }
 }

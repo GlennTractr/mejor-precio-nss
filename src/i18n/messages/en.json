@@ -97,5 +97,17 @@
     "newTodoPlaceholder": "Add a new todo...",
     "noTodos": "No todos yet",
     "showAll": "Show all"
+  },
+  "footer": {
+    "description": "Find the best prices for your favorite products",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "connect": "Connect",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "allRightsReserved": "All rights reserved"
   }
 }
