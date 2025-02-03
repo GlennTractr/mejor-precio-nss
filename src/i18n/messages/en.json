@@ -4,7 +4,9 @@
     "logout": "Logout",
     "openSettings": "Open settings",
     "add": "Add",
-    "buy": "Buy"
+    "buy": "Buy",
+    "seeOffers": "See offers",
+    "buyNow": "Buy now"
   },
   "category": {
     "title": "Category: {category}"
@@ -68,7 +70,9 @@
     "welcome": "Welcome back, {email}",
     "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!",
     "categories": "Categories",
-    "allProducts": "All Products"
+    "allProducts": "All Products",
+    "heroTitle": "Find the Best Prices for Your Baby",
+    "heroDescription": "Compare baby product prices across major online stores. Find the best deals on diapers, formula, strollers, and everything your baby needs, all in one place."
   },
   "common": {
     "logo": "Logo"

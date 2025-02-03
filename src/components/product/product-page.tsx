@@ -6,11 +6,14 @@ import supabaseClient from '@/lib/supabase-client';
 import { Tables } from '@/types/database';
 import { useTranslations } from 'next-intl';
 import { ProductSellContextList } from './product-sell-context-list';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type ProductSellContext = {
   price: number;
+  link: string;
   Shop: {
     label: string;
+    img_url: string;
   };
 };
 
@@ -39,6 +42,10 @@ type ProductResponse = Omit<Tables<'Product'>, 'model' | 'image'> & {
   model: ProductModel;
   image: ProductImage;
   ProductPackaging: ProductPackaging[];
+  ProductSpecs?: Array<{
+    type: string;
+    label: string;
+  }>;
 };
 
 interface ProductPageProps {
@@ -49,6 +56,96 @@ interface PriceContext {
   price: number;
   pricePerUnit: number;
   shop: string;
+}
+
+function ProductPageSkeleton() {
+  return (
+    <div>
+      <div className="bg-white border-b border-primary-light/20">
+        <div className="container mx-auto py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <Skeleton className="h-7 w-48 mb-2" />
+              <Skeleton className="h-5 w-96" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Left column - Image skeleton */}
+          <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-md border border-primary-light/20">
+            <div className="absolute inset-0 flex items-center justify-center bg-primary-light/5">
+              <div className="w-16 h-16 rounded-full bg-primary-light/20" />
+            </div>
+          </div>
+
+          {/* Right column - Product details skeleton */}
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <Skeleton className="h-9 w-3/4" />
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-5 w-24" />
+                <Skeleton className="h-5 w-24" />
+                <Skeleton className="h-5 w-24" />
+              </div>
+              <div className="flex flex-wrap gap-1.5 pt-2">
+                <Skeleton className="h-5 w-20 rounded-full" />
+                <Skeleton className="h-5 w-24 rounded-full" />
+                <Skeleton className="h-5 w-16 rounded-full" />
+              </div>
+            </div>
+
+            {/* Price card skeleton */}
+            <div className="border-t border-b border-primary-light/20 py-6 space-y-3 bg-white/50 rounded-lg px-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-baseline gap-3">
+                    <Skeleton className="h-10 w-32" />
+                    <Skeleton className="h-5 w-24" />
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="h-5 w-28" />
+                    <Skeleton className="h-5 w-20" />
+                  </div>
+                </div>
+                <Skeleton className="h-12 w-28 rounded-md" />
+              </div>
+            </div>
+
+            {/* Product list skeleton */}
+            <div className="bg-white rounded-lg shadow-sm border border-primary-light/20 p-4 space-y-4">
+              <Skeleton className="h-7 w-48" />
+              <div className="space-y-3">
+                {[1, 2, 3].map(i => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-4 bg-primary-light/5 rounded-lg"
+                  >
+                    <div className="flex items-center gap-4">
+                      <Skeleton className="h-12 w-12 rounded-lg" />
+                      <div className="space-y-2">
+                        <Skeleton className="h-5 w-24" />
+                        <Skeleton className="h-4 w-16" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <div className="text-right space-y-1">
+                        <Skeleton className="h-6 w-20" />
+                        <Skeleton className="h-4 w-16" />
+                      </div>
+                      <Skeleton className="h-9 w-20 rounded-md" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function ProductPage({ productSlug }: ProductPageProps) {
@@ -92,11 +189,16 @@ export function ProductPage({ productSlug }: ProductPageProps) {
               file_bucket,
               file_path
             ),
+            ProductSpecs (
+              type,
+              label
+            ),
             ProductPackaging (
               quantity,
               type,
               ProductSellContext (
                 price,
+                link,
                 Shop (
                   label,
                   img_url
@@ -130,7 +232,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
     fetchProduct();
   }, [productSlug]);
 
-  if (loading) return <div>{t('product.loading')}</div>;
+  if (loading) return <ProductPageSkeleton />;
   if (error) return <div>{t('product.error', { message: error })}</div>;
   if (!product) return <div>{t('product.notFound')}</div>;
 
@@ -156,17 +258,17 @@ export function ProductPage({ productSlug }: ProductPageProps) {
   );
 
   return (
-    <div className="py-8">
+    <div>
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left column - Image */}
-          <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-sm">
+          <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-md border border-primary-light/20">
             {imageUrl && (
               <Image
                 src={imageUrl}
                 alt={product?.title || ''}
                 fill
-                className="object-contain"
+                className="object-contain p-4"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />
@@ -176,43 +278,67 @@ export function ProductPage({ productSlug }: ProductPageProps) {
           {/* Right column - Product details */}
           <div className="space-y-6">
             <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-gray-900">{product.title}</h1>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <h1 className="text-3xl font-bold text-accent">{product.title}</h1>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 {product.model?.category?.label && (
                   <>
                     <span>{product.model.category.label}</span>
-                    <span>•</span>
+                    <span className="text-primary-light">•</span>
                   </>
                 )}
                 {product.model?.brand?.label && (
                   <>
-                    <span className="text-blue-600 hover:text-blue-800 cursor-pointer">
-                      {product.model.brand.label}
-                    </span>
-                    <span>•</span>
+                    <span className="text-muted-foreground">{product.model.brand.label}</span>
+                    <span className="text-primary-light">•</span>
                   </>
                 )}
-                {product.model?.label && <span>{product.model.label}</span>}
+                {product.model?.label && (
+                  <span className="text-muted-foreground">{product.model.label}</span>
+                )}
               </div>
+              {product.ProductSpecs && product.ProductSpecs.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {product.ProductSpecs.map((spec, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-light/10 text-primary"
+                    >
+                      {spec.type}: {spec.label}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {lowestPriceContext && (
-              <div className="border-t border-b py-4 space-y-2">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-gray-900">
-                    ${lowestPriceContext.price.toFixed(2)}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {t('product.priceAt', { shop: lowestPriceContext.shop })}
-                  </span>
+              <div className="border-t border-b border-primary-light/20 py-6 space-y-3 bg-white/50 rounded-lg px-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-4xl font-bold text-accent">
+                      ${lowestPriceContext.price.toFixed(2)}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {t('product.priceAt', { shop: lowestPriceContext.shop })}
+                    </span>
+                  </div>
+                  <a
+                    href={product.ProductPackaging?.[0]?.ProductSellContext?.[0]?.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-md transition-colors"
+                  >
+                    {t('actions.buyNow')}
+                  </a>
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-primary-dark font-medium">
                   {t('product.pricePerUnit', { price: lowestPriceContext.pricePerUnit.toFixed(2) })}
                 </div>
               </div>
             )}
 
-            <ProductSellContextList productPackaging={product.ProductPackaging} />
+            <div className="bg-white rounded-lg shadow-sm border border-primary-light/20 p-4">
+              <ProductSellContextList productPackaging={product.ProductPackaging} />
+            </div>
           </div>
         </div>
       </div>

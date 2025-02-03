@@ -44,12 +44,10 @@ async function getCategories(): Promise<Category[]> {
 
 function CategorySkeleton() {
   return (
-    <Card className="w-[200px] flex-shrink-0">
-      <CardContent className="p-4">
-        <div className="space-y-3">
-          <Skeleton className="h-[120px] w-full rounded-lg" />
-          <Skeleton className="h-4 w-full" />
-        </div>
+    <Card className="w-[180px] h-[180px] flex-shrink-0">
+      <CardContent className="p-4 space-y-3">
+        <Skeleton className="h-[120px] w-full rounded-lg" />
+        <Skeleton className="h-4 w-full" />
       </CardContent>
     </Card>
   );
@@ -75,7 +73,7 @@ export function CategoryCarousel() {
     <div className="flex gap-4 overflow-x-auto pb-4">
       {categories?.map(category => (
         <Link key={category.id} href={`/categoria/${category.slug}`}>
-          <Card className="w-[200px] flex-shrink-0 hover:bg-accent transition-colors">
+          <Card className="w-[180px] h-[180px] flex-shrink-0 hover:bg-accent/50 transition-colors">
             <CardContent className="p-4 space-y-3">
               <div className="relative h-[120px] w-full">
                 <Image
@@ -83,9 +81,12 @@ export function CategoryCarousel() {
                   alt={category.label}
                   fill
                   className="object-cover rounded-lg"
+                  sizes="180px"
+                  priority={false}
+                  quality={80}
                 />
               </div>
-              <h3 className="font-medium text-center">{category.label}</h3>
+              <h3 className="text-sm font-medium text-center truncate">{category.label}</h3>
             </CardContent>
           </Card>
         </Link>

@@ -13,6 +13,8 @@ export interface Product {
     label: string;
     type: string;
   }>;
+  main_image_bucket: string;
+  main_image_path: string;
 }
 
 export interface FacetValue {

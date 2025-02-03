@@ -132,27 +132,29 @@ export function ProductListFiltered({
     priceRange[1] < maxPossiblePrice;
 
   return (
-    <div className="px-4 py-8">
+    <div className="px-4 pb-8">
       <div className="flex gap-8">
         {/* Filter Panel */}
-        <FilterPanel
-          facets={facets}
-          specFacets={specFacets}
-          selectedBrands={selectedBrands}
-          selectedModels={selectedModels}
-          selectedSpecLabels={selectedSpecLabels}
-          priceRange={priceRange}
-          minPossiblePrice={minPossiblePrice}
-          maxPossiblePrice={maxPossiblePrice}
-          isFacetsLoading={isFacetsLoading}
-          isInitialLoad={isInitialLoad}
-          searchQuery={searchQuery}
-          onSearchQueryChange={handleSearchQueryChange}
-          onBrandSelectionChange={handleBrandSelectionChange}
-          onModelSelectionChange={handleModelSelectionChange}
-          onSpecLabelSelectionChange={handleSpecLabelSelectionChange}
-          onPriceRangeChange={handlePriceRangeChange}
-        />
+        <div className="w-64 flex-shrink-0">
+          <FilterPanel
+            facets={facets}
+            specFacets={specFacets}
+            selectedBrands={selectedBrands}
+            selectedModels={selectedModels}
+            selectedSpecLabels={selectedSpecLabels}
+            priceRange={priceRange}
+            minPossiblePrice={minPossiblePrice}
+            maxPossiblePrice={maxPossiblePrice}
+            isFacetsLoading={isFacetsLoading}
+            isInitialLoad={isInitialLoad}
+            searchQuery={searchQuery}
+            onSearchQueryChange={handleSearchQueryChange}
+            onBrandSelectionChange={handleBrandSelectionChange}
+            onModelSelectionChange={handleModelSelectionChange}
+            onSpecLabelSelectionChange={handleSpecLabelSelectionChange}
+            onPriceRangeChange={handlePriceRangeChange}
+          />
+        </div>
 
         {/* Main Content */}
         <div className="flex-1">
@@ -160,11 +162,14 @@ export function ProductListFiltered({
             {/* Active Filters */}
             <div className="flex flex-wrap gap-2">
               {searchQuery && (
-                <Badge key="search" variant="secondary" className="flex items-center gap-1">
+                <Badge
+                  variant="secondary"
+                  className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
+                >
                   {t('search.label', { query: searchQuery })}
                   <button
                     onClick={() => handleSearchQueryChange('')}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
+                    className="ml-1 rounded-full hover:bg-primary-light/30"
                   >
                     <Cross2Icon className="h-3 w-3" />
                     <span className="sr-only">{t('search.clearAria')}</span>
@@ -175,7 +180,7 @@ export function ProductListFiltered({
                 <Badge
                   key={`brand-${brand}`}
                   variant="secondary"
-                  className="flex items-center gap-1"
+                  className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
                 >
                   {t('badges.brand', { name: brand })}
                   <button
@@ -183,7 +188,7 @@ export function ProductListFiltered({
                       const newBrands = selectedBrands.filter(b => b !== brand);
                       handleBrandSelectionChange(newBrands);
                     }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
+                    className="ml-1 rounded-full hover:bg-primary-light/30"
                   >
                     <Cross2Icon className="h-3 w-3" />
                     <span className="sr-only">{t('badges.removeAria', { type: brand })}</span>
@@ -194,7 +199,7 @@ export function ProductListFiltered({
                 <Badge
                   key={`model-${model}`}
                   variant="secondary"
-                  className="flex items-center gap-1"
+                  className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
                 >
                   {t('badges.model', { name: model })}
                   <button
@@ -202,7 +207,7 @@ export function ProductListFiltered({
                       const newModels = selectedModels.filter(m => m !== model);
                       handleModelSelectionChange(newModels);
                     }}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
+                    className="ml-1 rounded-full hover:bg-primary-light/30"
                   >
                     <Cross2Icon className="h-3 w-3" />
                     <span className="sr-only">{t('badges.removeAria', { type: model })}</span>
@@ -217,7 +222,7 @@ export function ProductListFiltered({
                   <Badge
                     key={`spec-label-${specLabel}`}
                     variant="secondary"
-                    className="flex items-center gap-1"
+                    className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
                   >
                     {t('badges.spec', { type: specType, value: specLabel })}
                     <button
@@ -225,7 +230,7 @@ export function ProductListFiltered({
                         const newSpecLabels = selectedSpecLabels.filter(l => l !== specLabel);
                         handleSpecLabelSelectionChange(newSpecLabels);
                       }}
-                      className="ml-1 rounded-full hover:bg-secondary/80"
+                      className="ml-1 rounded-full hover:bg-primary-light/30"
                     >
                       <Cross2Icon className="h-3 w-3" />
                       <span className="sr-only">{t('badges.removeAria', { type: specType })}</span>
@@ -234,14 +239,17 @@ export function ProductListFiltered({
                 );
               })}
               {(priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice) && (
-                <Badge variant="secondary" className="flex items-center gap-1">
+                <Badge
+                  variant="secondary"
+                  className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
+                >
                   {t('priceRange.filter', {
                     min: priceRange[0].toFixed(2),
                     max: priceRange[1].toFixed(2),
                   })}
                   <button
                     onClick={() => handlePriceRangeChange([minPossiblePrice, maxPossiblePrice])}
-                    className="ml-1 rounded-full hover:bg-secondary/80"
+                    className="ml-1 rounded-full hover:bg-primary-light/30"
                   >
                     <Cross2Icon className="h-3 w-3" />
                     <span className="sr-only">{t('badges.removeAria', { type: 'price' })}</span>
@@ -251,7 +259,7 @@ export function ProductListFiltered({
               {hasActiveFilters && (
                 <button
                   onClick={handleClearAllFilters}
-                  className="text-sm text-muted-foreground hover:text-foreground"
+                  className="text-sm text-primary hover:text-primary-dark transition-colors"
                 >
                   {t('badges.clearAll')}
                 </button>

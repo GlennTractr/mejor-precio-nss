@@ -39,16 +39,31 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className="py-8 space-y-8">
+    <div className="space-y-8">
+      <section className="relative overflow-hidden bg-primary p-12 rounded-xl shadow-md">
+        <div className="absolute inset-0 bg-[url('/hero-pattern.svg')] opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-light/80 via-primary to-primary-dark/90" />
+        <div className="relative max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-6">
+            <span>🎯</span>
+            <span>Comparador de precios para productos de bebé</span>
+          </div>
+          <h1 className="text-4xl font-bold text-white mb-6">{t('heroTitle')}</h1>
+          <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+            {t('heroDescription')}
+          </p>
+        </div>
+      </section>
+
       <section>
-        <h2 className="text-2xl font-bold mb-4">{t('categories')}</h2>
+        <h2 className="text-2xl font-bold text-accent mb-6">{t('categories')}</h2>
         <Suspense fallback={<CategoryCarouselSkeleton />}>
           <CategoryCarousel />
         </Suspense>
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold mb-4">{t('allProducts')}</h2>
+        <h2 className="text-2xl font-bold text-accent mb-6">{t('allProducts')}</h2>
         <HydrationBoundary state={dehydratedState}>
           <HomeProductList currentPage={currentPage} itemsPerPage={itemsPerPage} />
         </HydrationBoundary>
@@ -61,7 +76,7 @@ function CategoryCarouselSkeleton() {
   return (
     <div className="flex gap-4 overflow-x-auto pb-4">
       {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="w-[200px] h-[180px] bg-muted rounded-lg animate-pulse" />
+        <div key={i} className="w-[180px] h-[180px] bg-muted rounded-lg animate-pulse" />
       ))}
     </div>
   );

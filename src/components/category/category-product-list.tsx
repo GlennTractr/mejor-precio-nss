@@ -318,10 +318,6 @@ export function CategoryProductList({
 
   return (
     <div>
-      <div className="flex flex-col gap-2 mb-6">
-        <h1 className="text-2xl font-bold">{t('title', { category: categorySlug })}</h1>
-      </div>
-
       <ProductListFiltered
         products={products}
         totalItems={totalItems}

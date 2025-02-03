@@ -53,13 +53,13 @@ export function FilterGroup({
 
   return (
     <div className="space-y-3">
-      <h3 className="font-semibold capitalize">{t(title.toLowerCase())}</h3>
+      <h3 className="font-semibold text-accent capitalize">{t(title.toLowerCase())}</h3>
       {isInitialLoad ? (
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className="flex items-center space-x-2">
-              <div className="h-4 w-4 rounded bg-gray-200 animate-pulse" />
-              <div className="h-4 w-24 rounded bg-gray-200 animate-pulse" />
+              <div className="h-4 w-4 rounded bg-primary-light/20 animate-pulse" />
+              <div className="h-4 w-24 rounded bg-primary-light/20 animate-pulse" />
             </div>
           ))}
         </div>
@@ -79,12 +79,18 @@ export function FilterGroup({
                       : selectedValues.filter(v => v !== option.value);
                     onSelectionChange(newValues);
                   }}
+                  className="border-primary-light data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
                 <label
                   htmlFor={`${title}-${option.value}`}
-                  className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${
-                    option.count === 0 && !isSelected ? 'text-gray-400' : ''
-                  } ${isLoading ? 'opacity-50' : ''}`}
+                  className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed 
+                    ${
+                      option.count === 0 && !isSelected
+                        ? 'text-muted-foreground/50'
+                        : 'text-muted-foreground'
+                    } 
+                    ${isLoading ? 'opacity-50' : ''} 
+                    ${isSelected ? 'text-primary' : ''}`}
                 >
                   {option.value} ({option.count})
                 </label>
