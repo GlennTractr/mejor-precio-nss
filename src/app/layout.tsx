@@ -39,13 +39,13 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-layout-background`}
       >
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
             <TopBar />
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <main className="flex-1">
+              <main className="flex-1 py-6">
                 <div className="container mx-auto px-4">{children}</div>
               </main>
             </ThemeProvider>
