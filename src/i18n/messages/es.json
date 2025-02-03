@@ -51,5 +51,11 @@
             "bestPrice": "Mejor precio: €{price}",
             "availableAt": "Disponible en: {shops}"
         }
+    },
+    "home": {
+        "welcome": "Bienvenido de nuevo, {email}",
+        "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!",
+        "categories": "Categorías",
+        "allProducts": "Todos los Productos"
     }
 }

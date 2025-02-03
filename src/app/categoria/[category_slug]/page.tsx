@@ -1,28 +1,10 @@
 // Server Component
 import { CategoryPage } from '@/components/category/category-page';
-import TypesenseInstantsearchAdapter from 'typesense-instantsearch-adapter';
 import type { SearchResponse } from '@/types/product';
 import { createClient } from '@supabase/supabase-js';
+import { typesenseClient } from '@/lib/typesense-client';
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_ANON_KEY!);
-
-const typesenseAdapter = new TypesenseInstantsearchAdapter({
-  server: {
-    apiKey: process.env.TYPESENSE_ADMIN_API_KEY!,
-    nodes: [
-      {
-        host: process.env.TYPESENSE_HOST!,
-        port: parseInt(process.env.TYPESENSE_PORT || '443'),
-        protocol: process.env.TYPESENSE_PROTOCOL || 'https',
-      },
-    ],
-  },
-  additionalSearchParameters: {
-    query_by: 'title,brand,model',
-  },
-});
-
-const typesenseClient = typesenseAdapter.typesenseClient;
 
 interface PageProps {
   params: {

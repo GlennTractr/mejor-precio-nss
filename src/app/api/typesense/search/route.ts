@@ -1,24 +1,6 @@
 import { NextRequest } from 'next/server';
-import TypesenseInstantsearchAdapter from 'typesense-instantsearch-adapter';
 import type { SearchResponse, FacetCount } from '@/types/product';
-
-const typesenseAdapter = new TypesenseInstantsearchAdapter({
-  server: {
-    apiKey: process.env.TYPESENSE_ADMIN_API_KEY!,
-    nodes: [
-      {
-        host: process.env.TYPESENSE_HOST!,
-        port: parseInt(process.env.TYPESENSE_PORT || '443'),
-        protocol: process.env.TYPESENSE_PROTOCOL || 'https',
-      },
-    ],
-  },
-  additionalSearchParameters: {
-    query_by: 'title,brand,model',
-  },
-});
-
-const typesenseClient = typesenseAdapter.typesenseClient;
+import { typesenseClient } from '@/lib/typesense-client';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

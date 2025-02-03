@@ -100,7 +100,7 @@ export function ProductSellContextList({ productPackaging }: ProductSellContextL
                 <div>
                   <div className="font-medium">{ctx.Shop.label}</div>
                   <div className="text-sm text-gray-600">
-                    {pkg.quantity} {pkg.type}
+                    {pkg.quantity} {t('product.units.unit', { count: pkg.quantity })}
                   </div>
                 </div>
               </div>

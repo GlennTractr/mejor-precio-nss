@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import TypesenseInstantsearchAdapter from 'typesense-instantsearch-adapter';
+import { typesenseClient } from '@/lib/typesense-client';
 
 interface FacetStats {
   min: number;
@@ -20,24 +20,6 @@ interface SearchResponseWithStats {
   };
   facet_counts?: FacetCount[];
 }
-
-const typesenseAdapter = new TypesenseInstantsearchAdapter({
-  server: {
-    apiKey: process.env.TYPESENSE_ADMIN_API_KEY!,
-    nodes: [
-      {
-        host: process.env.TYPESENSE_HOST!,
-        port: parseInt(process.env.TYPESENSE_PORT || '443'),
-        protocol: process.env.TYPESENSE_PROTOCOL || 'https',
-      },
-    ],
-  },
-  additionalSearchParameters: {
-    query_by: 'title,brand,model',
-  },
-});
-
-const typesenseClient = typesenseAdapter.typesenseClient;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
