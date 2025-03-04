@@ -6,7 +6,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { ReactQueryProvider } from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
-import { TopBar } from '@/components/top-bar';
+import { MainNav } from '@/components/main-nav';
 import { Footer } from '@/components/footer';
 
 const geistSans = localFont({
@@ -43,7 +43,7 @@ export default async function RootLayout({
       >
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
-            <TopBar />
+            <MainNav />
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <main className="flex-1 py-6">
                 <div className="container mx-auto px-4">{children}</div>

@@ -10,7 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
 import LayoutSidebar from '@/components/layout-sidebar';
 import { useQueryClient } from '@tanstack/react-query';
-import Image from 'next/image';
+
 import {
   Form,
   FormControl,

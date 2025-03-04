@@ -80,7 +80,15 @@
     "navigation": {
         "home": "Inicio",
         "mainMenu": "Menú principal",
-        "todos": "Tareas"
+        "todos": "Tareas",
+        "profile": "Perfil",
+        "settings": "Configuración",
+        "changePassword": "Cambiar Contraseña",
+        "logout": "Cerrar Sesión",
+        "about": "Acerca de",
+        "mobile": {
+            "menu": "Menú Móvil"
+        }
     },
     "settings": {
         "title": "Configuración",

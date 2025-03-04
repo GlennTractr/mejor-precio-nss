@@ -80,7 +80,15 @@
   "navigation": {
     "home": "Home",
     "mainMenu": "Main menu",
-    "todos": "Todos"
+    "todos": "Todos",
+    "profile": "Profile",
+    "settings": "Settings",
+    "changePassword": "Change Password",
+    "logout": "Logout",
+    "about": "About",
+    "mobile": {
+      "menu": "Mobile Menu"
+    }
   },
   "settings": {
     "title": "Settings",
