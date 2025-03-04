@@ -44,7 +44,7 @@ export default async function RootLayout({
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
             <TopBar />
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <main className="flex-1 py-6">
                 <div className="container mx-auto px-4">{children}</div>
               </main>

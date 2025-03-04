@@ -98,6 +98,18 @@
             "store": true
         },
         {
+            "name": "max_price_per_unit",
+            "type": "float",
+            "facet": true,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
             "name": "category_slug",
             "type": "string",
             "facet": true,

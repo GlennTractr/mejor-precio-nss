@@ -71,11 +71,10 @@ export default function LoginPage() {
     <LayoutSidebar
       isOpen={false}
       containerClassName="bg-muted/50"
-      contentClassName="flex w-full h-full items-center justify-center"
+      contentClassName="flex w-full items-center justify-center"
     >
       <Card className="max-w-md w-full">
         <CardHeader className="flex justify-center items-center gap-4">
-          <Image src="/images/logo.svg" alt={t('common.logo')} width={150} height={100} />
           <CardTitle className="text-center text-lg font-extrabold">
             {t('auth.signInTitle')}
           </CardTitle>

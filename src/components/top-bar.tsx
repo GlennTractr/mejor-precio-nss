@@ -1,12 +1,67 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Search, LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { supabaseClient } from '@/lib/supabase/client';
+import { Button } from './ui/button';
+import { useCurrentUser } from '@/hooks/use-current-user';
+import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 export function TopBar() {
   const t = useTranslations('filters');
+  const currentUser = useCurrentUser();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  // Update authentication state when currentUser changes
+  useEffect(() => {
+    setIsAuthenticated(!!currentUser.data);
+  }, [currentUser.data, currentUser.status]);
+
+  // Listen for auth state changes
+  useEffect(() => {
+    const { data: authListener } = supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
+        // Invalidate and refetch currentUser query when auth state changes
+        queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+        setIsAuthenticated(!!session);
+      }
+    });
+
+    // Initial auth check
+    const checkInitialAuth = async () => {
+      const { data } = await supabaseClient.auth.getSession();
+      setIsAuthenticated(!!data.session);
+    };
+
+    checkInitialAuth();
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [queryClient]);
+
+  const logout = async () => {
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      // Invalidate the currentUser query to trigger a refetch
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      setIsAuthenticated(false);
+      router.refresh();
+    } catch (err) {
+      console.error('Unexpected error during logout:', err);
+    }
+  };
 
   return (
     <div className="sticky top-0 z-50 w-full border-b bg-primary shadow-sm">
@@ -28,6 +83,19 @@ export function TopBar() {
             </div>
           </div>
         </div>
+        {isAuthenticated ? (
+          <Button variant="link" className="text-primary-foreground" onClick={logout}>
+            <LogOut className="mr-1 h-4 w-4" />
+            Logout
+          </Button>
+        ) : (
+          <Button variant="link" className="text-primary-foreground" asChild>
+            <Link href="/auth/login">
+              <LogIn className="mr-1 h-4 w-4" />
+              Sign In
+            </Link>
+          </Button>
+        )}
       </div>
     </div>
   );

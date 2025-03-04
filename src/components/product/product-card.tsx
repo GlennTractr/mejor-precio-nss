@@ -65,7 +65,10 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardHeader>
         <CardContent className="py-1 px-4">
           <p className="text-base font-semibold text-accent">
-            {t('bestPrice', { price: product.best_price_per_unit.toFixed(2) })}
+            {t('rangePrice', {
+              min: product.best_price_per_unit.toFixed(2),
+              max: product.max_price_per_unit.toFixed(2),
+            })}
           </p>
         </CardContent>
         <CardFooter className="pt-0 pb-2 px-4 flex flex-col gap-2">
