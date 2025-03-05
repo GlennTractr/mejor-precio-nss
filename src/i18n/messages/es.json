@@ -1,6 +1,7 @@
 {
     "actions": {
         "login": "Iniciar sesión",
+        "signup": "Registrarse",
         "logout": "Cerrar sesión",
         "openSettings": "Abrir configuración",
         "add": "Agregar",
@@ -56,6 +57,11 @@
     },
     "auth": {
         "signInTitle": "Inicia sesión en tu cuenta",
+        "signUpTitle": "Crea tu cuenta",
+        "signUpSuccess": "¡Cuenta creada exitosamente! Por favor revisa tu correo electrónico para verificar tu cuenta.",
+        "signingUp": "Registrando...",
+        "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",
+        "dontHaveAccount": "¿No tienes una cuenta? Regístrate",
         "emailLabel": "Correo electrónico",
         "emailPlaceholder": "Correo electrónico",
         "emailRequired": "El correo electrónico es requerido",
@@ -63,8 +69,7 @@
         "passwordLabel": "Contraseña",
         "passwordPlaceholder": "Contraseña",
         "passwordRequired": "La contraseña es requerida",
-        "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
-        "signingIn": "Iniciando sesión..."
+        "passwordMinLength": "La contraseña debe tener al menos 6 caracteres"
     },
     "home": {
         "welcome": "Bienvenido de nuevo, {email}",

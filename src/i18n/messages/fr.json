@@ -1,6 +1,7 @@
 {
     "actions": {
         "login": "Se connecter",
+        "signup": "S'inscrire",
         "logout": "Se déconnecter",
         "openSettings": "Ouvrir les paramètres",
         "add": "Ajouter",
@@ -56,6 +57,11 @@
     },
     "auth": {
         "signInTitle": "Connectez-vous à votre compte",
+        "signUpTitle": "Créez votre compte",
+        "signUpSuccess": "Compte créé avec succès ! Veuillez vérifier votre e-mail pour confirmer votre compte.",
+        "signingUp": "Inscription en cours...",
+        "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous",
+        "dontHaveAccount": "Vous n'avez pas de compte ? Inscrivez-vous",
         "emailLabel": "Adresse e-mail",
         "emailPlaceholder": "Adresse e-mail",
         "emailRequired": "L'adresse e-mail est requise",
@@ -63,8 +69,7 @@
         "passwordLabel": "Mot de passe",
         "passwordPlaceholder": "Mot de passe",
         "passwordRequired": "Le mot de passe est requis",
-        "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères",
-        "signingIn": "Connexion en cours..."
+        "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères"
     },
     "home": {
         "welcome": "Bienvenue, {email}",

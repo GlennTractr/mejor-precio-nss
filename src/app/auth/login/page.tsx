@@ -1,11 +1,11 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { login } from '../actions';
+import { login, signup } from '../actions';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardContent, CardTitle, CardFooter } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
 import LayoutSidebar from '@/components/layout-sidebar';
@@ -36,6 +36,7 @@ export default function LoginPage() {
   const t = useTranslations();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
 
   const loginSchema = createLoginSchema(t);
 
@@ -51,7 +52,11 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      await login(data);
+      if (isSignup) {
+        await signup(data);
+      } else {
+        await login(data);
+      }
       queryClient.invalidateQueries();
       form.reset();
     } catch (error) {
@@ -67,6 +72,12 @@ export default function LoginPage() {
     }
   };
 
+  const toggleMode = () => {
+    setIsSignup(!isSignup);
+    form.reset();
+    form.clearErrors();
+  };
+
   return (
     <LayoutSidebar
       isOpen={false}
@@ -76,7 +87,7 @@ export default function LoginPage() {
       <Card className="max-w-md w-full">
         <CardHeader className="flex justify-center items-center gap-4">
           <CardTitle className="text-center text-lg font-extrabold">
-            {t('auth.signInTitle')}
+            {isSignup ? t('auth.signUpTitle') : t('auth.signInTitle')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -120,8 +131,10 @@ export default function LoginPage() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t('auth.signingIn')}
+                    {isSignup ? t('auth.signingUp') : t('auth.signingIn')}
                   </>
+                ) : isSignup ? (
+                  t('actions.signup')
                 ) : (
                   t('actions.login')
                 )}
@@ -135,6 +148,11 @@ export default function LoginPage() {
             </form>
           </Form>
         </CardContent>
+        <CardFooter className="flex justify-center">
+          <Button variant="link" onClick={toggleMode} type="button" className="text-sm">
+            {isSignup ? t('auth.alreadyHaveAccount') : t('auth.dontHaveAccount')}
+          </Button>
+        </CardFooter>
       </Card>
     </LayoutSidebar>
   );
