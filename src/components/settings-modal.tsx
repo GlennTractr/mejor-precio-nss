@@ -12,30 +12,36 @@ import { useRouter } from 'next/navigation';
 import { setLanguageCookie } from '@/lib/cookies';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import { getAcceptedLocales } from '@/lib/env';
 
 interface SettingsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const SUPPORTED_LANGUAGES = [
-  { value: 'en', label: 'English' },
-  { value: 'es', label: 'Español' },
-] as const;
+const LANGUAGE_LABELS: Record<string, string> = {
+  en: 'English',
+  es: 'Español',
+  fr: 'Français',
+};
 
 export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const t = useTranslations();
   const [language, setLanguage] = useState<string>('en');
+  const [acceptedLocales, setAcceptedLocales] = useState<string[]>([]);
 
-  // Get initial language from cookie on mount
+  // Get initial language from cookie and accepted locales on mount
   useEffect(() => {
     const cookies = document.cookie.split(';');
     const langCookie = cookies.find(cookie => cookie.trim().startsWith('NEXT_LOCALE='));
     if (langCookie) {
       setLanguage(langCookie.split('=')[1]);
     }
+
+    // Get accepted locales from environment
+    setAcceptedLocales(getAcceptedLocales());
   }, []);
 
   const handleLanguageChange = (newLocale: string) => {
@@ -72,9 +78,9 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
                 <SelectValue placeholder={t('settings.language.placeholder')} />
               </SelectTrigger>
               <SelectContent>
-                {SUPPORTED_LANGUAGES.map(lang => (
-                  <SelectItem key={lang.value} value={lang.value}>
-                    {lang.label}
+                {acceptedLocales.map(locale => (
+                  <SelectItem key={locale} value={locale}>
+                    {LANGUAGE_LABELS[locale] || locale}
                   </SelectItem>
                 ))}
               </SelectContent>

@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { MainNav } from '@/components/main-nav';
 import { Footer } from '@/components/footer';
+import { env } from '@/lib/env';
 
 const geistSans = localFont({
   src: '../fonts/GeistVF.woff',
@@ -21,7 +22,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'MejorPrecio',
+  title: env().NEXT_PUBLIC_SITE_TITLE,
   description: 'Find the best prices for your favorite products',
 };
 

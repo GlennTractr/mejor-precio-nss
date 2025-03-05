@@ -19,6 +19,7 @@ import { SettingsModal } from '@/components/settings-modal';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { env } from '@/lib/env';
 
 const items = [
   {
@@ -107,7 +108,7 @@ export function MainNav() {
               className="hover:opacity-80 transition-all ml-2 md:ml-0 text-xl font-bold text-primary"
               aria-label={t('common.logo')}
             >
-              PapásListos
+              {env().NEXT_PUBLIC_SITE_TITLE}
             </Link>
 
             {/* Main Menu (Desktop only) */}
@@ -193,7 +194,7 @@ export function MainNav() {
                 className="text-xl font-bold text-primary"
                 aria-label={t('common.logo')}
               >
-                PapásListos
+                {env().NEXT_PUBLIC_SITE_TITLE}
               </Link>
             </div>
             <nav className="flex-1 p-4" aria-label={t('navigation.mobile.menu')}>
