@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface ProductCardProps {
   product: Product;
@@ -88,16 +89,27 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       <Card className="border-primary-light/20 hover:border-primary-light transition-colors h-[320px] flex flex-col relative">
         {currentUser.data && (
-          <button
-            onClick={toggleNotify}
-            disabled={isLoading}
-            className={cn(
-              'absolute top-2 right-2 z-10 p-2 rounded-full transition-colors',
-              isNotified ? 'text-red-500 hover:text-red-600' : 'text-gray-400 hover:text-gray-500'
-            )}
-          >
-            <Bell className="h-5 w-5" />
-          </button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={toggleNotify}
+                  disabled={isLoading}
+                  className={cn(
+                    'absolute top-2 right-2 z-10 p-2 rounded-full transition-colors',
+                    isNotified
+                      ? 'text-red-500 bg-red-50 hover:bg-red-100'
+                      : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                  )}
+                >
+                  <Bell className="h-5 w-5" fill={isNotified ? 'currentColor' : 'none'} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {isNotified ? tActions('notify.remove') : tActions('notify.add')}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
         <div className="relative w-full h-36">
           {imageUrl ? (

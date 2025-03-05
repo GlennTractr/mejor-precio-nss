@@ -7,7 +7,11 @@
         "add": "Agregar",
         "buy": "Comprar",
         "seeOffers": "Ver ofertas",
-        "buyNow": "Comprar ahora"
+        "buyNow": "Comprar ahora",
+        "notify": {
+            "add": "Añadir a favoritos",
+            "remove": "Eliminar de favoritos"
+        }
     },
     "category": {
         "title": "Categoría: {category}"
