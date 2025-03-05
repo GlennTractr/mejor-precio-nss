@@ -7,6 +7,11 @@ import { Tables } from '@/types/database';
 import { useTranslations } from 'next-intl';
 import { ProductSellContextList } from './product-sell-context-list';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCurrentUser } from '@/hooks/use-current-user';
+import { Bell } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useRouter } from 'next/navigation';
 
 type ProductSellContext = {
   price: number;
@@ -150,10 +155,16 @@ function ProductPageSkeleton() {
 
 export function ProductPage({ productSlug }: ProductPageProps) {
   const t = useTranslations();
+  const tActions = useTranslations('actions');
+  const tAuth = useTranslations('auth');
+  const router = useRouter();
   const [product, setProduct] = useState<ProductResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isNotified, setIsNotified] = useState(false);
+  const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
+  const currentUser = useCurrentUser();
 
   useEffect(() => {
     async function fetchProduct() {
@@ -232,6 +243,74 @@ export function ProductPage({ productSlug }: ProductPageProps) {
     fetchProduct();
   }, [productSlug]);
 
+  // Check if the product is in favorites
+  useEffect(() => {
+    async function checkNotifyStatus() {
+      if (!currentUser.data?.id || !product?.id) return;
+
+      try {
+        const { data } = await supabaseClient
+          .from('product_favory')
+          .select('id')
+          .eq('product', product.id)
+          .eq('owner', currentUser.data.id)
+          .single();
+
+        setIsNotified(!!data);
+      } catch {
+        // If no favorite found, data will be null and error will be thrown
+        setIsNotified(false);
+      }
+    }
+
+    checkNotifyStatus();
+  }, [currentUser.data?.id, product?.id]);
+
+  const toggleNotify = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent any default behavior
+
+    if (!currentUser.data?.id) {
+      // Clear any existing pending favorites first
+      localStorage.removeItem('pendingFavorite');
+
+      // Store the product ID to add to favorites after login
+      if (product?.id) {
+        localStorage.setItem('pendingFavorite', product.id);
+      }
+
+      // Store the current URL to redirect back after login
+      const currentUrl = window.location.pathname + window.location.search;
+      localStorage.setItem('redirectAfterLogin', currentUrl);
+
+      // Redirect to login page with next parameter
+      router.push(`/auth/login?next=${encodeURIComponent('/process-favorite')}`);
+      return;
+    }
+
+    if (!product?.id) return;
+
+    setIsFavoriteLoading(true);
+    try {
+      if (isNotified) {
+        await supabaseClient
+          .from('product_favory')
+          .delete()
+          .eq('product', product.id)
+          .eq('owner', currentUser.data.id);
+      } else {
+        await supabaseClient.from('product_favory').insert({
+          product: product.id,
+          owner: currentUser.data.id,
+        });
+      }
+      setIsNotified(!isNotified);
+    } catch (error) {
+      console.error('Error toggling notify status:', error);
+    } finally {
+      setIsFavoriteLoading(false);
+    }
+  };
+
   if (loading) return <ProductPageSkeleton />;
   if (error) return <div>{t('product.error', { message: error })}</div>;
   if (!product) return <div>{t('product.notFound')}</div>;
@@ -278,7 +357,34 @@ export function ProductPage({ productSlug }: ProductPageProps) {
           {/* Right column - Product details */}
           <div className="space-y-6">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-accent">{product.title}</h1>
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-accent">{product.title}</h1>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={toggleNotify}
+                        disabled={isFavoriteLoading}
+                        className={cn(
+                          'p-2 rounded-full transition-colors',
+                          isNotified
+                            ? 'text-red-500 bg-red-50 hover:bg-red-100'
+                            : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                        )}
+                      >
+                        <Bell className="h-6 w-6" fill={isNotified ? 'currentColor' : 'none'} />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {currentUser.data
+                        ? isNotified
+                          ? tActions('notify.remove')
+                          : tActions('notify.add')
+                        : tAuth('loginToFavorite')}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 {product.model?.category?.label && (
                   <>
