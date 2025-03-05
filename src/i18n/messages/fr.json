@@ -81,7 +81,9 @@
         "categories": "Catégories",
         "allProducts": "Tous les produits",
         "heroTitle": "Trouvez les meilleurs prix pour votre bébé",
-        "heroDescription": "Comparez les prix des produits pour bébés dans les principales boutiques en ligne du Québec. Trouvez les meilleures offres sur les couches, les formules, les poussettes et tout ce dont votre bébé a besoin, le tout en un seul endroit."
+        "heroDescription": "Comparez les prix des produits pour bébés dans les principales boutiques en ligne du Québec. Trouvez les meilleures offres sur les couches, les formules, les poussettes et tout ce dont votre bébé a besoin, le tout en un seul endroit.",
+        "favorites": "Vos Favoris",
+        "noFavorites": "Vous n'avez pas encore de produits favoris"
     },
     "common": {
         "logo": "Logo"

@@ -81,7 +81,9 @@
     "categories": "Categories",
     "allProducts": "All Products",
     "heroTitle": "Find the Best Prices for Your Baby",
-    "heroDescription": "Compare baby product prices across major online stores. Find the best deals on diapers, formula, strollers, and everything your baby needs, all in one place."
+    "heroDescription": "Compare baby product prices across major online stores. Find the best deals on diapers, formula, strollers, and everything your baby needs, all in one place.",
+    "favorites": "Your Favorites",
+    "noFavorites": "You don't have any favorite products yet"
   },
   "common": {
     "logo": "Logo"

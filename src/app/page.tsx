@@ -3,6 +3,7 @@
 import { Suspense } from 'react';
 import { CategoryCarousel } from '@/components/category/category-carousel';
 import { HomeProductList } from '@/components/product/home-product-list';
+import { FavoritesList } from '@/components/product/favorites-list';
 import { typesenseClient } from '@/lib/typesense-client';
 import { getTranslations } from 'next-intl/server';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
@@ -54,6 +55,11 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           </p>
         </div>
       </section>
+
+      {/* Favorites Section - FavoritesList component handles hiding for non-authenticated users */}
+      <Suspense fallback={null}>
+        <FavoritesList />
+      </Suspense>
 
       <section>
         <h2 className="text-2xl font-bold text-accent mb-6">{t('categories')}</h2>

@@ -81,7 +81,9 @@
         "categories": "Categorías",
         "allProducts": "Todos los productos",
         "heroTitle": "Encuentra los Mejores Precios para tu Bebé",
-        "heroDescription": "Compara precios de productos para bebés entre las principales tiendas en linea de Mexico. Encuentra las mejores ofertas en pañales, fórmulas, carriolas y todo lo que tu bebé necesita, todo en un solo lugar."
+        "heroDescription": "Compara precios de productos para bebés entre las principales tiendas en linea de Mexico. Encuentra las mejores ofertas en pañales, fórmulas, carriolas y todo lo que tu bebé necesita, todo en un solo lugar.",
+        "favorites": "Tus Favoritos",
+        "noFavorites": "Aún no tienes productos favoritos"
     },
     "common": {
         "logo": "Logo"
