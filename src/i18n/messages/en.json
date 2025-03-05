@@ -11,7 +11,8 @@
     "notify": {
       "add": "Add to favorites",
       "remove": "Remove from favorites"
-    }
+    },
+    "goHome": "Go to Home"
   },
   "category": {
     "title": "Category: {category}"
@@ -64,6 +65,7 @@
     "signUpTitle": "Create your account",
     "signUpSuccess": "Account created successfully! Please check your email to verify your account.",
     "signingUp": "Signing up...",
+    "signingIn": "Signing in...",
     "alreadyHaveAccount": "Already have an account? Sign in",
     "dontHaveAccount": "Don't have an account? Sign up",
     "emailLabel": "Email address",
@@ -73,7 +75,8 @@
     "passwordLabel": "Password",
     "passwordPlaceholder": "Password",
     "passwordRequired": "Password is required",
-    "passwordMinLength": "Password must be at least 6 characters"
+    "passwordMinLength": "Password must be at least 6 characters",
+    "loginToFavorite": "Login to add to favorites"
   },
   "home": {
     "welcome": "Welcome back, {email}",
@@ -86,7 +89,12 @@
     "noFavorites": "You don't have any favorite products yet"
   },
   "common": {
-    "logo": "Logo"
+    "logo": "Logo",
+    "loading": "Loading",
+    "pleaseWait": "Please wait...",
+    "redirecting": "Redirecting",
+    "error": "Error",
+    "unexpectedError": "An unexpected error occurred"
   },
   "navigation": {
     "home": "Home",
@@ -132,5 +140,9 @@
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
     "allRightsReserved": "All rights reserved"
+  },
+  "favorites": {
+    "processing": "Processing favorite",
+    "loginRequired": "You must be logged in to add favorites"
   }
 }

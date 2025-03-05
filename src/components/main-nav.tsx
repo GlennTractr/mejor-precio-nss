@@ -18,7 +18,6 @@ import { useTranslations } from 'next-intl';
 import { SettingsModal } from '@/components/settings-modal';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { env } from '@/lib/env';
 
 const items = [
@@ -37,7 +36,6 @@ export function MainNav() {
   const [openMobile, setOpenMobile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const queryClient = useQueryClient();
-  const router = useRouter();
   const t = useTranslations();
 
   // Update authentication state when currentUser changes
@@ -79,7 +77,9 @@ export function MainNav() {
       // Invalidate the currentUser query to trigger a refetch
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       setIsAuthenticated(false);
-      router.refresh();
+
+      // Force reload the page to reset all application state
+      window.location.reload();
     } catch (err) {
       console.error('Unexpected error during logout:', err);
     }

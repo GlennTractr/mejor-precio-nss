@@ -11,7 +11,8 @@
         "notify": {
             "add": "Añadir a favoritos",
             "remove": "Eliminar de favoritos"
-        }
+        },
+        "goHome": "Ir a Inicio"
     },
     "category": {
         "title": "Categoría: {category}"
@@ -64,6 +65,7 @@
         "signUpTitle": "Crea tu cuenta",
         "signUpSuccess": "¡Cuenta creada exitosamente! Por favor revisa tu correo electrónico para verificar tu cuenta.",
         "signingUp": "Registrando...",
+        "signingIn": "Iniciando sesión...",
         "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",
         "dontHaveAccount": "¿No tienes una cuenta? Regístrate",
         "emailLabel": "Correo electrónico",
@@ -73,7 +75,8 @@
         "passwordLabel": "Contraseña",
         "passwordPlaceholder": "Contraseña",
         "passwordRequired": "La contraseña es requerida",
-        "passwordMinLength": "La contraseña debe tener al menos 6 caracteres"
+        "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+        "loginToFavorite": "Inicia sesión para añadir a favoritos"
     },
     "home": {
         "welcome": "Bienvenido de nuevo, {email}",
@@ -82,11 +85,16 @@
         "allProducts": "Todos los productos",
         "heroTitle": "Encuentra los Mejores Precios para tu Bebé",
         "heroDescription": "Compara precios de productos para bebés entre las principales tiendas en linea de Mexico. Encuentra las mejores ofertas en pañales, fórmulas, carriolas y todo lo que tu bebé necesita, todo en un solo lugar.",
-        "favorites": "Tus Favoritos",
-        "noFavorites": "Aún no tienes productos favoritos"
+        "favorites": "Favoritos",
+        "noFavorites": "No tienes favoritos"
     },
     "common": {
-        "logo": "Logo"
+        "logo": "Logo",
+        "loading": "Cargando",
+        "pleaseWait": "Por favor espera...",
+        "redirecting": "Redirigiendo",
+        "error": "Error",
+        "unexpectedError": "Ha ocurrido un error inesperado"
     },
     "navigation": {
         "home": "Inicio",
@@ -132,5 +140,9 @@
         "privacyPolicy": "Política de privacidad",
         "termsOfService": "Términos de servicio",
         "allRightsReserved": "Todos los derechos reservados"
+    },
+    "favorites": {
+        "processing": "Procesando favorito",
+        "loginRequired": "Debes iniciar sesión para añadir favoritos"
     }
 }

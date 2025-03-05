@@ -11,7 +11,8 @@
         "notify": {
             "add": "Ajouter aux favoris",
             "remove": "Retirer des favoris"
-        }
+        },
+        "goHome": "Aller à l'accueil"
     },
     "category": {
         "title": "Catégorie: {category}"
@@ -64,6 +65,7 @@
         "signUpTitle": "Créez votre compte",
         "signUpSuccess": "Compte créé avec succès ! Veuillez vérifier votre e-mail pour confirmer votre compte.",
         "signingUp": "Inscription en cours...",
+        "signingIn": "Connexion en cours...",
         "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous",
         "dontHaveAccount": "Vous n'avez pas de compte ? Inscrivez-vous",
         "emailLabel": "Adresse e-mail",
@@ -73,7 +75,8 @@
         "passwordLabel": "Mot de passe",
         "passwordPlaceholder": "Mot de passe",
         "passwordRequired": "Le mot de passe est requis",
-        "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères"
+        "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères",
+        "loginToFavorite": "Connectez-vous pour ajouter aux favoris"
     },
     "home": {
         "welcome": "Bienvenue, {email}",
@@ -86,7 +89,12 @@
         "noFavorites": "Vous n'avez pas encore de produits favoris"
     },
     "common": {
-        "logo": "Logo"
+        "logo": "Logo",
+        "loading": "Chargement",
+        "pleaseWait": "Veuillez patienter...",
+        "redirecting": "Redirection en cours",
+        "error": "Erreur",
+        "unexpectedError": "Une erreur inattendue s'est produite"
     },
     "navigation": {
         "home": "Accueil",
@@ -132,5 +140,9 @@
         "privacyPolicy": "Politique de confidentialité",
         "termsOfService": "Conditions d'utilisation",
         "allRightsReserved": "Tous droits réservés"
+    },
+    "favorites": {
+        "processing": "Traitement du favori",
+        "loginRequired": "Vous devez être connecté pour ajouter des favoris"
     }
 }

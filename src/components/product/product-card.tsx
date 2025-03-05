@@ -3,6 +3,7 @@ import { Product } from '@/types/product';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import supabaseClient from '@/lib/supabase-client';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { Bell } from 'lucide-react';
@@ -25,6 +26,8 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const t = useTranslations('filters.products');
   const tActions = useTranslations('actions');
+  const tAuth = useTranslations('auth');
+  const router = useRouter();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isNotified, setIsNotified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +61,22 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const toggleNotify = async (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent the Link navigation
-    if (!currentUser.data?.id) return;
+
+    if (!currentUser.data?.id) {
+      // Clear any existing pending favorites first
+      localStorage.removeItem('pendingFavorite');
+
+      // Store the product ID to add to favorites after login
+      localStorage.setItem('pendingFavorite', product.id);
+
+      // Store the current URL to redirect back after login
+      const currentUrl = window.location.pathname + window.location.search;
+      localStorage.setItem('redirectAfterLogin', currentUrl);
+
+      // Redirect to login page with next parameter
+      router.push(`/auth/login?next=${encodeURIComponent('/process-favorite')}`);
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -88,29 +106,31 @@ export function ProductCard({ product }: ProductCardProps) {
       className="block transition-transform hover:scale-105"
     >
       <Card className="border-primary-light/20 hover:border-primary-light transition-colors h-[320px] flex flex-col relative">
-        {currentUser.data && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={toggleNotify}
-                  disabled={isLoading}
-                  className={cn(
-                    'absolute top-2 right-2 z-10 p-2 rounded-full transition-colors',
-                    isNotified
-                      ? 'text-red-500 bg-red-50 hover:bg-red-100'
-                      : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
-                  )}
-                >
-                  <Bell className="h-5 w-5" fill={isNotified ? 'currentColor' : 'none'} />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                {isNotified ? tActions('notify.remove') : tActions('notify.add')}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={toggleNotify}
+                disabled={isLoading}
+                className={cn(
+                  'absolute top-2 right-2 z-10 p-2 rounded-full transition-colors',
+                  isNotified
+                    ? 'text-red-500 bg-red-50 hover:bg-red-100'
+                    : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                )}
+              >
+                <Bell className="h-5 w-5" fill={isNotified ? 'currentColor' : 'none'} />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {currentUser.data
+                ? isNotified
+                  ? tActions('notify.remove')
+                  : tActions('notify.add')
+                : tAuth('loginToFavorite')}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <div className="relative w-full h-36">
           {imageUrl ? (
             <Image

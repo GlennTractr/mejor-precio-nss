@@ -1,20 +1,21 @@
-import type { Metadata } from 'next';
-import localFont from 'next/font/local';
-import './globals.css';
-import { NextIntlClientProvider } from 'next-intl';
+import { Metadata } from 'next';
 import { getLocale, getMessages } from 'next-intl/server';
-import { ReactQueryProvider } from '@/components/react-query-provider';
-import { Toaster } from '@/components/ui/toaster';
+import { NextIntlClientProvider } from 'next-intl';
 import { ThemeProvider } from '@/components/theme-provider';
 import { MainNav } from '@/components/main-nav';
+import { Toaster } from '@/components/ui/toaster';
+import { ReactQueryProvider } from '@/components/react-query-provider';
+import localFont from 'next/font/local';
 import { Footer } from '@/components/footer';
 import { env } from '@/lib/env';
+import './globals.css';
 
 const geistSans = localFont({
   src: '../fonts/GeistVF.woff',
   variable: '--font-geist-sans',
   weight: '100 900',
 });
+
 const geistMono = localFont({
   src: '../fonts/GeistMonoVF.woff',
   variable: '--font-geist-mono',
@@ -44,15 +45,15 @@ export default async function RootLayout({
       >
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
-            <MainNav />
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+              <MainNav />
               <main className="flex-1 py-6">
                 <div className="container mx-auto px-4">{children}</div>
               </main>
+              <Footer />
+              <Toaster />
             </ThemeProvider>
-            <Footer />
           </NextIntlClientProvider>
-          <Toaster />
         </ReactQueryProvider>
       </body>
     </html>
