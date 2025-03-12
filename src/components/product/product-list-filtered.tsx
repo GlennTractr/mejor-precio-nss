@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/accordion';
 import { ProductCard } from '@/components/product/product-card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
 export interface ProductListFilteredProps {
   products: Product[];
@@ -203,16 +204,22 @@ export function ProductListFiltered({
       <div className="space-y-6 rounded-lg border p-4">
         <div>
           <h2 className="mb-2 font-medium">{t('filters.search')}</h2>
-          <form onSubmit={handleSearchSubmit} className="flex gap-2">
+          <form onSubmit={handleSearchSubmit} className="relative">
             <Input
               type="text"
               value={searchInputValue}
               onChange={handleSearchInput}
               placeholder={t('filters.searchPlaceholder')}
-              className="flex-1"
+              className="pr-10"
             />
-            <Button type="submit" size="sm">
-              {t('filters.searchButton')}
+            <Button
+              type="submit"
+              size="icon"
+              variant="ghost"
+              className="absolute right-0 top-0 h-full px-3"
+              aria-label={t('filters.searchButton')}
+            >
+              <MagnifyingGlassIcon className="h-4 w-4" />
             </Button>
           </form>
         </div>

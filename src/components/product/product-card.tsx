@@ -51,7 +51,7 @@ export function ProductCard({ product }: ProductCardProps) {
         .select('id')
         .eq('product', product.id)
         .eq('owner', currentUser.data.id)
-        .single();
+        .maybeSingle();
 
       setIsNotified(!!data);
     }
