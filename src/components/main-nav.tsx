@@ -20,13 +20,18 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useQueryClient } from '@tanstack/react-query';
 import { env } from '@/lib/env';
 
-const items = [
-  {
-    titleKey: 'navigation.home',
-    url: '/',
-    icon: LayoutDashboard,
-    external: false,
-  },
+const items: {
+  titleKey: string;
+  url: string;
+  icon: React.ElementType;
+  external: boolean;
+}[] = [
+  // {
+  //   titleKey: 'navigation.home',
+  //   url: '/',
+  //   icon: LayoutDashboard,
+  //   external: false,
+  // },
 ];
 
 export function MainNav() {
