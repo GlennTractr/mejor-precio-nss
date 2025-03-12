@@ -5,6 +5,9 @@ import { useTranslations } from 'next-intl';
 import { ProductCard } from '@/components/product/product-card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductFilters } from '@/components/product/product-filters';
+import { Badge } from '@/components/ui/badge';
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { Button } from '@/components/ui/button';
 
 export interface ProductListFilteredProps {
   products: Product[];
@@ -58,6 +61,23 @@ export function ProductListFiltered({
   onResetFilters,
 }: ProductListFilteredProps) {
   const t = useTranslations('category');
+
+  // Check if any filters are applied
+  const hasActiveFilters =
+    searchQuery.trim() !== '' ||
+    selectedBrands.length > 0 ||
+    selectedModels.length > 0 ||
+    selectedSpecLabels.length > 0 ||
+    priceRange[0] > minPossiblePrice ||
+    priceRange[1] < maxPossiblePrice;
+
+  // Format price for display
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(price);
+  };
 
   // Simple pagination component
   function Pagination({
@@ -182,10 +202,101 @@ export function ProductListFiltered({
 
       {/* Products grid */}
       <div className="md:col-span-3 space-y-6">
+        {/* Active filters */}
+        {hasActiveFilters && (
+          <div className="flex flex-wrap gap-2 items-center">
+            <span className="text-sm font-medium">{t('activeFilters')}:</span>
+
+            {searchQuery.trim() !== '' && (
+              <Badge variant="secondary" className="flex items-center gap-1">
+                {t('filters.search')}: {searchQuery}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 ml-1"
+                  onClick={() => onSearchChange('')}
+                >
+                  <Cross2Icon className="h-3 w-3" />
+                  <span className="sr-only">{t('removeFilter')}</span>
+                </Button>
+              </Badge>
+            )}
+
+            {selectedBrands.map(brand => (
+              <Badge key={`brand-${brand}`} variant="secondary" className="flex items-center gap-1">
+                {t('filters.brand')}: {brand}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 ml-1"
+                  onClick={() => onBrandToggle(brand)}
+                >
+                  <Cross2Icon className="h-3 w-3" />
+                  <span className="sr-only">{t('removeFilter')}</span>
+                </Button>
+              </Badge>
+            ))}
+
+            {selectedModels.map(model => (
+              <Badge key={`model-${model}`} variant="secondary" className="flex items-center gap-1">
+                {t('filters.model')}: {model}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 ml-1"
+                  onClick={() => onModelToggle(model)}
+                >
+                  <Cross2Icon className="h-3 w-3" />
+                  <span className="sr-only">{t('removeFilter')}</span>
+                </Button>
+              </Badge>
+            ))}
+
+            {selectedSpecLabels.map(spec => (
+              <Badge key={`spec-${spec}`} variant="secondary" className="flex items-center gap-1">
+                {spec}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 ml-1"
+                  onClick={() => onSpecLabelToggle(spec)}
+                >
+                  <Cross2Icon className="h-3 w-3" />
+                  <span className="sr-only">{t('removeFilter')}</span>
+                </Button>
+              </Badge>
+            ))}
+
+            {(priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice) && (
+              <Badge variant="secondary" className="flex items-center gap-1">
+                {t('filters.price')}: {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 ml-1"
+                  onClick={() => onPriceRangeChange([minPossiblePrice, maxPossiblePrice])}
+                >
+                  <Cross2Icon className="h-3 w-3" />
+                  <span className="sr-only">{t('removeFilter')}</span>
+                </Button>
+              </Badge>
+            )}
+
+            <Button
+              variant="link"
+              size="sm"
+              className="text-primary font-medium"
+              onClick={onResetFilters}
+            >
+              {t('clearAll')}
+            </Button>
+          </div>
+        )}
+
         <div className="flex justify-between items-center">
-          <div>{t('results', { count: totalItems })}</div>
+          <div className="text-sm text-muted-foreground">{t('results', { count: totalItems })}</div>
           <div className="flex items-center gap-2">
-            <span className="text-sm">{t('itemsPerPage')}</span>
+            <span className="text-sm text-muted-foreground">{t('itemsPerPage')}</span>
             <select
               value={itemsPerPage}
               onChange={e => onItemsPerPageChange(Number(e.target.value))}

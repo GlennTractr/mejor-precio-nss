@@ -3,7 +3,6 @@
 import { ProductListFiltered } from '@/components/product/product-list-filtered';
 import type { CategoryFilters } from '@/lib/api/category-queries';
 import useCategoryData from '@/hooks/use-category-data';
-import { useTranslations } from 'next-intl';
 
 interface CategoryPageProps {
   categorySlug: string;
@@ -24,8 +23,6 @@ export function CategoryPage({
   minPossiblePrice,
   maxPossiblePrice,
 }: CategoryPageProps) {
-  const t = useTranslations('category');
-
   const {
     products,
     totalItems,
@@ -55,12 +52,12 @@ export function CategoryPage({
     maxPossiblePrice,
   });
 
+  const displayName = categoryName || filters.category_name;
+
   return (
-    <div className="space-y-4">
-      <div className="border-b border-primary-light/20 pb-2">
-        <h1 className="text-lg font-medium text-accent">
-          {t('title', { category: categoryName || filters.category_name })}
-        </h1>
+    <div className="space-y-6">
+      <div className="mb-6 text-center">
+        <h1 className="text-2xl font-bold text-primary">{displayName}</h1>
       </div>
       <ProductListFiltered
         products={products}
