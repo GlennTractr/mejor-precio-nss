@@ -56,6 +56,15 @@ export function ProductFilters({
   const [searchInputValue, setSearchInputValue] = useState(searchQuery);
   const [localPriceRange, setLocalPriceRange] = useState<[number, number]>(priceRange);
 
+  // Check if any filters are applied
+  const hasActiveFilters =
+    searchQuery.trim() !== '' ||
+    selectedBrands.length > 0 ||
+    selectedModels.length > 0 ||
+    selectedSpecLabels.length > 0 ||
+    priceRange[0] > minPossiblePrice ||
+    priceRange[1] < maxPossiblePrice;
+
   // Handle search input
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInputValue(e.target.value);
@@ -227,9 +236,11 @@ export function ProductFilters({
         )}
       </Accordion>
 
-      <Button onClick={onResetFilters} variant="outline" className="w-full">
-        {t('filters.resetFilters')}
-      </Button>
+      {hasActiveFilters && (
+        <Button onClick={onResetFilters} variant="outline" className="w-full">
+          {t('filters.resetFilters')}
+        </Button>
+      )}
     </div>
   );
 }
