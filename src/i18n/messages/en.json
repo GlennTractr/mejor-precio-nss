@@ -15,7 +15,21 @@
     "goHome": "Go to Home"
   },
   "category": {
-    "title": "Category: {category}"
+    "title": "Category: {category}",
+    "results": "{count, plural, =0 {No products found} =1 {1 product found} other {# products found}}",
+    "itemsPerPage": "Items per page:",
+    "noResults": "No products found",
+    "tryDifferentFilters": "Try different filters or search terms",
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search products...",
+      "searchButton": "Search",
+      "price": "Price Range",
+      "brands": "Brands",
+      "models": "Models",
+      "specs": "Specifications",
+      "resetFilters": "Reset Filters"
+    }
   },
   "product": {
     "loading": "Loading...",

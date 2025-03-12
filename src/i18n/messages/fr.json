@@ -15,7 +15,21 @@
         "goHome": "Aller à l'accueil"
     },
     "category": {
-        "title": "Catégorie: {category}"
+        "title": "Catégorie: {category}",
+        "results": "{count, plural, =0 {Aucun produit trouvé} =1 {1 produit trouvé} other {# produits trouvés}}",
+        "itemsPerPage": "Produits par page:",
+        "noResults": "Aucun produit trouvé",
+        "tryDifferentFilters": "Essayez différents filtres ou termes de recherche",
+        "filters": {
+            "search": "Rechercher",
+            "searchPlaceholder": "Rechercher des produits...",
+            "searchButton": "Rechercher",
+            "price": "Fourchette de prix",
+            "brands": "Marques",
+            "models": "Modèles",
+            "specs": "Spécifications",
+            "resetFilters": "Réinitialiser les filtres"
+        }
     },
     "product": {
         "loading": "Chargement...",

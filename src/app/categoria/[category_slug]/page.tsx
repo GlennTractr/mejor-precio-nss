@@ -1,6 +1,5 @@
 // Server Component
 import { CategoryPage } from '@/components/category/category-page';
-import type { SearchResponse } from '@/types/product';
 import { createClient } from '@supabase/supabase-js';
 import { typesenseClient } from '@/lib/typesense-client';
 
@@ -20,12 +19,12 @@ interface SpecsGroupedByType {
   [key: string]: string[];
 }
 
-async function getInitialFilters(categorySlug: string) {
+async function getInitialFiltersAndName(categorySlug: string) {
   try {
-    // 1. Get category ID from slug
+    // 1. Get category ID and name from slug
     const { data: category } = await supabase
       .from('ProductCategory')
-      .select('id')
+      .select('id, label')
       .eq('slug', categorySlug)
       .single();
 
@@ -52,7 +51,7 @@ async function getInitialFilters(categorySlug: string) {
     );
 
     // 3. Get counts from Typesense
-    const facetsResponse = (await typesenseClient
+    const facetsResponse = await typesenseClient
       .collections('product')
       .documents()
       .search(
@@ -66,7 +65,7 @@ async function getInitialFilters(categorySlug: string) {
           per_page: 0,
         },
         {}
-      )) as SearchResponse;
+      );
 
     const facetCounts = facetsResponse.facet_counts || [];
 
@@ -97,12 +96,16 @@ async function getInitialFilters(categorySlug: string) {
     );
 
     return {
-      price_range: priceRange,
-      facets: {
-        brand: brandFacets,
-        model: modelFacets,
+      initialFilters: {
+        price_range: priceRange,
+        facets: {
+          brand: brandFacets,
+          model: modelFacets,
+        },
+        specs_facets: specTypesWithLabels,
+        category_name: category.label,
       },
-      specs_facets: specTypesWithLabels,
+      categoryName: category.label,
     };
   } catch (error) {
     console.error('Failed to fetch initial filters:', error);
@@ -117,12 +120,13 @@ export default async function Page({ params, searchParams }: PageProps) {
   const currentPage = parseInt(searchParamsAwaited.page || '1');
   const itemsPerPage = parseInt(searchParamsAwaited.per_page || '20');
 
-  // Get initial filters
-  const initialFilters = await getInitialFilters(categorySlug);
+  // Get initial filters and category name
+  const { initialFilters, categoryName } = await getInitialFiltersAndName(categorySlug);
 
   return (
     <CategoryPage
       categorySlug={categorySlug}
+      categoryName={categoryName}
       initialPage={currentPage}
       initialItemsPerPage={itemsPerPage}
       initialFilters={initialFilters}

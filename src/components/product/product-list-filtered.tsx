@@ -1,282 +1,397 @@
 'use client';
 
+import { useState } from 'react';
+import { Product, FacetValue, SpecFacet } from '@/types/product';
 import { useTranslations } from 'next-intl';
-import { Product } from '@/types/product';
-import { Badge } from '@/components/ui/badge';
-import { Cross2Icon } from '@radix-ui/react-icons';
-import { FilterPanel } from '@/components/filter/filter-panel';
-import { ProductList } from '@/components/product/product-list';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Slider } from '@/components/ui/slider';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { ProductCard } from '@/components/product/product-card';
+import { Skeleton } from '@/components/ui/skeleton';
 
-interface FacetValue {
-  value: string;
-  count: number;
-}
-
-interface SpecFacet {
-  type: string;
-  count: number;
-  labels: FacetValue[];
-}
-
-interface Facets {
-  brand: FacetValue[];
-  model: FacetValue[];
-}
-
-interface ProductListFilteredProps {
+export interface ProductListFilteredProps {
   products: Product[];
   totalItems: number;
-  isProductsLoading: boolean;
-  isFacetsLoading: boolean;
-  isInitialLoad: boolean;
+  isLoading: boolean;
   currentPage: number;
   itemsPerPage: number;
   searchQuery: string;
   selectedBrands: string[];
   selectedModels: string[];
-  selectedSpecTypes: string[];
   selectedSpecLabels: string[];
   priceRange: [number, number];
   minPossiblePrice: number;
   maxPossiblePrice: number;
-  initialFilters: {
-    price_range: {
-      min: number;
-      max: number;
-    };
-    facets: {
-      brand: FacetValue[];
-      model: FacetValue[];
-    };
-    specs_facets: SpecFacet[];
-  };
-  facets: Facets;
+  brandFacets: FacetValue[];
+  modelFacets: FacetValue[];
   specFacets: SpecFacet[];
   onPageChange: (page: number) => void;
   onItemsPerPageChange: (perPage: number) => void;
-  onSearchQueryChange: (query: string) => void;
-  onBrandSelectionChange: (brands: string[]) => void;
-  onModelSelectionChange: (models: string[]) => void;
-  onSpecLabelSelectionChange: (labels: string[]) => void;
+  onSearchChange: (query: string) => void;
+  onBrandToggle: (brand: string) => void;
+  onModelToggle: (model: string) => void;
+  onSpecLabelToggle: (label: string) => void;
   onPriceRangeChange: (range: [number, number]) => void;
-  onClearAllFilters: () => void;
+  onResetFilters: () => void;
 }
 
 export function ProductListFiltered({
   products,
   totalItems,
-  isProductsLoading,
-  isFacetsLoading,
-  isInitialLoad,
+  isLoading,
   currentPage,
   itemsPerPage,
   searchQuery,
   selectedBrands,
   selectedModels,
-  selectedSpecTypes,
   selectedSpecLabels,
   priceRange,
   minPossiblePrice,
   maxPossiblePrice,
-  facets,
+  brandFacets,
+  modelFacets,
   specFacets,
   onPageChange,
   onItemsPerPageChange,
-  onSearchQueryChange,
-  onBrandSelectionChange,
-  onModelSelectionChange,
-  onSpecLabelSelectionChange,
+  onSearchChange,
+  onBrandToggle,
+  onModelToggle,
+  onSpecLabelToggle,
   onPriceRangeChange,
-  onClearAllFilters,
+  onResetFilters,
 }: ProductListFilteredProps) {
-  const t = useTranslations('filters');
+  const t = useTranslations('category');
+  const [searchInputValue, setSearchInputValue] = useState(searchQuery);
+  const [localPriceRange, setLocalPriceRange] = useState<[number, number]>(priceRange);
 
-  // Handlers that reset pagination
-  const handleSearchQueryChange = (query: string) => {
-    onSearchQueryChange(query);
-    onPageChange(1);
+  // Handle search input
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInputValue(e.target.value);
   };
 
-  const handleBrandSelectionChange = (brands: string[]) => {
-    onBrandSelectionChange(brands);
-    onPageChange(1);
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearchChange(searchInputValue);
   };
 
-  const handleModelSelectionChange = (models: string[]) => {
-    onModelSelectionChange(models);
-    onPageChange(1);
+  // Handle price range change
+  const handlePriceRangeChange = (value: number[]) => {
+    setLocalPriceRange([value[0], value[1]]);
   };
 
-  const handleSpecLabelSelectionChange = (labels: string[]) => {
-    onSpecLabelSelectionChange(labels);
-    onPageChange(1);
+  const handlePriceRangeCommit = () => {
+    onPriceRangeChange(localPriceRange);
   };
 
-  const handlePriceRangeChange = (range: [number, number]) => {
-    onPriceRangeChange(range);
-    onPageChange(1);
+  // Format price for display
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(price);
   };
 
-  const handleClearAllFilters = () => {
-    onClearAllFilters();
-    onPageChange(1);
-  };
+  // Simple pagination component
+  function Pagination({
+    currentPage,
+    totalItems,
+    pageSize,
+    onPageChange,
+  }: {
+    currentPage: number;
+    totalItems: number;
+    pageSize: number;
+    onPageChange: (page: number) => void;
+  }) {
+    const totalPages = Math.ceil(totalItems / pageSize);
 
-  const hasActiveFilters =
-    selectedBrands.length > 0 ||
-    selectedModels.length > 0 ||
-    selectedSpecTypes.length > 0 ||
-    selectedSpecLabels.length > 0 ||
-    searchQuery ||
-    priceRange[0] > minPossiblePrice ||
-    priceRange[1] < maxPossiblePrice;
+    // Generate page numbers to display
+    const getPageNumbers = () => {
+      const pages = [];
+      const maxPagesToShow = 5;
+
+      if (totalPages <= maxPagesToShow) {
+        // Show all pages if there are few
+        for (let i = 1; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        // Always show first page
+        pages.push(1);
+
+        // Calculate start and end of page range around current page
+        let start = Math.max(2, currentPage - 1);
+        let end = Math.min(totalPages - 1, currentPage + 1);
+
+        // Adjust if at the beginning or end
+        if (currentPage <= 2) {
+          end = Math.min(totalPages - 1, 4);
+        } else if (currentPage >= totalPages - 1) {
+          start = Math.max(2, totalPages - 3);
+        }
+
+        // Add ellipsis if needed
+        if (start > 2) {
+          pages.push('...');
+        }
+
+        // Add middle pages
+        for (let i = start; i <= end; i++) {
+          pages.push(i);
+        }
+
+        // Add ellipsis if needed
+        if (end < totalPages - 1) {
+          pages.push('...');
+        }
+
+        // Always show last page
+        pages.push(totalPages);
+      }
+
+      return pages;
+    };
+
+    const pageNumbers = getPageNumbers();
+
+    return (
+      <div className="flex justify-center mt-6">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded border disabled:opacity-50"
+          >
+            &lt;
+          </button>
+
+          {pageNumbers.map((page, index) => (
+            <button
+              key={index}
+              onClick={() => typeof page === 'number' && onPageChange(page)}
+              disabled={page === '...' || page === currentPage}
+              className={`px-3 py-1 rounded border ${
+                page === currentPage ? 'bg-primary text-white' : ''
+              } ${page === '...' ? 'cursor-default' : ''}`}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded border disabled:opacity-50"
+          >
+            &gt;
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="px-4 pb-8">
-      <div className="flex gap-8">
-        {/* Filter Panel */}
-        <div className="w-64 flex-shrink-0">
-          <FilterPanel
-            facets={facets}
-            specFacets={specFacets}
-            selectedBrands={selectedBrands}
-            selectedModels={selectedModels}
-            selectedSpecLabels={selectedSpecLabels}
-            priceRange={priceRange}
-            minPossiblePrice={minPossiblePrice}
-            maxPossiblePrice={maxPossiblePrice}
-            isFacetsLoading={isFacetsLoading}
-            isInitialLoad={isInitialLoad}
-            searchQuery={searchQuery}
-            onSearchQueryChange={handleSearchQueryChange}
-            onBrandSelectionChange={handleBrandSelectionChange}
-            onModelSelectionChange={handleModelSelectionChange}
-            onSpecLabelSelectionChange={handleSpecLabelSelectionChange}
-            onPriceRangeChange={handlePriceRangeChange}
-          />
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+      {/* Filters sidebar */}
+      <div className="space-y-6 rounded-lg border p-4">
+        <div>
+          <h2 className="mb-2 font-medium">{t('filters.search')}</h2>
+          <form onSubmit={handleSearchSubmit} className="flex gap-2">
+            <Input
+              type="text"
+              value={searchInputValue}
+              onChange={handleSearchInput}
+              placeholder={t('filters.searchPlaceholder')}
+              className="flex-1"
+            />
+            <Button type="submit" size="sm">
+              {t('filters.searchButton')}
+            </Button>
+          </form>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1">
-          <div className="flex flex-col gap-4 mb-6">
-            {/* Active Filters */}
-            <div className="flex flex-wrap gap-2">
-              {searchQuery && (
-                <Badge
-                  variant="secondary"
-                  className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
-                >
-                  {t('search.label', { query: searchQuery })}
-                  <button
-                    onClick={() => handleSearchQueryChange('')}
-                    className="ml-1 rounded-full hover:bg-primary-light/30"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">{t('search.clearAria')}</span>
-                  </button>
-                </Badge>
-              )}
-              {selectedBrands.map(brand => (
-                <Badge
-                  key={`brand-${brand}`}
-                  variant="secondary"
-                  className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
-                >
-                  {t('badges.brand', { name: brand })}
-                  <button
-                    onClick={() => {
-                      const newBrands = selectedBrands.filter(b => b !== brand);
-                      handleBrandSelectionChange(newBrands);
-                    }}
-                    className="ml-1 rounded-full hover:bg-primary-light/30"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">{t('badges.removeAria', { type: brand })}</span>
-                  </button>
-                </Badge>
-              ))}
-              {selectedModels.map(model => (
-                <Badge
-                  key={`model-${model}`}
-                  variant="secondary"
-                  className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
-                >
-                  {t('badges.model', { name: model })}
-                  <button
-                    onClick={() => {
-                      const newModels = selectedModels.filter(m => m !== model);
-                      handleModelSelectionChange(newModels);
-                    }}
-                    className="ml-1 rounded-full hover:bg-primary-light/30"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">{t('badges.removeAria', { type: model })}</span>
-                  </button>
-                </Badge>
-              ))}
-              {selectedSpecLabels.map(specLabel => {
-                const specType = specFacets.find(spec =>
-                  spec.labels.some(l => l.value === specLabel)
-                )?.type;
-                return (
-                  <Badge
-                    key={`spec-label-${specLabel}`}
-                    variant="secondary"
-                    className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
-                  >
-                    {t('badges.spec', { type: specType, value: specLabel })}
-                    <button
-                      onClick={() => {
-                        const newSpecLabels = selectedSpecLabels.filter(l => l !== specLabel);
-                        handleSpecLabelSelectionChange(newSpecLabels);
-                      }}
-                      className="ml-1 rounded-full hover:bg-primary-light/30"
-                    >
-                      <Cross2Icon className="h-3 w-3" />
-                      <span className="sr-only">{t('badges.removeAria', { type: specType })}</span>
-                    </button>
-                  </Badge>
-                );
-              })}
-              {(priceRange[0] > minPossiblePrice || priceRange[1] < maxPossiblePrice) && (
-                <Badge
-                  variant="secondary"
-                  className="bg-primary-light/10 text-primary hover:bg-primary-light/20"
-                >
-                  {t('priceRange.filter', {
-                    min: priceRange[0].toFixed(2),
-                    max: priceRange[1].toFixed(2),
-                  })}
-                  <button
-                    onClick={() => handlePriceRangeChange([minPossiblePrice, maxPossiblePrice])}
-                    className="ml-1 rounded-full hover:bg-primary-light/30"
-                  >
-                    <Cross2Icon className="h-3 w-3" />
-                    <span className="sr-only">{t('badges.removeAria', { type: 'price' })}</span>
-                  </button>
-                </Badge>
-              )}
-              {hasActiveFilters && (
-                <button
-                  onClick={handleClearAllFilters}
-                  className="text-sm text-primary hover:text-primary-dark transition-colors"
-                >
-                  {t('badges.clearAll')}
-                </button>
-              )}
+        <div>
+          <h2 className="mb-2 font-medium">{t('filters.price')}</h2>
+          <div className="space-y-4">
+            <Slider
+              min={minPossiblePrice}
+              max={maxPossiblePrice}
+              step={1}
+              value={[localPriceRange[0], localPriceRange[1]]}
+              onValueChange={handlePriceRangeChange}
+              onValueCommit={handlePriceRangeCommit}
+            />
+            <div className="flex justify-between text-sm">
+              <span>{formatPrice(localPriceRange[0])}</span>
+              <span>{formatPrice(localPriceRange[1])}</span>
             </div>
           </div>
-
-          <ProductList
-            products={products}
-            isProductsLoading={isProductsLoading}
-            totalItems={totalItems}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            onPageChange={onPageChange}
-            onItemsPerPageChange={onItemsPerPageChange}
-          />
         </div>
+
+        <Accordion type="multiple" defaultValue={['brands', 'models', 'specs']}>
+          {/* Brands filter */}
+          {brandFacets.length > 0 && (
+            <AccordionItem value="brands">
+              <AccordionTrigger>{t('filters.brands')}</AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {brandFacets
+                    .sort((a, b) => b.count - a.count)
+                    .map(brand => (
+                      <div key={brand.value} className="flex items-center gap-2">
+                        <Checkbox
+                          id={`brand-${brand.value}`}
+                          checked={selectedBrands.includes(brand.value)}
+                          onCheckedChange={() => onBrandToggle(brand.value)}
+                          disabled={brand.count === 0}
+                        />
+                        <label
+                          htmlFor={`brand-${brand.value}`}
+                          className={`text-sm flex-1 cursor-pointer ${
+                            brand.count === 0 ? 'text-gray-400' : ''
+                          }`}
+                        >
+                          {brand.value} ({brand.count})
+                        </label>
+                      </div>
+                    ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
+          {/* Models filter */}
+          {modelFacets.length > 0 && (
+            <AccordionItem value="models">
+              <AccordionTrigger>{t('filters.models')}</AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {modelFacets
+                    .sort((a, b) => b.count - a.count)
+                    .map(model => (
+                      <div key={model.value} className="flex items-center gap-2">
+                        <Checkbox
+                          id={`model-${model.value}`}
+                          checked={selectedModels.includes(model.value)}
+                          onCheckedChange={() => onModelToggle(model.value)}
+                          disabled={model.count === 0}
+                        />
+                        <label
+                          htmlFor={`model-${model.value}`}
+                          className={`text-sm flex-1 cursor-pointer ${
+                            model.count === 0 ? 'text-gray-400' : ''
+                          }`}
+                        >
+                          {model.value} ({model.count})
+                        </label>
+                      </div>
+                    ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
+          {/* Specs filters */}
+          {specFacets.length > 0 && (
+            <AccordionItem value="specs">
+              <AccordionTrigger>{t('filters.specs')}</AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-4">
+                  {specFacets.map(specType => (
+                    <div key={specType.type}>
+                      <h3 className="text-sm font-medium mb-2">{specType.type}</h3>
+                      <div className="space-y-2 max-h-40 overflow-y-auto">
+                        {specType.labels
+                          .sort((a, b) => b.count - a.count)
+                          .map(label => (
+                            <div key={label.value} className="flex items-center gap-2">
+                              <Checkbox
+                                id={`spec-${label.value}`}
+                                checked={selectedSpecLabels.includes(label.value)}
+                                onCheckedChange={() => onSpecLabelToggle(label.value)}
+                                disabled={label.count === 0}
+                              />
+                              <label
+                                htmlFor={`spec-${label.value}`}
+                                className={`text-sm flex-1 cursor-pointer ${
+                                  label.count === 0 ? 'text-gray-400' : ''
+                                }`}
+                              >
+                                {label.value} ({label.count})
+                              </label>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+        </Accordion>
+
+        <Button onClick={onResetFilters} variant="outline" className="w-full">
+          {t('filters.resetFilters')}
+        </Button>
+      </div>
+
+      {/* Products grid */}
+      <div className="md:col-span-3 space-y-6">
+        <div className="flex justify-between items-center">
+          <div>{t('results', { count: totalItems })}</div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm">{t('itemsPerPage')}</span>
+            <select
+              value={itemsPerPage}
+              onChange={e => onItemsPerPageChange(Number(e.target.value))}
+              className="border rounded p-1 text-sm"
+            >
+              <option value="20">20</option>
+              <option value="40">40</option>
+              <option value="60">60</option>
+            </select>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: itemsPerPage }).map((_, i) => (
+              <div key={i} className="border rounded-lg p-4 space-y-3">
+                <Skeleton className="h-40 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-6 w-1/3" />
+              </div>
+            ))}
+          </div>
+        ) : products.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {products.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-lg font-medium">{t('noResults')}</p>
+            <p className="text-gray-500 mt-2">{t('tryDifferentFilters')}</p>
+          </div>
+        )}
+
+        {totalItems > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            pageSize={itemsPerPage}
+            onPageChange={onPageChange}
+          />
+        )}
       </div>
     </div>
   );
