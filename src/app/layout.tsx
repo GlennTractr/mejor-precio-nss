@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { MainNav } from '@/components/main-nav';
 import { Toaster } from '@/components/ui/toaster';
 import { ReactQueryProvider } from '@/components/react-query-provider';
+import { GoogleAnalyticsScript } from '@/components/google-analytics';
 import localFont from 'next/font/local';
 import { Footer } from '@/components/footer';
 import { env } from '@/lib/env';
@@ -55,6 +56,7 @@ export default async function RootLayout({
             </ThemeProvider>
           </NextIntlClientProvider>
         </ReactQueryProvider>
+        <GoogleAnalyticsScript gaId={env().NEXT_PUBLIC_GA_MEASUREMENT_ID} />
       </body>
     </html>
   );
