@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Build filter string
-    let filters = [];
+    const filters: string[] = [];
 
     // Add category filter if provided
     if (categorySlug) {

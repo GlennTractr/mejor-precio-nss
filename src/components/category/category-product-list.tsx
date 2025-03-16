@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, notFound } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { ProductListFiltered } from '@/components/product/product-list-filtered';
 import type { FacetValue, SpecFacet, Product } from '@/types/product';
 import useDebounce from '@/hooks/use-debounce';
@@ -49,14 +48,13 @@ export function CategoryProductList({
   initialFilters,
 }: CategoryProductListProps) {
   const searchParams = useSearchParams();
-  const t = useTranslations('category');
 
   // State management
   const [products, setProducts] = useState<Product[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [isProductsLoading, setIsProductsLoading] = useState(true);
-  const [isFacetsLoading, setIsFacetsLoading] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [, setIsFacetsLoading] = useState(false);
+  const [, setIsInitialLoad] = useState(true);
   const [currentPageState, setCurrentPageState] = useState(
     parseInt(searchParams?.get('page') || String(initialPage))
   );
@@ -67,7 +65,7 @@ export function CategoryProductList({
   const [selectedModels, setSelectedModels] = useState<string[]>(
     searchParams?.get('models')?.split(',').filter(Boolean) || []
   );
-  const [selectedSpecTypes, setSelectedSpecTypes] = useState<string[]>(
+  const [selectedSpecTypes] = useState<string[]>(
     searchParams?.get('spec_types')?.split(',').filter(Boolean) || []
   );
   const [selectedSpecLabels, setSelectedSpecLabels] = useState<string[]>(
@@ -321,22 +319,38 @@ export function CategoryProductList({
       <ProductListFiltered
         products={products}
         totalItems={totalItems}
-        isProductsLoading={isProductsLoading}
-        isFacetsLoading={isFacetsLoading}
-        isInitialLoad={isInitialLoad}
         currentPage={currentPageState}
         itemsPerPage={itemsPerPage}
         searchQuery={searchQuery}
         selectedBrands={selectedBrands}
         selectedModels={selectedModels}
-        selectedSpecTypes={selectedSpecTypes}
         selectedSpecLabels={selectedSpecLabels}
         priceRange={priceRange}
+        isLoading={isProductsLoading}
+        brandFacets={facets.brand}
+        modelFacets={facets.model}
+        specFacets={specFacets}
+        onResetFilters={() => {
+          setSelectedBrands([]);
+          setSelectedModels([]);
+          setSelectedSpecLabels([]);
+          setSearchQuery('');
+          setPriceRange([minPossiblePrice, maxPossiblePrice]);
+        }}
+        onBrandToggle={brand => {
+          setSelectedBrands(prev => [...prev, brand]);
+        }}
+        onModelToggle={model => {
+          setSelectedModels(prev => [...prev, model]);
+        }}
+        onSpecLabelToggle={label => {
+          setSelectedSpecLabels(prev => [...prev, label]);
+        }}
+        onPriceRangeChange={range => {
+          setPriceRange(range);
+        }}
         minPossiblePrice={minPossiblePrice}
         maxPossiblePrice={maxPossiblePrice}
-        initialFilters={initialFilters}
-        facets={facets}
-        specFacets={specFacets}
         onPageChange={page => {
           setCurrentPageState(page);
           updateUrlParams(
@@ -365,7 +379,7 @@ export function CategoryProductList({
             selectedSpecLabels
           );
         }}
-        onSearchQueryChange={query => {
+        onSearchChange={(query: string) => {
           setSearchQuery(query);
           setCurrentPageState(1);
           updateUrlParams(
@@ -379,76 +393,6 @@ export function CategoryProductList({
             selectedSpecTypes,
             selectedSpecLabels
           );
-        }}
-        onBrandSelectionChange={brands => {
-          setSelectedBrands(brands);
-          setCurrentPageState(1);
-          updateUrlParams(
-            1,
-            itemsPerPage,
-            searchQuery,
-            brands,
-            selectedModels,
-            priceRange[0],
-            priceRange[1],
-            selectedSpecTypes,
-            selectedSpecLabels
-          );
-        }}
-        onModelSelectionChange={models => {
-          setSelectedModels(models);
-          setCurrentPageState(1);
-          updateUrlParams(
-            1,
-            itemsPerPage,
-            searchQuery,
-            selectedBrands,
-            models,
-            priceRange[0],
-            priceRange[1],
-            selectedSpecTypes,
-            selectedSpecLabels
-          );
-        }}
-        onSpecLabelSelectionChange={labels => {
-          setSelectedSpecLabels(labels);
-          setCurrentPageState(1);
-          updateUrlParams(
-            1,
-            itemsPerPage,
-            searchQuery,
-            selectedBrands,
-            selectedModels,
-            priceRange[0],
-            priceRange[1],
-            selectedSpecTypes,
-            labels
-          );
-        }}
-        onPriceRangeChange={range => {
-          setPriceRange(range);
-          setCurrentPageState(1);
-          updateUrlParams(
-            1,
-            itemsPerPage,
-            searchQuery,
-            selectedBrands,
-            selectedModels,
-            range[0],
-            range[1],
-            selectedSpecTypes,
-            selectedSpecLabels
-          );
-        }}
-        onClearAllFilters={() => {
-          setSelectedBrands([]);
-          setSelectedModels([]);
-          setSelectedSpecTypes([]);
-          setSelectedSpecLabels([]);
-          setSearchQuery('');
-          setPriceRange([minPossiblePrice, maxPossiblePrice]);
-          setCurrentPageState(1);
-          updateUrlParams(1, itemsPerPage, '', [], [], minPossiblePrice, maxPossiblePrice, [], []);
         }}
       />
     </div>

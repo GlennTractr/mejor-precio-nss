@@ -20,7 +20,10 @@ async function getProducts(page: number, perPage: number): Promise<SearchRespons
     sort_by: 'best_price_per_unit:asc',
   };
 
-  return typesenseClient.collections('product').documents().search(searchParameters, {});
+  return typesenseClient
+    .collections('product')
+    .documents()
+    .search(searchParameters, {}) as Promise<SearchResponse>;
 }
 
 export function HomeProductList({ currentPage, itemsPerPage }: HomeProductListProps) {

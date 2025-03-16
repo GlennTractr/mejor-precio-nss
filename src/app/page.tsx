@@ -25,7 +25,7 @@ async function getProducts(page: number, perPage: number) {
   return typesenseClient.collections('product').documents().search(searchParameters, {});
 }
 
-export default async function HomePage({ searchParams }: { searchParams: SearchParams }) {
+export default async function HomePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const searchParamsAwaited = await searchParams;
   const t = await getTranslations('home');
   const currentPage = parseInt(searchParamsAwaited.page || '1');

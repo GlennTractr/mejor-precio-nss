@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     const searchResults = await typesenseClient
       .collections('product')
       .documents()
-      .search(searchParameters);
+      .search(searchParameters, {});
 
     return NextResponse.json(searchResults);
   } catch (error) {

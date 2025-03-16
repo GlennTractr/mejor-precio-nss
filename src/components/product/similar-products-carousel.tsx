@@ -1,12 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { Product } from '@/types/product';
 import { ProductCard } from './product-card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
 interface SimilarProductsCarouselProps {
   title: string;
@@ -49,7 +47,6 @@ export function SimilarProductsCarousel({
   filterBy = '',
   perPage = 10,
 }: SimilarProductsCarouselProps) {
-  const t = useTranslations();
   const [products, setProducts] = useState<Product[]>([]);
   const [totalFound, setTotalFound] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -90,7 +87,7 @@ export function SimilarProductsCarousel({
         const data = await response.json();
 
         if (data.hits) {
-          setProducts(data.hits.map((hit: any) => hit.document as Product));
+          setProducts(data.hits.map((hit: { document: Product }) => hit.document));
           setTotalFound(data.found || 0);
         }
       } catch (error) {

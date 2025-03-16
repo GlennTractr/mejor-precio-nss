@@ -6,13 +6,13 @@ import { typesenseClient } from '@/lib/typesense-client';
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_ANON_KEY!);
 
 interface PageProps {
-  params: {
+  params: Promise<{
     category_slug: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     page?: string;
     per_page?: string;
-  };
+  }>;
 }
 
 interface SpecsGroupedByType {
