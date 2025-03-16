@@ -27,7 +27,6 @@ export async function GET(request: NextRequest) {
   const filterBy = searchParams.get('filter_by') || '';
 
   try {
-    console.log('filterBy', filterBy);
     // Get all basic facets and price range in one query
     const basicFacetsResponse = (await typesenseClient.collections('product').documents().search(
       {
@@ -42,7 +41,6 @@ export async function GET(request: NextRequest) {
       },
       {}
     )) as SearchResponseWithStats;
-    console.log('basicFacetsResponse', basicFacetsResponse);
 
     // Get price range from facet stats
     const priceStats = basicFacetsResponse.facet_stats?.best_price_per_unit;

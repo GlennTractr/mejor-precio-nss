@@ -7,7 +7,6 @@ interface GoogleAnalyticsProps {
 }
 
 export function GoogleAnalyticsScript({ gaId }: GoogleAnalyticsProps) {
-  console.log('gaId', gaId);
   if (!gaId) {
     return null;
   }

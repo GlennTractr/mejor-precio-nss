@@ -46,7 +46,14 @@
         "showAll": "Tous",
         "units": {
             "unit": "{count, plural, =1 {unité} other {unités}}"
-        }
+        },
+        "priceRange": "Fourchette de Prix",
+        "perUnit": "par unité",
+        "fromMultipleProviders": "De plusieurs fournisseurs",
+        "ourRecommendation": "Notre recommandation",
+        "showMore": "Afficher plus de fournisseurs",
+        "showLess": "Afficher moins de fournisseurs",
+        "similarProducts": "Produits Similaires"
     },
     "filters": {
         "brands": "Marques",

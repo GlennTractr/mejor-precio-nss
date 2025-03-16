@@ -5,13 +5,13 @@ import Image from 'next/image';
 import supabaseClient from '@/lib/supabase-client';
 import { Tables } from '@/types/database';
 import { useTranslations } from 'next-intl';
-import { ProductSellContextList } from './product-sell-context-list';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRouter } from 'next/navigation';
+import { SimilarProductsCarousel } from './similar-products-carousel';
 
 type ProductSellContext = {
   price: number;
@@ -55,12 +55,6 @@ type ProductResponse = Omit<Tables<'Product'>, 'model' | 'image'> & {
 
 interface ProductPageProps {
   productSlug: string;
-}
-
-interface PriceContext {
-  price: number;
-  pricePerUnit: number;
-  shop: string;
 }
 
 function ProductPageSkeleton() {
@@ -164,6 +158,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isNotified, setIsNotified] = useState(false);
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
+  const [showAllProviders, setShowAllProviders] = useState(false);
   const currentUser = useCurrentUser();
 
   useEffect(() => {
@@ -315,26 +310,33 @@ export function ProductPage({ productSlug }: ProductPageProps) {
   if (error) return <div>{t('product.error', { message: error })}</div>;
   if (!product) return <div>{t('product.notFound')}</div>;
 
-  // Calculate the lowest price and price per unit from ProductPackaging
-  const lowestPriceContext = product.ProductPackaging?.reduce<PriceContext | null>(
-    (lowest, pkg) => {
-      const pkgPrices =
+  // Calculate price range and best price per unit
+  const pricePerUnitData =
+    product.ProductPackaging?.flatMap(
+      pkg =>
         pkg.ProductSellContext?.map(ctx => ({
           price: ctx.price,
           pricePerUnit: ctx.price / pkg.quantity,
           shop: ctx.Shop?.label || '',
-        })) || [];
+          shopImg: ctx.Shop?.img_url || '',
+          quantity: pkg.quantity,
+          link: ctx.link,
+        })) || []
+    ) || [];
 
-      const minPrice = Math.min(...pkgPrices.map(p => p.price));
-      const minPriceContext = pkgPrices.find(p => p.price === minPrice);
+  // Sort by price per unit to find the best deal
+  const sortedPricePerUnit = [...pricePerUnitData].sort((a, b) => a.pricePerUnit - b.pricePerUnit);
 
-      if (!lowest || (minPriceContext && minPriceContext.price < lowest.price)) {
-        return minPriceContext || null;
-      }
-      return lowest;
-    },
-    null
-  );
+  // Calculate price range
+  const minPricePerUnit = Math.min(...pricePerUnitData.map(p => p.pricePerUnit));
+  const maxPricePerUnit = Math.max(...pricePerUnitData.map(p => p.pricePerUnit));
+
+  // Get unique providers
+  const uniqueProviders = Array.from(new Set(pricePerUnitData.map(p => p.shop)));
+
+  // Limit displayed providers based on state
+  const displayedProviders = showAllProviders ? sortedPricePerUnit : sortedPricePerUnit.slice(0, 5);
+  const hasMoreProviders = sortedPricePerUnit.length > 5;
 
   return (
     <div>
@@ -416,37 +418,116 @@ export function ProductPage({ productSlug }: ProductPageProps) {
               )}
             </div>
 
-            {lowestPriceContext && (
-              <div className="border-t border-b border-primary-light/20 py-6 space-y-3 bg-white/50 rounded-lg px-4 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-4xl font-bold text-accent">
-                      ${lowestPriceContext.price.toFixed(2)}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      {t('product.priceAt', { shop: lowestPriceContext.shop })}
-                    </span>
-                  </div>
-                  <a
-                    href={product.ProductPackaging?.[0]?.ProductSellContext?.[0]?.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-md transition-colors"
-                  >
-                    {t('actions.buyNow')}
-                  </a>
-                </div>
-                <div className="text-sm text-primary-dark font-medium">
-                  {t('product.pricePerUnit', { price: lowestPriceContext.pricePerUnit.toFixed(2) })}
-                </div>
-              </div>
-            )}
-
+            {/* Integrated Provider List with Price Range Header */}
             <div className="bg-white rounded-lg shadow-sm border border-primary-light/20 p-4">
-              <ProductSellContextList productPackaging={product.ProductPackaging} />
+              {pricePerUnitData.length > 0 && (
+                <div className="mb-6 pb-4 border-b border-primary-light/20">
+                  <h2 className="text-lg font-medium text-accent mb-2">
+                    {t('product.priceRange')}
+                  </h2>
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-2xl font-bold text-accent">
+                      ${minPricePerUnit.toFixed(2)} - ${maxPricePerUnit.toFixed(2)}
+                    </span>
+                    <span className="text-sm text-muted-foreground">{t('product.perUnit')}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {uniqueProviders.map((provider, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-light/10 text-primary"
+                      >
+                        {provider}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <h2 className="text-lg font-medium text-accent mb-4">{t('product.availableFrom')}</h2>
+              <div className="space-y-3">
+                {displayedProviders.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 bg-white rounded-lg border border-primary-light/20 hover:border-primary-light/50 transition-colors shadow-sm"
+                  >
+                    <div className="flex items-center gap-4">
+                      {/* Shop Logo */}
+                      <div className="relative w-12 h-12 flex-shrink-0 bg-white rounded-lg p-1 border border-primary-light/10">
+                        <Image
+                          src={item.shopImg}
+                          alt={item.shop}
+                          fill
+                          className="object-contain"
+                          sizes="48px"
+                        />
+                      </div>
+                      {/* Shop Info */}
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-accent">{item.shop}</span>
+                          {index === 0 && (
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-600 text-white shadow-sm">
+                              {t('product.ourRecommendation')}
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {item.quantity} {t('product.units.unit', { count: item.quantity })}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-6">
+                      {/* Price Info */}
+                      <div className="text-right">
+                        <div className="text-lg font-semibold text-accent">
+                          ${item.price.toFixed(2)}
+                        </div>
+                        <div className="text-sm text-primary-dark">
+                          {t('product.pricePerUnit', {
+                            price: item.pricePerUnit.toFixed(2),
+                          })}
+                        </div>
+                      </div>
+                      {/* Buy Button */}
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+                      >
+                        {t('actions.buy')}
+                      </a>
+                    </div>
+                  </div>
+                ))}
+
+                {hasMoreProviders && (
+                  <div className="flex justify-center pt-2">
+                    <button
+                      onClick={() => setShowAllProviders(!showAllProviders)}
+                      className="text-sm font-medium text-primary hover:text-primary-dark focus:outline-none focus:underline transition-colors"
+                    >
+                      {showAllProviders ? t('product.showLess') : t('product.showMore')}
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Similar Products Carousel */}
+        {product && (
+          <SimilarProductsCarousel
+            title={t('product.similarProducts')}
+            query={product.model?.category?.label || ''}
+            productId={product.id}
+            categorySlug={product.model?.category?.label?.toLowerCase().replace(/\s+/g, '-')}
+            specs={product.ProductSpecs}
+            perPage={10}
+          />
+        )}
       </div>
     </div>
   );
