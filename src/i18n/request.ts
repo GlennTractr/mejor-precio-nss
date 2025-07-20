@@ -12,8 +12,6 @@ export default getRequestConfig(async () => {
   const acceptLanguage = headersList.get('accept-language');
   const defaultLocale = env().NEXT_PUBLIC_DEFAULT_LOCALE || 'es';
   const acceptedLocales = getAcceptedLocales();
-  console.log('defaultLocale', defaultLocale);
-  console.log('acceptedLocales', acceptedLocales);
 
   // First check cookie, then accept-language header
   let locale =
