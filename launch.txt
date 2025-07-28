@@ -1,0 +1,9 @@
+
+- https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&facet=brand%3AHuggies
+- https://www.fahorro.com/catalogsearch/result/index/?q=huggies&product_list_limit=90
+- https://super.walmart.com.mx/search?q=huggies&facet=category_names_level1%3ABeb%C3%A9s%7C%7Cbrand%3AHuggies
+- https://super.walmart.com.mx/search?q=huggies&facet=category_names_level1%3ABeb%C3%A9s%7C%7Cbrand%3AHuggies&page=2
+- https://www.farmaciasguadalajara.com/SearchDisplay?categoryId=&storeId=10151&searchType=1001&catalogId=10052&langId=-24&sType=SimpleSearch&resultCatEntryType=2&showResultsPage=true&searchSource=Q&pageView=&beginIndex=0&pageSize=100&searchTerm=huggies&#facet:&productBeginIndex:0&facetLimit:&orderBy:undefined&pageView:grid&minPrice:&maxPrice:&pageSize:40&
+- https://www.sams.com.mx/search?ss=selectPickupStore&catId=30168_30178_30179&facet=brand%3AHuggies
+- https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&query=/bebes/panales/huggies&searchState
+- https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&page=2&query=/bebes/panales/huggies&searchState

@@ -1,0 +1,64 @@
+- details produit
+
+  - produit similaire (other brand)
+  - ajouter un min/max (possiblement historique min/max)
+
+- profile produit
+
+  - favorie + alerte sur la liste (hedbo)
+
+- target QC:
+  - e-commerce: 10 (maxi, pharmaprix, iga)
+  - marque: 4 principales (huggies, pampers, attitude)
+
+Amazon Canada : Large sélection de marques et modèles.​
+Walmart Canada : Offre une variété de couches en ligne et en magasin.​
+Costco Canada : Vente en gros, notamment la marque Kirkland Signature.​
+Pharmaprix : Pharmacie offrant des produits pour bébés en ligne.​
+Jean Coutu : Chaîne de pharmacies avec une boutique en ligne.​
+Familiprix : Pharmacie offrant des couches pour bébés en ligne.​
+Maxi : Supermarché proposant des produits pour bébés en ligne.​
+IGA : Supermarché offrant une gamme de couches pour bébés.​
+Well.ca : Boutique en ligne spécialisée dans les produits de santé et de bien-être.​
+Toys"R"Us Canada : Magasin de jouets proposant également des produits pour bébés.​
+
+
+- Pharmaprix
+- Familiprix
+- maxi
+- IGA
+
+1. Pampers
+   Pampers est l'une des marques les plus populaires au Québec, offrant une variété de modèles adaptés aux besoins des bébés.​
+
+Swaddlers : Tailles de Prématuré à 5, conçues pour unisexe.​
+Baby Dry : Tailles de 1 à 6, adaptées pour unisexe.​
+Cruisers : Tailles de 3 à 7, pour unisexe.​
+Cruisers 360 : Tailles de 3 à 7, pour unisexe.​
+Pure Protection : Tailles de Nouveau-né (N) à 6, pour unisexe.​
+Easy Ups (culottes d’entraînement) : Tailles de 2T-3T à 4T-5T, disponibles pour garçons et filles.​
+
+2. Huggies
+   Huggies est également une marque très répandue, proposant des couches avec différentes caractéristiques.​
+
+Little Snugglers : Tailles de Prématuré à 6, pour unisexe.​
+Little Movers : Tailles de 3 à 7, pour unisexe.​
+Snug & Dry : Tailles de 1 à 6, pour unisexe.​
+OverNites : Tailles de 3 à 6, pour unisexe.​
+Special Delivery : Tailles de Nouveau-né à 6, pour unisexe.​
+Pull-Ups (culottes d’entraînement) : Tailles de 2T-3T à 4T-5T, disponibles pour garçons et filles.
+
+3. Kirkland Signature
+   La marque maison de Costco offre des couches de qualité à un prix compétitif.​
+
+- Couches jetables : Tailles de 1 à 6, pour unisexe.​
+
+4. Babyganics
+   Babyganics propose des couches axées sur des ingrédients naturels et une approche écologique.​
+
+-Couches ultra-absorbantes (Skin Love) : Tailles de 1 à 6, pour unisexe.​
+
+5. Rascal + Friends
+   Cette marque offre des couches premium avec un accent sur la performance et le confort.​
+
+-Premium Diapers : Tailles de 1 à 7, pour unisexe
