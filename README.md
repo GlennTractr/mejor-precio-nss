@@ -268,3 +268,14 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Push db prod
+
+```bash
+export POSTGRES_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+```
+
+```bash
+npx supabase db push --db-url $POSTGRES_URL
+npx supabase db pull --db-url $POSTGRES_URL --schema public
+```
