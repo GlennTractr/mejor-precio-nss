@@ -194,8 +194,8 @@ DECLARE
     request_body jsonb;
 BEGIN
     -- Retrieve the Supabase anon key from the vault
-    SELECT getSecret('SUPABASE_ANON_KEY') INTO api_key;
-    SELECT getSecret('SUPABASE_URL') INTO api_url;
+    SELECT getSecret('NEXT_PUBLIC_SUPABASE_ANON_KEY') INTO api_key;
+    SELECT getSecret('NEXT_PUBLIC_SUPABASE_URL') INTO api_url;
 
     -- Construct the request body (you can customize this as needed)
     request_body := jsonb_build_object(
@@ -235,8 +235,8 @@ BEGIN
     WHERE source_intent = matching_source_intent_id;
 
     -- Retrieve the Supabase anon key from the vault
-    SELECT vault."getSecret"('SUPABASE_ANON_KEY') INTO api_key;
-    SELECT vault."getSecret"('SUPABASE_URL') INTO api_url;
+    SELECT vault."getSecret"('NEXT_PUBLIC_SUPABASE_ANON_KEY') INTO api_key;
+    SELECT vault."getSecret"('NEXT_PUBLIC_SUPABASE_URL') INTO api_url;
 
     -- Construct the request body (you can customize this as needed)
     request_body := jsonb_build_object(
