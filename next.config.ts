@@ -5,7 +5,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const nextConfig: NextConfig = {
   env: env(),
   images: {
-    domains: [env().NEXT_PUBLIC_SUPABASE_URL.replace('https://', '')],
+    domains: [env().NEXT_PUBLIC_SUPABASE_URL.replace('https://', '').replace('http://', '')],
   },
 };
 
