@@ -10,15 +10,16 @@ INSERT INTO "public"."ProductCategory" ("id", "created_at", "label", "slug", "im
 */
 
 
-INSERT INTO "public"."Shop" ("id", "created_at", "label", "img_url") VALUES 
-('192114b2-4c05-4a35-86dc-02c90327720a', '2025-02-25 03:46:34.365713+00', 'Mercado Libre', '/shop/mercado-libre.png'),
-('691a4aab-c095-4b3a-a547-df136e66ce25', '2025-02-15 03:48:45.082115+00', 'Amazon', '/shop/amazon.png'),
-('86cc689f-f2a6-4350-b88c-60b9d80bf228', '2024-11-17 03:29:30.353116+00', 'Walmart', '/shop/walmart.png'),
-('94b9d420-8c12-4b04-9699-a0bfa84649bf', '2024-09-22 22:46:02.947853+00', 'Aurrera', '/shop/aurrera.png'),
-('97610a47-57f5-46b4-882e-71df9b19f4a3', '2024-09-22 22:46:29.317348+00', 'Ahorro', '/shop/ahorro.png'),
-('b88cd8b0-bbf6-4226-ab94-fca45b41d02f', '2024-11-08 23:19:31.33981+00', 'Sam''s club', '/shop/sams-club.png'),
-('f5eb82b7-3d56-45f2-af8a-30d9c6c42779', '2024-10-19 03:32:45.780622+00', 'Guadalajara', '/shop/guadalajara.png'),
-('aa936c52-90b6-4010-8f4a-f4f368a871b0', '2024-10-19 03:32:45.780622+00', 'Chedraui', '/shop/chedraui.png');
+INSERT INTO "public"."Shop" ("id", "label", "img_url") VALUES 
+('192114b2-4c05-4a35-86dc-02c90327720a', 'Mercado Libre', '/shop/mercado-libre.png'),
+('691a4aab-c095-4b3a-a547-df136e66ce25', 'Amazon', '/shop/amazon.png'),
+('86cc689f-f2a6-4350-b88c-60b9d80bf228', 'Walmart', '/shop/walmart.png'),
+('94b9d420-8c12-4b04-9699-a0bfa84649bf', 'Aurrera', '/shop/aurrera.png'),
+('97610a47-57f5-46b4-882e-71df9b19f4a3', 'Ahorro', '/shop/ahorro.png'),
+('b88cd8b0-bbf6-4226-ab94-fca45b41d02f', 'Sam''s club', '/shop/sams-club.png'),
+('f5eb82b7-3d56-45f2-af8a-30d9c6c42779', 'Guadalajara', '/shop/guadalajara.png'),
+('aa936c52-90b6-4010-8f4a-f4f368a871b0', 'Chedraui', '/shop/chedraui.png'),
+('9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'Soriana', '/shop/soriana.png');
 
 /*
 ## SHOP QC
@@ -28,15 +29,17 @@ INSERT INTO "public"."Shop" ("id", "created_at", "label", "img_url") VALUES
 ('9ee99dcd-c884-49e0-9a64-c7badd496884', '2025-02-28 04:09:25.774291+00', 'Jean-Coutu', '/shop/jean.png'),; 
 */
 
-INSERT INTO "public"."ShopIdentifier" ("id", "created_at", "shop", "domain") VALUES 
-('1', '2025-07-05 19:01:56.980227+00', '94b9d420-8c12-4b04-9699-a0bfa84649bf', 'bodegaaurrera.com.mx'),
-('2', '2025-07-10 22:03:47.296373+00', '86cc689f-f2a6-4350-b88c-60b9d80bf228', 'super.walmart.com.mx'),
-('3', '2025-07-10 22:18:47.259569+00', '97610a47-57f5-46b4-882e-71df9b19f4a3', 'fahorro.com'),
-('4', '2025-07-10 22:32:01.091361+00', 'f5eb82b7-3d56-45f2-af8a-30d9c6c42779', 'farmaciasguadalajara.com'),
-('5', '2025-07-10 22:38:48.666331+00', 'b88cd8b0-bbf6-4226-ab94-fca45b41d02f', 'sams.com.mx'),
-('6', '2025-07-22 22:38:48.666331+00', 'aa936c52-90b6-4010-8f4a-f4f368a871b0', 'chedraui.com.mx'),
-('7', '2025-07-22 22:38:48.666331+00', '192114b2-4c05-4a35-86dc-02c90327720a', 'mercadolibre.com.mx'),
-('8', '2025-07-22 22:38:48.666331+00', '192114b2-4c05-4a35-86dc-02c90327720a', 'listado.mercadolibre.com.mx');
+INSERT INTO "public"."ShopIdentifier" ("id", "shop", "domain") VALUES 
+('1', '94b9d420-8c12-4b04-9699-a0bfa84649bf', 'bodegaaurrera.com.mx'),
+('2', '86cc689f-f2a6-4350-b88c-60b9d80bf228', 'super.walmart.com.mx'),
+('3', '97610a47-57f5-46b4-882e-71df9b19f4a3', 'fahorro.com'),
+('4', 'f5eb82b7-3d56-45f2-af8a-30d9c6c42779', 'farmaciasguadalajara.com'),
+('5', 'b88cd8b0-bbf6-4226-ab94-fca45b41d02f', 'sams.com.mx'),
+('6', 'aa936c52-90b6-4010-8f4a-f4f368a871b0', 'chedraui.com.mx'),
+('7', '192114b2-4c05-4a35-86dc-02c90327720a', 'mercadolibre.com.mx'),
+('8', '192114b2-4c05-4a35-86dc-02c90327720a', 'listado.mercadolibre.com.mx'),
+('9', '691a4aab-c095-4b3a-a547-df136e66ce25', 'amazon.com.mx'),
+('10', '9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'soriana.com');
 
 
 INSERT INTO "public"."ProductBrand" ("id", "created_at", "label") VALUES 
