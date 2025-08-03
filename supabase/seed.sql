@@ -123,3 +123,48 @@ INSERT INTO "public"."ProductSpecs" ("id", "created_at", "category", "type", "la
 ('c762120e-2b6e-4e8d-b48a-42ac1f8ae919', '2025-02-28 03:39:55.89228+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '6'),
 ('cdc24c33-b849-42db-bf72-77fb6fe34f76', '2025-02-28 03:39:44.510538+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '5');
 */
+
+
+
+INSERT INTO "matching"."Sources" 
+("url", "disabled") 
+VALUES 
+( 'https://listado.mercadolibre.com.mx/huggies-ultra-confort?sb=all_mercadolibre#D[A:huggies%20ultra%20confort]', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=5&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/desechables/huggies-ultra-confort_Desde_145_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_289_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&page=2&query=/bebes/panales/huggies&searchState', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/desechables/huggies-ultra-confort_Desde_97_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_49_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=2&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/desechables/huggies-ultra-confort_Desde_49_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&facet=brand%3AHuggies', 'false'), 
+('https://www.sams.com.mx/search?ss=selectPickupStore&catId=30168_30178_30179&facet=brand%3AHuggies', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_241_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.farmaciasguadalajara.com/SearchDisplay?categoryId=&storeId=10151&searchType=1001&catalogId=10052&langId=-24&sType=SimpleSearch&resultCatEntryType=2&showResultsPage=true&searchSource=Q&pageView=&beginIndex=0&pageSize=100&searchTerm=huggies&#facet:&productBeginIndex:0&facetLimit:&orderBy:&pageView:grid&minPrice:&maxPrice:&pageSize:40&', 'false'), 
+('https://super.walmart.com.mx/search?q=huggies&facet=category_names_level1%3ABeb%C3%A9s%7C%7Cbrand%3AHuggies&page=2', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=7&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
+('https://super.walmart.com.mx/search?q=huggies&facet=category_names_level1%3ABeb%C3%A9s%7C%7Cbrand%3AHuggies', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_145_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?prefn1=brand&prefv1=Huggies&view=grid&cref=0&cgid=huggies&srule=huggies&start=48&sz=24&pageNumber=3&forceOldView=false', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_433_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&query=/bebes/panales/huggies&searchState', 'false'), 
+('https://www.amazon.com.mx/s?k=huggies+supreme&crid=2PMS48RO7O6X2&sprefix=%2Caps%2C106&ref=nb_sb_ss_recent_1_0_recent', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_385_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_97_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=9&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=6&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
+('https://www.amazon.com.mx/s?rh=n%3A16687724011%2Cp_123%3A236240&dc&qid=1753743717&rnid=119962389011&ref=sr_nr_p_123_0', 'false'), 
+('https://www.fahorro.com/catalogsearch/result/index/?q=huggies&product_list_limit=90', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=3&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
+('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?prefn1=brand&prefv1=Huggies&view=grid', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_193_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&page=3&query=/bebes/panales/huggies&searchState', 'false'), 
+('https://listado.mercadolibre.com.mx/huggies-supreme?sb=all_mercadolibre#D[A:huggies%20supreme]', 'false'), 
+('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?prefn1=brand&prefv1=Huggies&view=grid&cref=0&cgid=huggies&srule=undefined&start=24&sz=24&pageNumber=2&forceOldView=false', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=10&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_NoIndex_True?sb=all_mercadolibre#applied_filter_id%3Dcategory%26applied_filter_name%3DCategor%C3%ADas%26applied_filter_order%3D3%26applied_value_id%3DMLM440833%26applied_value_name%3DPa%C3%B1ales%26applied_value_order%3D3%26applied_value_results%3D458%26is_custom%3Dfalse', 'false'), 
+('https://listado.mercadolibre.com.mx/huggies-eco-protect?sb=all_mercadolibre#D[A:huggies%20eco%20protect]', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=8&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
+('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_337_NoIndex_True?sb=all_mercadolibre', 'false'), 
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=4&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false');

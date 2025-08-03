@@ -216,3 +216,15 @@ drop index if exists "public"."Dictionary_pkey";
 drop table "public"."Dictionary";
 
 
+
+create table matching."Sources" (
+  id uuid not null default gen_random_uuid (),
+  created_at timestamp with time zone not null default now(),
+  url text not null,
+  disabled boolean not null default false,
+  constraint Sources_pkey primary key (id)
+) TABLESPACE pg_default;
+
+
+ALTER TABLE "matching"."Sources" ENABLE ROW LEVEL SECURITY;
+

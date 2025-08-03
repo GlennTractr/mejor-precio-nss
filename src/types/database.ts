@@ -1,11 +1,6 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: '12.2.3 (519615d)';
-  };
   graphql_public: {
     Tables: {
       [_ in never]: never;
@@ -16,10 +11,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
+          extensions?: Json;
           operationName?: string;
           query?: string;
           variables?: Json;
-          extensions?: Json;
         };
         Returns: Json;
       };
@@ -33,191 +28,6 @@ export type Database = {
   };
   matching: {
     Tables: {
-      MatchingInput: {
-        Row: {
-          created_at: string;
-          data_extracted: Json | null;
-          id: string;
-          input_parsed: Json;
-          input_unparsed: Json | null;
-          link: string;
-          source_intent: string;
-          status: string;
-        };
-        Insert: {
-          created_at?: string;
-          data_extracted?: Json | null;
-          id?: string;
-          input_parsed: Json;
-          input_unparsed?: Json | null;
-          link: string;
-          source_intent: string;
-          status?: string;
-        };
-        Update: {
-          created_at?: string;
-          data_extracted?: Json | null;
-          id?: string;
-          input_parsed?: Json;
-          input_unparsed?: Json | null;
-          link?: string;
-          source_intent?: string;
-          status?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'MatchingInput_source_intent_fkey';
-            columns: ['source_intent'];
-            isOneToOne: false;
-            referencedRelation: 'MatchingSourceIntent';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
-      MatchingIntent: {
-        Row: {
-          created_at: string;
-          id: string;
-          pool: string;
-          status: string;
-          updated_at: string | null;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          pool: string;
-          status?: string;
-          updated_at?: string | null;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          pool?: string;
-          status?: string;
-          updated_at?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'MatchingIntent_pool_fkey';
-            columns: ['pool'];
-            isOneToOne: false;
-            referencedRelation: 'MatchingPool';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
-      MatchingPool: {
-        Row: {
-          category: string | null;
-          created_at: string;
-          id: string;
-          name: string;
-          prompt: string | null;
-        };
-        Insert: {
-          category?: string | null;
-          created_at?: string;
-          id?: string;
-          name: string;
-          prompt?: string | null;
-        };
-        Update: {
-          category?: string | null;
-          created_at?: string;
-          id?: string;
-          name?: string;
-          prompt?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'CrawlingPool_prompt_fkey';
-            columns: ['prompt'];
-            isOneToOne: false;
-            referencedRelation: 'PromptMetadata';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
-      MatchingSource: {
-        Row: {
-          created_at: string;
-          id: string;
-          label: string;
-          metadata: Json | null;
-          pool: string;
-          shop: string;
-          type: string | null;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          label: string;
-          metadata?: Json | null;
-          pool: string;
-          shop: string;
-          type?: string | null;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          label?: string;
-          metadata?: Json | null;
-          pool?: string;
-          shop?: string;
-          type?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'MatchingSource_pool_fkey';
-            columns: ['pool'];
-            isOneToOne: false;
-            referencedRelation: 'MatchingPool';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
-      MatchingSourceIntent: {
-        Row: {
-          created_at: string;
-          id: string;
-          pool_intent: string;
-          source: string;
-          status: string;
-          updated_at: string | null;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          pool_intent: string;
-          source: string;
-          status?: string;
-          updated_at?: string | null;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          pool_intent?: string;
-          source?: string;
-          status?: string;
-          updated_at?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'MatchingSourceIntent_pool_intent_fkey';
-            columns: ['pool_intent'];
-            isOneToOne: false;
-            referencedRelation: 'MatchingIntent';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'MatchingSourceIntent_source_fkey';
-            columns: ['source'];
-            isOneToOne: false;
-            referencedRelation: 'MatchingSource';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
       ProcessIntent: {
         Row: {
           created_at: string;
@@ -257,121 +67,24 @@ export type Database = {
         };
         Relationships: [];
       };
-      ProductToModerate: {
+      Sources: {
         Row: {
-          brand: string | null;
-          category: string | null;
           created_at: string;
-          description: string | null;
+          disabled: boolean;
           id: string;
-          image_url: string | null;
-          intent: string;
-          model: string | null;
-          price: number;
-          quantity: number | null;
-          shop: string;
-          status: string;
-          title: string | null;
           url: string;
         };
         Insert: {
-          brand?: string | null;
-          category?: string | null;
           created_at?: string;
-          description?: string | null;
+          disabled?: boolean;
           id?: string;
-          image_url?: string | null;
-          intent: string;
-          model?: string | null;
-          price: number;
-          quantity?: number | null;
-          shop: string;
-          status?: string;
-          title?: string | null;
           url: string;
         };
         Update: {
-          brand?: string | null;
-          category?: string | null;
           created_at?: string;
-          description?: string | null;
+          disabled?: boolean;
           id?: string;
-          image_url?: string | null;
-          intent?: string;
-          model?: string | null;
-          price?: number;
-          quantity?: number | null;
-          shop?: string;
-          status?: string;
-          title?: string | null;
           url?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'ProductToModerate_intent_fkey';
-            columns: ['intent'];
-            isOneToOne: false;
-            referencedRelation: 'MatchingIntent';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
-      ProductToModerateSpecs: {
-        Row: {
-          created_at: string;
-          id: string;
-          product: string;
-          specs: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          product: string;
-          specs: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          product?: string;
-          specs?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'ProductToModerateSpecs_product_fkey';
-            columns: ['product'];
-            isOneToOne: false;
-            referencedRelation: 'ProductToModerate';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
-      PromptMetadata: {
-        Row: {
-          created_at: string;
-          id: string;
-          label: string;
-          model: string;
-          prompt: string;
-          response_format: Json;
-          temperature: number;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          label: string;
-          model: string;
-          prompt: string;
-          response_format: Json;
-          temperature?: number;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          label?: string;
-          model?: string;
-          prompt?: string;
-          response_format?: Json;
-          temperature?: number;
         };
         Relationships: [];
       };
@@ -383,9 +96,9 @@ export type Database = {
       call_open_router_api: {
         Args: {
           p_model: string;
-          p_temperature: number;
           p_prompt_system: string;
           p_prompt_user: string;
+          p_temperature: number;
         };
         Returns: Json;
       };
@@ -439,30 +152,6 @@ export type Database = {
         };
         Update: {
           label?: string;
-        };
-        Relationships: [];
-      };
-      Dictionary: {
-        Row: {
-          created_at: string;
-          id: string;
-          source: string;
-          type: string;
-          value: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          source: string;
-          type: string;
-          value: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          source?: string;
-          type?: string;
-          value?: string;
         };
         Relationships: [];
       };
@@ -1117,7 +806,7 @@ export type Database = {
         Returns: undefined;
       };
       setPrice: {
-        Args: { p_link: string; p_price: number; p_date?: string };
+        Args: { p_date?: string; p_link: string; p_price: number };
         Returns: undefined;
       };
       unaccent: {
