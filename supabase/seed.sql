@@ -1,5 +1,7 @@
 INSERT INTO "public"."Country" ("label") VALUES ('MX'), ('QC');
 
+-- INSERT INTO "public"."File" ("id", "is_public", "file_bucket", "file_path") VALUES ('2eee2e9c-8be9-4da7-bf8c-89ffc4b3182a', true, 'product', 'not_found.png');
+
 INSERT INTO "public"."ProductCategory" ("id", "created_at", "label", "slug", "image_bucket", "image_path", "country") VALUES 
 ('9b16f8f5-a36b-4a58-a81e-669a711556ba', '2024-10-26 23:49:02.148871+00', 'Toallitas', 'toallitas', null, null, 'MX'), 
 ('a1bb06cd-b954-498b-a45e-770900f29466', '2024-09-22 22:43:10.067073+00', 'Pañales', 'panales', null, null, 'MX');
@@ -157,7 +159,7 @@ VALUES
 ('https://www.amazon.com.mx/s?rh=n%3A16687724011%2Cp_123%3A236240&dc&qid=1753743717&rnid=119962389011&ref=sr_nr_p_123_0', 'false'), 
 ('https://www.fahorro.com/catalogsearch/result/index/?q=huggies&product_list_limit=90', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=3&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
-('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?prefn1=brand&prefv1=Huggies&view=grid', 'false'), 
+('https://www.soriana.com/bebes/panales-y-toallitas/huggies/', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_193_NoIndex_True?sb=all_mercadolibre', 'false'), 
 ('https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&page=3&query=/bebes/panales/huggies&searchState', 'false'), 
 ('https://listado.mercadolibre.com.mx/huggies-supreme?sb=all_mercadolibre#D[A:huggies%20supreme]', 'false'), 
@@ -168,3 +170,9 @@ VALUES
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=8&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_337_NoIndex_True?sb=all_mercadolibre', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=4&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false');
+
+-- ProductRules for Pañales category
+INSERT INTO "matching"."ProductRules" (category, type, min, max) VALUES 
+('a1bb06cd-b954-498b-a45e-770900f29466', 'price_per_unit', 3, 10),
+('a1bb06cd-b954-498b-a45e-770900f29466', 'quantity', 10, 500),
+('a1bb06cd-b954-498b-a45e-770900f29466', 'price', 50, 5000);

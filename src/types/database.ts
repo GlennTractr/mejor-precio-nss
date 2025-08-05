@@ -28,42 +28,275 @@ export type Database = {
   };
   matching: {
     Tables: {
+      AcquisitionIntent: {
+        Row: {
+          brand: string | null;
+          brand_confidence: number | null;
+          category: string | null;
+          category_confidence: number | null;
+          created_at: string | null;
+          failed_reason: string | null;
+          id: string;
+          model: string | null;
+          model_confidence: number | null;
+          process_intent: string;
+          progress: number | null;
+          score: number | null;
+          status: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          brand?: string | null;
+          brand_confidence?: number | null;
+          category?: string | null;
+          category_confidence?: number | null;
+          created_at?: string | null;
+          failed_reason?: string | null;
+          id?: string;
+          model?: string | null;
+          model_confidence?: number | null;
+          process_intent: string;
+          progress?: number | null;
+          score?: number | null;
+          status?: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          brand?: string | null;
+          brand_confidence?: number | null;
+          category?: string | null;
+          category_confidence?: number | null;
+          created_at?: string | null;
+          failed_reason?: string | null;
+          id?: string;
+          model?: string | null;
+          model_confidence?: number | null;
+          process_intent?: string;
+          progress?: number | null;
+          score?: number | null;
+          status?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'AcquisitionIntent_process_intent_fkey';
+            columns: ['process_intent'];
+            isOneToOne: false;
+            referencedRelation: 'ProcessIntent';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      AcquisitionIntentSpecsMatching: {
+        Row: {
+          acquisition_intent: string;
+          confidence: number;
+          created_at: string | null;
+          id: string;
+          spec: string;
+          type: string;
+        };
+        Insert: {
+          acquisition_intent: string;
+          confidence?: number;
+          created_at?: string | null;
+          id?: string;
+          spec: string;
+          type: string;
+        };
+        Update: {
+          acquisition_intent?: string;
+          confidence?: number;
+          created_at?: string | null;
+          id?: string;
+          spec?: string;
+          type?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'AcquisitionIntentSpecsMatching_acquisition_intent_fkey';
+            columns: ['acquisition_intent'];
+            isOneToOne: false;
+            referencedRelation: 'AcquisitionIntent';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      ExtractIntent: {
+        Row: {
+          created_at: string | null;
+          description: string | null;
+          extra_data: Json | null;
+          failed_reason: string | null;
+          id: string;
+          image_url: string | null;
+          is_bundle: boolean | null;
+          price: number | null;
+          process_intent: string;
+          status: string;
+          title: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          description?: string | null;
+          extra_data?: Json | null;
+          failed_reason?: string | null;
+          id?: string;
+          image_url?: string | null;
+          is_bundle?: boolean | null;
+          price?: number | null;
+          process_intent: string;
+          status?: string;
+          title?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          description?: string | null;
+          extra_data?: Json | null;
+          failed_reason?: string | null;
+          id?: string;
+          image_url?: string | null;
+          is_bundle?: boolean | null;
+          price?: number | null;
+          process_intent?: string;
+          status?: string;
+          title?: string | null;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ExtractIntent_process_intent_fkey';
+            columns: ['process_intent'];
+            isOneToOne: false;
+            referencedRelation: 'ProcessIntent';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
       ProcessIntent: {
         Row: {
           created_at: string;
           domain: string;
           html: string;
           id: string;
+          product_url: string | null;
           result: Json | null;
           source_type: string;
           source_url: string;
           status: string;
           target_url: string | null;
           type: string;
+          updated_at: string | null;
         };
         Insert: {
           created_at?: string;
           domain: string;
           html: string;
           id?: string;
+          product_url?: string | null;
           result?: Json | null;
           source_type: string;
           source_url: string;
           status?: string;
           target_url?: string | null;
           type: string;
+          updated_at?: string | null;
         };
         Update: {
           created_at?: string;
           domain?: string;
           html?: string;
           id?: string;
+          product_url?: string | null;
           result?: Json | null;
           source_type?: string;
           source_url?: string;
           status?: string;
           target_url?: string | null;
           type?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [];
+      };
+      ProcessIntentAIUsage: {
+        Row: {
+          completion_tokens: number;
+          cost: number;
+          created_at: string | null;
+          id: string;
+          label: string;
+          model: string;
+          process_intent: string;
+          prompt_tokens: number;
+          time: number;
+          total_tokens: number;
+          type: string;
+        };
+        Insert: {
+          completion_tokens?: number;
+          cost?: number;
+          created_at?: string | null;
+          id?: string;
+          label: string;
+          model: string;
+          process_intent: string;
+          prompt_tokens?: number;
+          time?: number;
+          total_tokens?: number;
+          type: string;
+        };
+        Update: {
+          completion_tokens?: number;
+          cost?: number;
+          created_at?: string | null;
+          id?: string;
+          label?: string;
+          model?: string;
+          process_intent?: string;
+          prompt_tokens?: number;
+          time?: number;
+          total_tokens?: number;
+          type?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ProcessIntentAIUsage_process_intent_fkey';
+            columns: ['process_intent'];
+            isOneToOne: false;
+            referencedRelation: 'ProcessIntent';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      ProductRules: {
+        Row: {
+          category: string;
+          created_at: string | null;
+          id: string;
+          max: number | null;
+          min: number | null;
+          type: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          category: string;
+          created_at?: string | null;
+          id?: string;
+          max?: number | null;
+          min?: number | null;
+          type: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          category?: string;
+          created_at?: string | null;
+          id?: string;
+          max?: number | null;
+          min?: number | null;
+          type?: string;
+          updated_at?: string | null;
         };
         Relationships: [];
       };
@@ -87,6 +320,41 @@ export type Database = {
           url?: string;
         };
         Relationships: [];
+      };
+      TrackingIntent: {
+        Row: {
+          created_at: string | null;
+          failed_reason: string | null;
+          id: string;
+          process_intent: string;
+          status: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          failed_reason?: string | null;
+          id?: string;
+          process_intent: string;
+          status?: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          failed_reason?: string | null;
+          id?: string;
+          process_intent?: string;
+          status?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'TrackingIntent_process_intent_fkey';
+            columns: ['process_intent'];
+            isOneToOne: false;
+            referencedRelation: 'ProcessIntent';
+            referencedColumns: ['id'];
+          }
+        ];
       };
     };
     Views: {
