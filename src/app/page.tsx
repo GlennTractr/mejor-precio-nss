@@ -42,7 +42,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   return (
     <div className="space-y-8">
       <section className="relative overflow-hidden bg-primary p-12 rounded-xl shadow-md">
-        <div className="absolute inset-0 bg-[url('/hero-pattern.svg')] opacity-10" />
+        <div className="absolute inset-0 opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary-light/80 via-primary to-primary-dark/90" />
         <div className="relative max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-6">
