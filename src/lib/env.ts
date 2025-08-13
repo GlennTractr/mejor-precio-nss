@@ -6,6 +6,7 @@ const envRef = {
     NEXT_PUBLIC_DEFAULT_LOCALE: '',
     NEXT_PUBLIC_ACCEPTED_LOCALES: '',
     NEXT_PUBLIC_SITE_TITLE: '',
+    NEXT_PUBLIC_SITE_URL: '',
     NEXT_PUBLIC_GA_MEASUREMENT_ID: '',
   },
 };
@@ -20,6 +21,7 @@ export const reloadEnv = () => {
     NEXT_PUBLIC_DEFAULT_LOCALE: String(process.env.NEXT_PUBLIC_DEFAULT_LOCALE || 'es'),
     NEXT_PUBLIC_ACCEPTED_LOCALES: String(process.env.NEXT_PUBLIC_ACCEPTED_LOCALES || 'es,en,fr'),
     NEXT_PUBLIC_SITE_TITLE: String(process.env.NEXT_PUBLIC_SITE_TITLE || 'PapásListos'),
+    NEXT_PUBLIC_SITE_URL: String(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
     NEXT_PUBLIC_GA_MEASUREMENT_ID: String(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''),
   };
 };

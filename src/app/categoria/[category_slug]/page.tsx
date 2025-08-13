@@ -2,6 +2,9 @@
 import { CategoryPage } from '@/components/category/category-page';
 import { createClient } from '@supabase/supabase-js';
 import { typesenseClient } from '@/lib/typesense-client';
+import type { Metadata } from 'next';
+import createServerClient from '@/lib/supabase/server';
+import { env } from '@/lib/env';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -137,4 +140,31 @@ export default async function Page({ params, searchParams }: PageProps) {
       maxPossiblePrice={initialFilters.price_range.max}
     />
   );
+}
+
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+  const categorySlug = (await params).category_slug;
+  const sp = await searchParams;
+  const supabase = await createServerClient();
+  const { data: category } = await supabase
+    .from('ProductCategory')
+    .select('label')
+    .eq('slug', categorySlug)
+    .single();
+
+  const categoryName = category?.label || categorySlug.replace(/-/g, ' ');
+  const title = `${categoryName} – compara precios y ahorra`;
+  const description = `Explora ${categoryName}: compara precios por unidad y encuentra las mejores ofertas.`;
+  const baseUrl = `${env().NEXT_PUBLIC_SITE_URL}/categoria/${categorySlug}`;
+  const page = sp?.page ? parseInt(sp.page) : 1;
+  const url = page && page > 1 ? `${baseUrl}?page=${page}` : baseUrl;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    robots: page && page > 1 ? { index: false, follow: true } : { index: true, follow: true },
+    openGraph: { title, description, url },
+    twitter: { title, description, card: 'summary_large_image' },
+  };
 }

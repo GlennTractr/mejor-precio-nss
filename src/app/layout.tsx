@@ -24,8 +24,24 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: env().NEXT_PUBLIC_SITE_TITLE,
-  description: 'Find the best prices for your favorite products',
+  metadataBase: new URL(env().NEXT_PUBLIC_SITE_URL),
+  title: {
+    default: env().NEXT_PUBLIC_SITE_TITLE,
+    template: `%s | ${env().NEXT_PUBLIC_SITE_TITLE}`,
+  },
+  description: 'Encuentra los mejores precios para tus productos favoritos',
+  openGraph: {
+    type: 'website',
+    siteName: env().NEXT_PUBLIC_SITE_TITLE,
+    locale: 'es_MX',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default async function RootLayout({
