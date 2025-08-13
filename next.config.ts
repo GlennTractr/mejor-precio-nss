@@ -2,12 +2,29 @@ import type { NextConfig } from 'next';
 import { env } from './src/lib/env';
 import createNextIntlPlugin from 'next-intl/plugin';
 
+function getSupabaseHostFromUrl(url: string): string | null {
+  try {
+    const u = new URL(url);
+    return u.hostname;
+  } catch {
+    return null;
+  }
+}
+
+const supabaseHost = getSupabaseHostFromUrl(env().NEXT_PUBLIC_SUPABASE_URL);
+
 const nextConfig: NextConfig = {
-  env: env(),
   images: {
-    domains: [
-      env().NEXT_PUBLIC_SUPABASE_URL.replace('https://', '').replace('http://', ''),
-      '127.0.0.1',
+    domains: supabaseHost ? [supabaseHost] : [],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
     ],
   },
 };
