@@ -1,3 +1,40 @@
+
+INSERT INTO auth.users (
+  instance_id,
+  id,
+  aud,
+  role,
+  email,
+  encrypted_password,
+  email_confirmed_at,
+  last_sign_in_at,
+  raw_app_meta_data,
+  raw_user_meta_data,
+  created_at,
+  updated_at,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change
+) VALUES (
+  '00000000-0000-0000-0000-000000000000', -- instance_id constant
+  'b0860eb9-faa5-48e7-92fa-5b9b3df2d3e9', -- id utilisateur
+  'authenticated', -- aud
+  'authenticated', -- role
+  'glenn@tractr.net', -- email
+  crypt('password', gen_salt('bf')), -- mot de passe bcrypt
+  NOW(), -- email confirmé
+  NOW(), -- last_sign_in_at
+  '{"provider":"email","providers":["email"]}',
+  '{}',
+  NOW(),
+  NOW(),
+  '',
+  '',
+  '',
+  ''
+);
+
 INSERT INTO "public"."Country" ("label") VALUES ('MX'), ('QC');
 
 -- INSERT INTO "public"."File" ("id", "is_public", "file_bucket", "file_path") VALUES ('2eee2e9c-8be9-4da7-bf8c-89ffc4b3182a', true, 'product', 'not_found.png');
@@ -42,6 +79,11 @@ INSERT INTO "public"."ShopIdentifier" ("id", "shop", "domain") VALUES
 ('8', '192114b2-4c05-4a35-86dc-02c90327720a', 'listado.mercadolibre.com.mx'),
 ('9', '691a4aab-c095-4b3a-a547-df136e66ce25', 'amazon.com.mx'),
 ('10', '9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'soriana.com');
+
+
+-- Seed banned URLs
+INSERT INTO "matching"."BannedUrl" (shop, url) VALUES
+('691a4aab-c095-4b3a-a547-df136e66ce25', 'https://www.amazon.com.mx/sspa/click');
 
 
 INSERT INTO "public"."ProductBrand" ("id", "created_at", "label") VALUES 
@@ -176,3 +218,11 @@ INSERT INTO "matching"."ProductRules" (category, type, min, max) VALUES
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'price_per_unit', 3, 10),
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'quantity', 10, 500),
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'price', 50, 5000);
+
+-- Update existing user to admin role
+UPDATE "public"."profiles" SET role = 'admin' WHERE id = 'b0860eb9-faa5-48e7-92fa-5b9b3df2d3e9';
+
+-- Insert profile if not exists (fallback)
+INSERT INTO "public"."profiles" (id, role) 
+SELECT 'b0860eb9-faa5-48e7-92fa-5b9b3df2d3e9', 'admin'
+WHERE NOT EXISTS (SELECT 1 FROM "public"."profiles" WHERE id = 'b0860eb9-faa5-48e7-92fa-5b9b3df2d3e9');

@@ -16,7 +16,8 @@ ADD COLUMN IF NOT EXISTS source_type TEXT,
 ADD COLUMN IF NOT EXISTS product_url TEXT,
 ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 ALTER COLUMN status SET DEFAULT 'waiting',
-ADD COLUMN IF NOT EXISTS type TEXT;
+DROP COLUMN IF EXISTS source_type,
+ADD COLUMN IF NOT EXISTS type TEXT DEFAULT NULL;
 
 -- Add check constraint for status values (V2 compatible)
 ALTER TABLE "matching"."ProcessIntent" 
@@ -78,7 +79,16 @@ CREATE TABLE IF NOT EXISTS "matching"."AcquisitionIntent" (
     -- Model matching
     model UUID REFERENCES "public"."ProductModel"(id),
     model_confidence INTEGER DEFAULT 0,
-    
+
+    -- Shop and quantity (optional)
+    shop UUID REFERENCES "public"."Shop"(id),
+    quantity DOUBLE PRECISION,
+
+    -- Resolved product references (optional)
+    product UUID REFERENCES "public"."Product"(id),
+    packaging UUID REFERENCES "public"."ProductPackaging"(id),
+    sell_context UUID REFERENCES "public"."ProductSellContext"(id),
+
     -- Overall metrics
     progress INTEGER DEFAULT 0,
     score INTEGER DEFAULT 0,
@@ -153,6 +163,37 @@ CREATE TABLE IF NOT EXISTS "matching"."ProcessIntentAIUsage" (
     CHECK (time >= 0)
 );
 
+-- 8. Create BannedUrl table (matching schema)
+CREATE TABLE IF NOT EXISTS "matching"."BannedUrl" (
+    shop UUID NOT NULL REFERENCES "public"."Shop"(id) ON DELETE CASCADE,
+    url TEXT NOT NULL,
+    CONSTRAINT "BannedUrl_pkey" PRIMARY KEY (shop, url)
+);
+
+-- 9. Create AcquisitionIntentValidationRule table
+CREATE TABLE IF NOT EXISTS "matching"."AcquisitionIntentValidationRule" (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    acquisition_intent UUID NOT NULL REFERENCES "matching"."AcquisitionIntent"(id) ON DELETE CASCADE,
+    rule TEXT NOT NULL,
+    explanation TEXT,
+    success BOOLEAN DEFAULT FALSE,
+    error_explanation TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 10. Create TrackingIntentValidationRule table
+CREATE TABLE IF NOT EXISTS "matching"."TrackingIntentValidationRule" (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tracking_intent UUID NOT NULL REFERENCES "matching"."TrackingIntent"(id) ON DELETE CASCADE,
+    rule TEXT NOT NULL,
+    explanation TEXT,
+    success BOOLEAN DEFAULT FALSE,
+    error_explanation TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Create indexes for performance
 CREATE INDEX IF NOT EXISTS idx_extractintent_process_intent ON "matching"."ExtractIntent" (process_intent);
 CREATE INDEX IF NOT EXISTS idx_extractintent_status ON "matching"."ExtractIntent" (status);
@@ -168,6 +209,12 @@ CREATE INDEX IF NOT EXISTS idx_processintentaiusage_process_intent ON "matching"
 CREATE INDEX IF NOT EXISTS idx_processintentaiusage_model ON "matching"."ProcessIntentAIUsage" (model);
 CREATE INDEX IF NOT EXISTS idx_processintentaiusage_type ON "matching"."ProcessIntentAIUsage" (type);
 CREATE INDEX IF NOT EXISTS idx_processintentaiusage_label ON "matching"."ProcessIntentAIUsage" (label);
+
+-- Indexes for validation rule tables
+CREATE INDEX IF NOT EXISTS idx_acq_validationrule_acquisition_intent ON "matching"."AcquisitionIntentValidationRule" (acquisition_intent);
+CREATE INDEX IF NOT EXISTS idx_acq_validationrule_success ON "matching"."AcquisitionIntentValidationRule" (success);
+CREATE INDEX IF NOT EXISTS idx_track_validationrule_tracking_intent ON "matching"."TrackingIntentValidationRule" (tracking_intent);
+CREATE INDEX IF NOT EXISTS idx_track_validationrule_success ON "matching"."TrackingIntentValidationRule" (success);
 
 -- Create updated_at triggers for tables that need them
 CREATE OR REPLACE FUNCTION "matching".update_updated_at_column()
@@ -205,6 +252,16 @@ CREATE TRIGGER update_productrules_updated_at
     BEFORE UPDATE ON "matching"."ProductRules" 
     FOR EACH ROW EXECUTE FUNCTION "matching".update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_acq_validationrule_updated_at ON "matching"."AcquisitionIntentValidationRule";
+CREATE TRIGGER update_acq_validationrule_updated_at
+    BEFORE UPDATE ON "matching"."AcquisitionIntentValidationRule"
+    FOR EACH ROW EXECUTE FUNCTION "matching".update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_track_validationrule_updated_at ON "matching"."TrackingIntentValidationRule";
+CREATE TRIGGER update_track_validationrule_updated_at
+    BEFORE UPDATE ON "matching"."TrackingIntentValidationRule"
+    FOR EACH ROW EXECUTE FUNCTION "matching".update_updated_at_column();
+
 -- Sample ProductRules data (adjust category UUIDs as needed)
 -- INSERT INTO "matching"."ProductRules" (category, type, min, max) VALUES 
 -- ('your-electronics-category-uuid', 'price', 100, 50000),
@@ -217,3 +274,23 @@ CREATE TRIGGER update_productrules_updated_at
 -- 2. Migrate existing ProcessIntent data to new schema if needed
 -- 3. Test all constraints and indexes
 -- 4. Update application code to use new schema
+
+
+
+
+
+ -- Grant usage on matching schema to authenticated users
+  -- GRANT USAGE ON SCHEMA matching TO authenticated;
+
+  -- Grant select permissions on all matching tables
+  -- GRANT SELECT ON matching."ProcessIntent" TO authenticated;
+  -- GRANT SELECT ON matching."ExtractIntent" TO authenticated;
+  -- GRANT SELECT ON matching."TrackingIntent" TO authenticated;
+  -- GRANT SELECT ON matching."AcquisitionIntent" TO authenticated;
+  -- GRANT SELECT ON matching."AcquisitionIntentSpecsMatching" TO authenticated;
+  -- GRANT SELECT ON matching."ProductRules" TO authenticated;
+  -- GRANT SELECT ON matching."ProcessIntentAIUsage" TO authenticated;
+
+  alter table "matching"."ProcessIntent" drop column "target_url";
+
+alter table "matching"."ProcessIntent" alter column "type" drop not null;

@@ -39,9 +39,14 @@ export type Database = {
           id: string;
           model: string | null;
           model_confidence: number | null;
+          packaging: string | null;
           process_intent: string;
+          product: string | null;
           progress: number | null;
+          quantity: number | null;
           score: number | null;
+          sell_context: string | null;
+          shop: string | null;
           status: string;
           updated_at: string | null;
         };
@@ -55,9 +60,14 @@ export type Database = {
           id?: string;
           model?: string | null;
           model_confidence?: number | null;
+          packaging?: string | null;
           process_intent: string;
+          product?: string | null;
           progress?: number | null;
+          quantity?: number | null;
           score?: number | null;
+          sell_context?: string | null;
+          shop?: string | null;
           status?: string;
           updated_at?: string | null;
         };
@@ -71,9 +81,14 @@ export type Database = {
           id?: string;
           model?: string | null;
           model_confidence?: number | null;
+          packaging?: string | null;
           process_intent?: string;
+          product?: string | null;
           progress?: number | null;
+          quantity?: number | null;
           score?: number | null;
+          sell_context?: string | null;
+          shop?: string | null;
           status?: string;
           updated_at?: string | null;
         };
@@ -121,6 +136,62 @@ export type Database = {
             referencedColumns: ['id'];
           }
         ];
+      };
+      AcquisitionIntentValidationRule: {
+        Row: {
+          acquisition_intent: string;
+          created_at: string | null;
+          error_explanation: string | null;
+          explanation: string | null;
+          id: string;
+          rule: string;
+          success: boolean | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          acquisition_intent: string;
+          created_at?: string | null;
+          error_explanation?: string | null;
+          explanation?: string | null;
+          id?: string;
+          rule: string;
+          success?: boolean | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          acquisition_intent?: string;
+          created_at?: string | null;
+          error_explanation?: string | null;
+          explanation?: string | null;
+          id?: string;
+          rule?: string;
+          success?: boolean | null;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'AcquisitionIntentValidationRule_acquisition_intent_fkey';
+            columns: ['acquisition_intent'];
+            isOneToOne: false;
+            referencedRelation: 'AcquisitionIntent';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      BannedUrl: {
+        Row: {
+          shop: string;
+          url: string;
+        };
+        Insert: {
+          shop: string;
+          url: string;
+        };
+        Update: {
+          shop?: string;
+          url?: string;
+        };
+        Relationships: [];
       };
       ExtractIntent: {
         Row: {
@@ -183,11 +254,10 @@ export type Database = {
           id: string;
           product_url: string | null;
           result: Json | null;
-          source_type: string;
+          source_type: string | null;
           source_url: string;
           status: string;
-          target_url: string | null;
-          type: string;
+          type: string | null;
           updated_at: string | null;
         };
         Insert: {
@@ -197,11 +267,10 @@ export type Database = {
           id?: string;
           product_url?: string | null;
           result?: Json | null;
-          source_type: string;
+          source_type?: string | null;
           source_url: string;
           status?: string;
-          target_url?: string | null;
-          type: string;
+          type?: string | null;
           updated_at?: string | null;
         };
         Update: {
@@ -211,11 +280,10 @@ export type Database = {
           id?: string;
           product_url?: string | null;
           result?: Json | null;
-          source_type?: string;
+          source_type?: string | null;
           source_url?: string;
           status?: string;
-          target_url?: string | null;
-          type?: string;
+          type?: string | null;
           updated_at?: string | null;
         };
         Relationships: [];
@@ -356,6 +424,47 @@ export type Database = {
           }
         ];
       };
+      TrackingIntentValidationRule: {
+        Row: {
+          created_at: string | null;
+          error_explanation: string | null;
+          explanation: string | null;
+          id: string;
+          rule: string;
+          success: boolean | null;
+          tracking_intent: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          error_explanation?: string | null;
+          explanation?: string | null;
+          id?: string;
+          rule: string;
+          success?: boolean | null;
+          tracking_intent: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          error_explanation?: string | null;
+          explanation?: string | null;
+          id?: string;
+          rule?: string;
+          success?: boolean | null;
+          tracking_intent?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'TrackingIntentValidationRule_tracking_intent_fkey';
+            columns: ['tracking_intent'];
+            isOneToOne: false;
+            referencedRelation: 'TrackingIntent';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -393,8 +502,8 @@ export type Database = {
       search_crawling_results: {
         Args: { keywords: string[] };
         Returns: {
-          id: string;
           all_keywords: string[];
+          id: string;
         }[];
       };
       updateIntentStatus: {
@@ -961,6 +1070,27 @@ export type Database = {
           }
         ];
       };
+      profiles: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          role: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          id: string;
+          role?: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          role?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [];
+      };
       Shop: {
         Row: {
           created_at: string;
@@ -1065,6 +1195,10 @@ export type Database = {
       };
     };
     Functions: {
+      is_admin: {
+        Args: { user_id?: string };
+        Returns: boolean;
+      };
       launchApifyActor: {
         Args: { p_actor_id: string; p_body: Json };
         Returns: string;
