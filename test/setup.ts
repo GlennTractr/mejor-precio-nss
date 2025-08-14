@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import { env, reloadEnv } from '../src/lib/env';
 import { createClient } from '@supabase/supabase-js';
 
+// Load local env first (dev convenience), then .env.test to override in test context, then default .env
+dotenv.config({ path: '.env.local' });
 dotenv.config({ path: '.env.test' });
 dotenv.config();
 

@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next';
-import { env } from './src/lib/env';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 function getSupabaseHostFromUrl(url: string): string | null {
@@ -11,20 +10,14 @@ function getSupabaseHostFromUrl(url: string): string | null {
   }
 }
 
-const supabaseHost = getSupabaseHostFromUrl(env().NEXT_PUBLIC_SUPABASE_URL);
+const supabaseHost = getSupabaseHostFromUrl(process.env.NEXT_PUBLIC_SUPABASE_URL || '');
 
 const nextConfig: NextConfig = {
   images: {
     domains: supabaseHost ? [supabaseHost] : [],
     remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: '127.0.0.1',
-      },
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-      },
+      { protocol: 'http', hostname: '127.0.0.1' },
+      { protocol: 'http', hostname: 'localhost' },
     ],
   },
 };
