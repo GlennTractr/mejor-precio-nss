@@ -93,7 +93,8 @@ INSERT INTO "public"."ProductBrand" ("id", "created_at", "label") VALUES
 ('6d3d6fa2-7b7a-4ef0-9e25-c0af4cf40413', '2024-11-17 04:32:33.454922+00', 'KleenBebé'),
 ('8bb603fd-cef0-4732-9790-82925b987f41', '2024-11-17 04:33:33.303266+00', 'BB Tips'),
 ('a0be820a-d5fe-4e94-97e4-96630d3df96f', '2024-10-29 02:29:57.427213+00', 'Gugu'),
-('57d490e7-2bad-4bbd-8d6a-dcc1aa077af7', '2024-11-17 04:32:07.268153+00', 'Pampers');
+('57d490e7-2bad-4bbd-8d6a-dcc1aa077af7', '2024-11-17 04:32:07.268153+00', 'Pampers'),
+('f1e5c4a8-9b2d-4c3e-8f7a-1a2b3c4d5e6f', '2024-11-17 04:36:00.000000+00', 'Babysec');
 
 
 INSERT INTO "public"."ProductBrandCategory" ("category", "brand") VALUES 
@@ -104,7 +105,8 @@ INSERT INTO "public"."ProductBrandCategory" ("category", "brand") VALUES
 ('a1bb06cd-b954-498b-a45e-770900f29466', '57d490e7-2bad-4bbd-8d6a-dcc1aa077af7'),
 ('a1bb06cd-b954-498b-a45e-770900f29466', '6d3d6fa2-7b7a-4ef0-9e25-c0af4cf40413'),
 ('a1bb06cd-b954-498b-a45e-770900f29466', '8bb603fd-cef0-4732-9790-82925b987f41'),
-('a1bb06cd-b954-498b-a45e-770900f29466', 'a0be820a-d5fe-4e94-97e4-96630d3df96f');
+('a1bb06cd-b954-498b-a45e-770900f29466', 'a0be820a-d5fe-4e94-97e4-96630d3df96f'),
+('a1bb06cd-b954-498b-a45e-770900f29466', 'f1e5c4a8-9b2d-4c3e-8f7a-1a2b3c4d5e6f');
 
 /*
 INSERT INTO "public"."ProductBrandCategory" ("category", "brand") VALUES 
@@ -120,7 +122,16 @@ INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "cate
 ('72845c43-907c-4413-a846-1d0134eecca8', '2024-11-17 04:38:08.979352+00', 'Pull-Ups', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
 ('9dad3c4f-8cee-4c61-bf40-0552cf2649d6', '2024-11-17 04:38:22.256685+00', 'Little swimmer', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
 ('b025f095-fa78-4030-a852-c7c23a7d9860', '2024-11-17 04:37:49.372313+00', 'All Around', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
-('efe76755-8452-465b-a70f-513b9ed49290', '2024-11-17 04:55:55.39221+00', 'Eco protect', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466');
+('efe76755-8452-465b-a70f-513b9ed49290', '2024-11-17 04:55:55.39221+00', 'Eco protect', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '2024-11-17 05:00:00.000000+00', 'Natural Care', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e', '2024-11-17 05:01:00.000000+00', 'Swaddlers', '57d490e7-2bad-4bbd-8d6a-dcc1aa077af7', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f', '2024-11-17 05:02:00.000000+00', 'Suavelastic', '6d3d6fa2-7b7a-4ef0-9e25-c0af4cf40413', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '2024-11-17 05:03:00.000000+00', 'Movilastic', '6d3d6fa2-7b7a-4ef0-9e25-c0af4cf40413', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b', '2024-11-17 05:04:00.000000+00', 'Absorsec', '6d3d6fa2-7b7a-4ef0-9e25-c0af4cf40413', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c', '2024-11-17 05:05:00.000000+00', 'UltraSec', 'f1e5c4a8-9b2d-4c3e-8f7a-1a2b3c4d5e6f', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d', '2024-11-17 05:06:00.000000+00', 'FlexProtect', 'f1e5c4a8-9b2d-4c3e-8f7a-1a2b3c4d5e6f', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e', '2024-11-17 05:07:00.000000+00', 'Classic', '4bad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f', '2024-11-17 05:08:00.000000+00', 'Sensitive', '8bb603fd-cef0-4732-9790-82925b987f41', 'a1bb06cd-b954-498b-a45e-770900f29466');   
 
 
 /*
@@ -173,49 +184,95 @@ INSERT INTO "public"."ProductSpecs" ("id", "created_at", "category", "type", "la
 INSERT INTO "matching"."Sources" 
 ("url", "disabled") 
 VALUES 
-( 'https://listado.mercadolibre.com.mx/huggies-ultra-confort?sb=all_mercadolibre#D[A:huggies%20ultra%20confort]', 'false'), 
+('https://listado.mercadolibre.com.mx/huggies-ultra-confort?sb=all_mercadolibre#D[A:huggies%20ultra%20confort]', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=5&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/desechables/huggies-ultra-confort_Desde_145_NoIndex_True?sb=all_mercadolibre', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_289_NoIndex_True?sb=all_mercadolibre', 'false'), 
-('https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&page=2&query=/bebes/panales/huggies&searchState', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/desechables/huggies-ultra-confort_Desde_97_NoIndex_True?sb=all_mercadolibre', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_49_NoIndex_True?sb=all_mercadolibre', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=2&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/desechables/huggies-ultra-confort_Desde_49_NoIndex_True?sb=all_mercadolibre', 'false'), 
-('https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&facet=brand%3AHuggies', 'false'), 
-('https://www.sams.com.mx/search?ss=selectPickupStore&catId=30168_30178_30179&facet=brand%3AHuggies', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_241_NoIndex_True?sb=all_mercadolibre', 'false'), 
-('https://www.farmaciasguadalajara.com/SearchDisplay?categoryId=&storeId=10151&searchType=1001&catalogId=10052&langId=-24&sType=SimpleSearch&resultCatEntryType=2&showResultsPage=true&searchSource=Q&pageView=&beginIndex=0&pageSize=100&searchTerm=huggies&#facet:&productBeginIndex:0&facetLimit:&orderBy:&pageView:grid&minPrice:&maxPrice:&pageSize:40&', 'false'), 
-('https://super.walmart.com.mx/search?q=huggies&facet=category_names_level1%3ABeb%C3%A9s%7C%7Cbrand%3AHuggies&page=2', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=7&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
-('https://super.walmart.com.mx/search?q=huggies&facet=category_names_level1%3ABeb%C3%A9s%7C%7Cbrand%3AHuggies', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_145_NoIndex_True?sb=all_mercadolibre', 'false'), 
-('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?prefn1=brand&prefv1=Huggies&view=grid&cref=0&cgid=huggies&srule=huggies&start=48&sz=24&pageNumber=3&forceOldView=false', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_433_NoIndex_True?sb=all_mercadolibre', 'false'), 
-('https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&query=/bebes/panales/huggies&searchState', 'false'), 
 ('https://www.amazon.com.mx/s?k=huggies+supreme&crid=2PMS48RO7O6X2&sprefix=%2Caps%2C106&ref=nb_sb_ss_recent_1_0_recent', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_385_NoIndex_True?sb=all_mercadolibre', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_97_NoIndex_True?sb=all_mercadolibre', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=9&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=6&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
 ('https://www.amazon.com.mx/s?rh=n%3A16687724011%2Cp_123%3A236240&dc&qid=1753743717&rnid=119962389011&ref=sr_nr_p_123_0', 'false'), 
-('https://www.fahorro.com/catalogsearch/result/index/?q=huggies&product_list_limit=90', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=3&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
-('https://www.soriana.com/bebes/panales-y-toallitas/huggies/', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_193_NoIndex_True?sb=all_mercadolibre', 'false'), 
-('https://www.chedraui.com.mx/bebes/panales?initialMap=c,c&initialQuery=bebes/panales&layout=grid&map=category-1,category-2,brand&page=3&query=/bebes/panales/huggies&searchState', 'false'), 
 ('https://listado.mercadolibre.com.mx/huggies-supreme?sb=all_mercadolibre#D[A:huggies%20supreme]', 'false'), 
-('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?prefn1=brand&prefv1=Huggies&view=grid&cref=0&cgid=huggies&srule=undefined&start=24&sz=24&pageNumber=2&forceOldView=false', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=10&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_NoIndex_True?sb=all_mercadolibre#applied_filter_id%3Dcategory%26applied_filter_name%3DCategor%C3%ADas%26applied_filter_order%3D3%26applied_value_id%3DMLM440833%26applied_value_name%3DPa%C3%B1ales%26applied_value_order%3D3%26applied_value_results%3D458%26is_custom%3Dfalse', 'false'), 
 ('https://listado.mercadolibre.com.mx/huggies-eco-protect?sb=all_mercadolibre#D[A:huggies%20eco%20protect]', 'false'), 
 ('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=8&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'), 
 ('https://listado.mercadolibre.com.mx/bebes/higiene-cuidado-bebe/panales/huggies-supreme_Desde_337_NoIndex_True?sb=all_mercadolibre', 'false'), 
-('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=4&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false');
+('https://www.amazon.com.mx/s?i=baby&rh=n%3A16687724011%2Cp_123%3A236240&dc&page=4&qid=1753850426&rnid=119962389011&xpid=gyrE9CoXmsWwh&ref=sr_pg_2', 'false'),
+
+
+-- Bodega Aurrera / Panales
+('https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&page=1&affinityOverride=default', false),
+('https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&page=2&affinityOverride=default', false),
+('https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&page=3&affinityOverride=default', false),
+('https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&page=4&affinityOverride=default', false),
+('https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&page=5&affinityOverride=default', false),
+('https://www.bodegaaurrera.com.mx/search?catId=265136_265207_265214&page=6&affinityOverride=default', false),
+
+-- Chedraui / Panales
+('https://www.chedraui.com.mx/bebes/panales?page=1', false),
+('https://www.chedraui.com.mx/bebes/panales?page=2', false),
+('https://www.chedraui.com.mx/bebes/panales?page=3', false),
+('https://www.chedraui.com.mx/bebes/panales?page=4', false),
+('https://www.chedraui.com.mx/bebes/panales?page=5', false),
+('https://www.chedraui.com.mx/bebes/panales?page=6', false),
+('https://www.chedraui.com.mx/bebes/panales?page=7', false),
+
+-- Soriana / Panales
+-- Huggies
+('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?cgid=huggies&srule=huggies&start=0&sz=24&pageNumber=1&forceOldView=false&view=grid&cref=0', false),
+('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?cgid=huggies&srule=huggies&start=24&sz=24&pageNumber=2&forceOldView=false&view=grid&cref=0', false),
+('https://www.soriana.com/bebes/panales-y-toallitas/huggies/?cgid=huggies&srule=huggies&start=48&sz=24&pageNumber=3&forceOldView=false&view=grid&cref=0', false),
+-- Kleenbebe
+('https://www.soriana.com/bebes/panales-y-toallitas/kleenbebe/?cgid=kleenbebe&view=grid', false),
+('https://www.soriana.com/bebes/panales-y-toallitas/kleenbebe/?cgid=kleenbebe&srule=kleenbebe&start=0&sz=24&pageNumber=1&forceOldView=false&view=grid&cref=0', false),
+-- Chiccolistic
+('https://www.soriana.com/bebes/panales-y-toallitas/chicolastic/?cgid=chicolastic&view=grid', false),
+-- Pampers
+('https://www.soriana.com/bebes/panales-y-toallitas/pampers/?cgid=pampers&view=grid', false),
+-- BB Tips
+('https://www.soriana.com/bebes/panales-y-toallitas/bb-tips/?cgid=bb-tips&view=grid', false),
+
+-- Ahorro
+('https://www.fahorro.com/catalogsearch/result/index/?cat=7428&q=KleenBeb%C3%A9&product_list_limit=90', false),
+('https://www.fahorro.com/catalogsearch/result/index/?cat=7428&q=Pampers&product_list_limit=90', false),
+('https://www.fahorro.com/catalogsearch/result/index/?cat=7428&q=BB%20Tips&product_list_limit=90', false),
+('https://www.fahorro.com/catalogsearch/result/index/?cat=7428&q=Huggies&product_list_limit=90', false),
+('https://www.fahorro.com/catalogsearch/result/index/?cat=7428&q=KleenBeb%C3%A9&product_list_limit=90', false),
+('https://www.fahorro.com/catalogsearch/result/index/?cat=7428&q=Pampers&product_list_limit=90', false),
+
+-- Sam's Club / Panales
+('https://www.sams.com.mx/search?catId=30168_30178_30179&page=1', false),
+('https://www.sams.com.mx/search?catId=30168_30178_30179&page=2', false),
+
+-- Guadalajara / Panales
+('https://www.farmaciasguadalajara.com/bebes/bebe-panales?#facet:&productBeginIndex:0&facetLimit:&orderBy:&pageView:grid&minPrice:&maxPrice:&pageSize:40&', false),
+('https://www.farmaciasguadalajara.com/SearchDisplay?categoryId=&searchType=1001&catalogId=10052&langId=-24&sType=SimpleSearch&resultCatEntryType=2&showResultsPage=true&searchSource=Q&pageView=&beginIndex=0&pageSize=100&searchTerm=huggies&#facet:&productBeginIndex:0&facetLimit:&orderBy:&pageView:grid&minPrice:&maxPrice:&pageSize:40&', false),
+
+-- Walmart / Panales
+('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-recien-nacido-y-etapa-1/120015_120038_1480029', false),
+('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-etapa-2/120015_120038_1480023', false),
+('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-etapa-3/120015_120038_1480024', false),
+('https://super.walmart.com.mx/browse/panales-y-toallitas-humedas-para-bebe/panales-etapa-4/120015_120038_1480025', false),
+('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-etapa-5/120015_120038_1480026', false),
+('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-etapa-6/120015_120038_1480027', false),
+('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-etapa-7/120015_120038_1480028', false);
 
 -- ProductRules for Pañales category
 INSERT INTO "matching"."ProductRules" (category, type, min, max) VALUES 
-('a1bb06cd-b954-498b-a45e-770900f29466', 'price_per_unit', 3, 10),
+('a1bb06cd-b954-498b-a45e-770900f29466', 'price_per_unit', 3, 20),
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'quantity', 10, 500),
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'price', 50, 5000);
 
