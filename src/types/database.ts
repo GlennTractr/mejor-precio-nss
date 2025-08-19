@@ -207,6 +207,7 @@ export type Database = {
           status: string;
           title: string | null;
           updated_at: string | null;
+          url: string | null;
         };
         Insert: {
           created_at?: string | null;
@@ -221,6 +222,7 @@ export type Database = {
           status?: string;
           title?: string | null;
           updated_at?: string | null;
+          url?: string | null;
         };
         Update: {
           created_at?: string | null;
@@ -235,6 +237,7 @@ export type Database = {
           status?: string;
           title?: string | null;
           updated_at?: string | null;
+          url?: string | null;
         };
         Relationships: [
           {

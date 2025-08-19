@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS "matching"."ExtractIntent" (
     process_intent UUID NOT NULL REFERENCES "matching"."ProcessIntent"(id) ON DELETE CASCADE,
     status TEXT NOT NULL DEFAULT 'in-progress',
     failed_reason TEXT,
+    url TEXT,
     title TEXT,
     description TEXT,
     price DECIMAL(10,2),

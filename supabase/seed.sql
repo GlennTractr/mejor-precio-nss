@@ -272,7 +272,7 @@ VALUES
 
 -- ProductRules for Pañales category
 INSERT INTO "matching"."ProductRules" (category, type, min, max) VALUES 
-('a1bb06cd-b954-498b-a45e-770900f29466', 'price_per_unit', 3, 20),
+('a1bb06cd-b954-498b-a45e-770900f29466', 'price_per_unit', 1.5, 20),
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'quantity', 10, 500),
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'price', 50, 5000);
 
