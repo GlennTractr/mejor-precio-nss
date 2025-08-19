@@ -89,11 +89,11 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS product_packaging_normal_price_view AS
 SELECT 
     pp.id as packaging_id,
     pp.product as product_id,
-    MIN(pscnp.normal_price) as normal_price
+    MIN(pscnp.normal_price / pp.quantity) as normal_price_per_unit
 FROM public."ProductPackaging" pp
 JOIN public."ProductSellContext" psc ON psc.packaging = pp.id
 JOIN product_sell_context_normal_price_view pscnp ON pscnp.sell_context = psc.id
-WHERE pscnp.normal_price IS NOT NULL
+WHERE pscnp.normal_price IS NOT NULL AND pp.quantity > 0
 GROUP BY pp.id, pp.product;
 
 -- Create index for performance
@@ -107,9 +107,9 @@ ON product_packaging_normal_price_view (product_id);
 CREATE MATERIALIZED VIEW IF NOT EXISTS product_normal_price_view AS
 SELECT 
     product_id,
-    MIN(normal_price) as normal_price
+    MIN(normal_price_per_unit) as normal_price_per_unit
 FROM product_packaging_normal_price_view
-WHERE normal_price IS NOT NULL
+WHERE normal_price_per_unit IS NOT NULL
 GROUP BY product_id;
 
 -- Create index for performance
@@ -123,7 +123,7 @@ ON product_normal_price_view (product_id);
 CREATE OR REPLACE VIEW "public"."product_view" WITH ("security_invoker"='on') AS
 SELECT 
     pv2.*,
-    pnp.normal_price
+    pnp.normal_price_per_unit
 FROM (
     SELECT "pv"."id",
         "pv"."best_price_per_unit",

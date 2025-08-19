@@ -1191,7 +1191,7 @@ export type Database = {
           main_image_path: string | null;
           max_price_per_unit: number | null;
           model: string | null;
-          normal_price: number | null;
+          normal_price_per_unit: number | null;
           price_list: number[] | null;
           product_slug: string | null;
           shop_names: string[] | null;
@@ -1214,14 +1214,14 @@ export type Database = {
         Row: {
           packaging_id: string | null;
           product_id: string | null;
-          normal_price: number | null;
+          normal_price_per_unit: number | null;
         };
         Relationships: [];
       };
       product_normal_price_view: {
         Row: {
           product_id: string | null;
-          normal_price: number | null;
+          normal_price_per_unit: number | null;
         };
         Relationships: [];
       };
