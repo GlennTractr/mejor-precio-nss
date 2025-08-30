@@ -1116,9 +1116,6 @@ ALTER TABLE ONLY "public"."ProductCategory"
 
 
 
-ALTER TABLE ONLY "public"."ProductCategory"
-    ADD CONSTRAINT "ProductCategory_slug_key" UNIQUE ("slug");
-
 
 
 ALTER TABLE ONLY "public"."ProductModelCategory"
@@ -1159,10 +1156,6 @@ ALTER TABLE ONLY "public"."ProductSpecs"
 ALTER TABLE ONLY "public"."Product"
     ADD CONSTRAINT "Product_pkey" PRIMARY KEY ("id");
 
-
-
-ALTER TABLE ONLY "public"."Product"
-    ADD CONSTRAINT "Product_slug_key" UNIQUE ("slug");
 
 
 
