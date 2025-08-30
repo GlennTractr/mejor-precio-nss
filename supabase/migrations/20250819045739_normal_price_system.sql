@@ -50,10 +50,33 @@ END;
 $$;
 
 -- ============================================================================
--- 2. Create Normal Price Calculation Materialized Views
+-- 2. Create helper function for logging quantity issues
 -- ============================================================================
 
--- 2.1 ProductSellContext Normal Price View
+CREATE OR REPLACE FUNCTION log_packaging_quantity_issues()
+RETURNS void
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Log all packaging with zero or negative quantities for monitoring
+    INSERT INTO public."Log" (message, level, created_at)
+    SELECT 
+        'Packaging quantity issue - ID: ' || pp.id::text || 
+        ', Product: ' || p.title || 
+        ', Quantity: ' || COALESCE(pp.quantity::text, 'NULL') as message,
+        'WARNING' as level,
+        NOW() as created_at
+    FROM public."ProductPackaging" pp
+    LEFT JOIN public."Product" p ON p.id = pp.product
+    WHERE pp.quantity IS NULL OR pp.quantity <= 0;
+END;
+$$;
+
+-- ============================================================================
+-- 3. Create Normal Price Calculation Materialized Views
+-- ============================================================================
+
+-- 3.1 ProductSellContext Normal Price View
 CREATE MATERIALIZED VIEW IF NOT EXISTS product_sell_context_normal_price_view AS
 SELECT 
     sell_context,
@@ -99,7 +122,7 @@ FROM (
 CREATE INDEX IF NOT EXISTS idx_product_sell_context_normal_price_sell_context 
 ON product_sell_context_normal_price_view (sell_context);
 
--- 2.2 ProductPackaging Normal Price View
+-- 3.2 ProductPackaging Normal Price View
 CREATE MATERIALIZED VIEW IF NOT EXISTS product_packaging_normal_price_view AS
 SELECT 
     pp.id as packaging_id,
@@ -110,14 +133,7 @@ JOIN public."ProductSellContext" psc ON psc.packaging = pp.id
 JOIN product_sell_context_normal_price_view pscnp ON pscnp.sell_context = psc.id
 WHERE pscnp.normal_price IS NOT NULL 
     AND pp.quantity IS NOT NULL
-    AND (CASE 
-        WHEN pp.quantity <= 0 THEN (
-            -- Log zero/negative quantity for monitoring
-            pg_notify('packaging_quantity_warning', 
-                'PackagingID: ' || pp.id::text || ', Quantity: ' || COALESCE(pp.quantity::text, 'NULL'))
-        ) 
-        ELSE TRUE 
-    END)
+    AND pp.quantity > 0  -- Exclude zero/negative quantities entirely
 GROUP BY pp.id, pp.product;
 
 -- Create index for performance
@@ -127,7 +143,7 @@ ON product_packaging_normal_price_view (packaging_id);
 CREATE INDEX IF NOT EXISTS idx_product_packaging_normal_price_product_id 
 ON product_packaging_normal_price_view (product_id);
 
--- 2.3 Product Normal Price View  
+-- 3.3 Product Normal Price View  
 CREATE MATERIALIZED VIEW IF NOT EXISTS product_normal_price_view AS
 SELECT 
     product_id,
@@ -141,7 +157,7 @@ CREATE INDEX IF NOT EXISTS idx_product_normal_price_product_id
 ON product_normal_price_view (product_id);
 
 -- ============================================================================
--- 3. Update existing product_view to include normal_price
+-- 4. Update existing product_view to include normal_price
 -- ============================================================================
 
 CREATE OR REPLACE VIEW "public"."product_view" WITH ("security_invoker"='on') AS
@@ -187,7 +203,7 @@ FROM (
 LEFT JOIN product_normal_price_view pnp ON pnp.product_id = pv2.id;
 
 -- ============================================================================
--- 4. Set up pg_cron jobs for daily refresh (early morning hours)
+-- 5. Set up pg_cron jobs for daily refresh (early morning hours)
 -- ============================================================================
 
 -- Refresh product_sell_context_normal_price_view at 2:00 AM daily
@@ -211,8 +227,15 @@ SELECT cron.schedule(
     'REFRESH MATERIALIZED VIEW product_normal_price_view;'
 );
 
+-- Log packaging quantity issues at 1:00 AM daily (before refresh jobs)
+SELECT cron.schedule(
+    'log-packaging-quantity-issues', 
+    '0 1 * * *', 
+    'SELECT log_packaging_quantity_issues();'
+);
+
 -- ============================================================================
--- 5. Grant appropriate permissions
+-- 6. Grant appropriate permissions
 -- ============================================================================
 
 -- Grant permissions for materialized views (restricted permissions for security)
@@ -229,7 +252,7 @@ GRANT ALL ON TABLE product_normal_price_view TO "authenticated";
 GRANT ALL ON TABLE product_normal_price_view TO "service_role";
 
 -- ============================================================================
--- 6. Initial data population (run the views refresh immediately)
+-- 7. Initial data population (run the views refresh immediately)
 -- ============================================================================
 
 -- Refresh all materialized views to populate with existing data
@@ -243,22 +266,24 @@ REFRESH MATERIALIZED VIEW product_normal_price_view;
 
 -- Summary of changes:
 -- 1. ✅ Fixed setPrice() function to save ALL prices (not just lower ones)
--- 2. ✅ Created product_sell_context_normal_price_view with 10-day minimum data requirement
--- 3. ✅ Created product_packaging_normal_price_view for packaging-level normal prices
--- 4. ✅ Created product_normal_price_view for product-level normal prices
--- 5. ✅ Updated existing product_view to include normal_price column
--- 6. ✅ Set up pg_cron jobs for daily refresh at 2-4 AM
--- 7. ✅ Added appropriate indexes for performance
--- 8. ✅ Granted restricted permissions (SELECT only for anon users)
--- 9. ✅ Added unique constraint validation for safe upserts
--- 10. ✅ Enhanced division by zero protection with logging
--- 11. ✅ Populated initial data
+-- 2. ✅ Added unique constraint validation for safe upserts
+-- 3. ✅ Created helper function for logging packaging quantity issues
+-- 4. ✅ Created product_sell_context_normal_price_view with 10-day minimum data requirement
+-- 5. ✅ Created product_packaging_normal_price_view for packaging-level normal prices
+-- 6. ✅ Created product_normal_price_view for product-level normal prices
+-- 7. ✅ Updated existing product_view to include normal_price column
+-- 8. ✅ Set up pg_cron jobs for daily refresh at 1-4 AM (including logging job)
+-- 9. ✅ Added appropriate indexes for performance
+-- 10. ✅ Granted restricted permissions (SELECT only for anon users)
+-- 11. ✅ Enhanced division by zero protection (excludes invalid quantities)
+-- 12. ✅ Populated initial data
 
 -- The system now:
 -- - Captures ALL price changes (no data loss)
 -- - Calculates normal prices based on most frequent daily minimum prices
 -- - Requires minimum 10 days of data for reliable normal price calculation
--- - Automatically refreshes daily during low-traffic hours
--- - Provides normal_price in the main product_view for easy access
+-- - Automatically refreshes daily during low-traffic hours (1-4 AM)
+-- - Provides normal_price_per_unit in the main product_view for easy access
 -- - Enhanced security with restricted anonymous permissions
 -- - Robust error handling and logging for monitoring
+-- - Proper division by zero protection with logging for quality issues
