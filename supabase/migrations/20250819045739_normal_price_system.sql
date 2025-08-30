@@ -22,6 +22,19 @@ BEGIN
 
     -- If the sell context exists, perform an upsert on ProductSellContextPrice
     IF v_sell_context IS NOT NULL THEN
+        -- Ensure unique constraint exists for safe upsert operation
+        -- Check if constraint exists, if not create it
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.table_constraints 
+            WHERE table_name = 'ProductSellContextPrice' 
+            AND constraint_type = 'UNIQUE'
+            AND constraint_name LIKE '%sell_context%date%'
+        ) THEN
+            -- Create unique constraint if it doesn't exist
+            ALTER TABLE public."ProductSellContextPrice" 
+            ADD CONSTRAINT unique_sell_context_date UNIQUE (sell_context, date);
+        END IF;
+        
         INSERT INTO public."ProductSellContextPrice" (sell_context, price, date, created_at)
         VALUES (v_sell_context, p_price, p_date, now())
         ON CONFLICT (sell_context, date) 
@@ -29,6 +42,8 @@ BEGIN
             price = EXCLUDED.price,  -- ALWAYS save the latest price (fixed!)
             created_at = now();
     ELSE
+        -- Log error before raising exception for monitoring
+        RAISE LOG 'ProductSellContext with link % not found', p_link;
         RAISE EXCEPTION 'ProductSellContext with link % not found', p_link;
     END IF;
 END;
@@ -67,7 +82,7 @@ FROM (
             MAX(date) as date_range_end
         FROM daily_prices
         GROUP BY sell_context, daily_min_price
-        HAVING COUNT(*) >= 30  -- Minimum 30 days data required
+        HAVING COUNT(*) >= 10  -- Minimum 10 days data required
     )
     -- Select most frequent price as normal price
     SELECT DISTINCT ON (sell_context)
@@ -89,11 +104,20 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS product_packaging_normal_price_view AS
 SELECT 
     pp.id as packaging_id,
     pp.product as product_id,
-    MIN(pscnp.normal_price / pp.quantity) as normal_price_per_unit
+    MIN(pscnp.normal_price / GREATEST(pp.quantity, 1)) as normal_price_per_unit
 FROM public."ProductPackaging" pp
 JOIN public."ProductSellContext" psc ON psc.packaging = pp.id
 JOIN product_sell_context_normal_price_view pscnp ON pscnp.sell_context = psc.id
-WHERE pscnp.normal_price IS NOT NULL AND pp.quantity > 0
+WHERE pscnp.normal_price IS NOT NULL 
+    AND pp.quantity IS NOT NULL
+    AND (CASE 
+        WHEN pp.quantity <= 0 THEN (
+            -- Log zero/negative quantity for monitoring
+            pg_notify('packaging_quantity_warning', 
+                'PackagingID: ' || pp.id::text || ', Quantity: ' || COALESCE(pp.quantity::text, 'NULL'))
+        ) 
+        ELSE TRUE 
+    END)
 GROUP BY pp.id, pp.product;
 
 -- Create index for performance
@@ -191,16 +215,16 @@ SELECT cron.schedule(
 -- 5. Grant appropriate permissions
 -- ============================================================================
 
--- Grant permissions for materialized views
-GRANT ALL ON TABLE product_sell_context_normal_price_view TO "anon";
+-- Grant permissions for materialized views (restricted permissions for security)
+GRANT SELECT ON TABLE product_sell_context_normal_price_view TO "anon";
 GRANT ALL ON TABLE product_sell_context_normal_price_view TO "authenticated";
 GRANT ALL ON TABLE product_sell_context_normal_price_view TO "service_role";
 
-GRANT ALL ON TABLE product_packaging_normal_price_view TO "anon";
+GRANT SELECT ON TABLE product_packaging_normal_price_view TO "anon";
 GRANT ALL ON TABLE product_packaging_normal_price_view TO "authenticated";
 GRANT ALL ON TABLE product_packaging_normal_price_view TO "service_role";
 
-GRANT ALL ON TABLE product_normal_price_view TO "anon";
+GRANT SELECT ON TABLE product_normal_price_view TO "anon";
 GRANT ALL ON TABLE product_normal_price_view TO "authenticated";
 GRANT ALL ON TABLE product_normal_price_view TO "service_role";
 
@@ -219,18 +243,22 @@ REFRESH MATERIALIZED VIEW product_normal_price_view;
 
 -- Summary of changes:
 -- 1. ✅ Fixed setPrice() function to save ALL prices (not just lower ones)
--- 2. ✅ Created product_sell_context_normal_price_view with 30-day minimum data requirement
+-- 2. ✅ Created product_sell_context_normal_price_view with 10-day minimum data requirement
 -- 3. ✅ Created product_packaging_normal_price_view for packaging-level normal prices
 -- 4. ✅ Created product_normal_price_view for product-level normal prices
 -- 5. ✅ Updated existing product_view to include normal_price column
 -- 6. ✅ Set up pg_cron jobs for daily refresh at 2-4 AM
 -- 7. ✅ Added appropriate indexes for performance
--- 8. ✅ Granted necessary permissions
--- 9. ✅ Populated initial data
+-- 8. ✅ Granted restricted permissions (SELECT only for anon users)
+-- 9. ✅ Added unique constraint validation for safe upserts
+-- 10. ✅ Enhanced division by zero protection with logging
+-- 11. ✅ Populated initial data
 
 -- The system now:
 -- - Captures ALL price changes (no data loss)
 -- - Calculates normal prices based on most frequent daily minimum prices
--- - Requires minimum 30 days of data for reliable normal price calculation
+-- - Requires minimum 10 days of data for reliable normal price calculation
 -- - Automatically refreshes daily during low-traffic hours
 -- - Provides normal_price in the main product_view for easy access
+-- - Enhanced security with restricted anonymous permissions
+-- - Robust error handling and logging for monitoring
