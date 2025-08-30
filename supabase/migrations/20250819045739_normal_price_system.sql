@@ -22,19 +22,6 @@ BEGIN
 
     -- If the sell context exists, perform an upsert on ProductSellContextPrice
     IF v_sell_context IS NOT NULL THEN
-        -- Ensure unique constraint exists for safe upsert operation
-        -- Check if constraint exists, if not create it
-        IF NOT EXISTS (
-            SELECT 1 FROM information_schema.table_constraints 
-            WHERE table_name = 'ProductSellContextPrice' 
-            AND constraint_type = 'UNIQUE'
-            AND constraint_name LIKE '%sell_context%date%'
-        ) THEN
-            -- Create unique constraint if it doesn't exist
-            ALTER TABLE public."ProductSellContextPrice" 
-            ADD CONSTRAINT unique_sell_context_date UNIQUE (sell_context, date);
-        END IF;
-        
         INSERT INTO public."ProductSellContextPrice" (sell_context, price, date, created_at)
         VALUES (v_sell_context, p_price, p_date, now())
         ON CONFLICT (sell_context, date) 
@@ -180,33 +167,9 @@ FROM (
 LEFT JOIN product_normal_price_view pnp ON pnp.product_id = pv2.id;
 
 -- ============================================================================
--- 4. Set up pg_cron jobs for daily refresh (early morning hours)
+-- 4. Grant appropriate permissions
 -- ============================================================================
 
--- Refresh product_sell_context_normal_price_view at 2:00 AM daily
-SELECT cron.schedule(
-    'refresh-sell-context-normal-prices', 
-    '0 2 * * *', 
-    'REFRESH MATERIALIZED VIEW product_sell_context_normal_price_view;'
-);
-
--- Refresh product_packaging_normal_price_view at 3:00 AM daily (after sell context view)
-SELECT cron.schedule(
-    'refresh-packaging-normal-prices', 
-    '0 3 * * *', 
-    'REFRESH MATERIALIZED VIEW product_packaging_normal_price_view;'
-);
-
--- Refresh product_normal_price_view at 4:00 AM daily (after packaging view)
-SELECT cron.schedule(
-    'refresh-product-normal-prices', 
-    '0 4 * * *', 
-    'REFRESH MATERIALIZED VIEW product_normal_price_view;'
-);
-
--- ============================================================================
--- 5. Grant appropriate permissions
--- ============================================================================
 
 -- Grant permissions for materialized views (restricted permissions for security)
 GRANT SELECT ON TABLE product_sell_context_normal_price_view TO "anon";
@@ -221,14 +184,6 @@ GRANT SELECT ON TABLE product_normal_price_view TO "anon";
 GRANT ALL ON TABLE product_normal_price_view TO "authenticated";
 GRANT ALL ON TABLE product_normal_price_view TO "service_role";
 
--- ============================================================================
--- 6. Initial data population (run the views refresh immediately)
--- ============================================================================
-
--- Refresh all materialized views to populate with existing data
-REFRESH MATERIALIZED VIEW product_sell_context_normal_price_view;
-REFRESH MATERIALIZED VIEW product_packaging_normal_price_view;
-REFRESH MATERIALIZED VIEW product_normal_price_view;
 
 -- ============================================================================
 -- Migration Complete
@@ -236,23 +191,21 @@ REFRESH MATERIALIZED VIEW product_normal_price_view;
 
 -- Summary of changes:
 -- 1. ✅ Fixed setPrice() function to save ALL prices (not just lower ones)
--- 2. ✅ Added unique constraint validation for safe upserts
--- 3. ✅ Created product_sell_context_normal_price_view with 10-day minimum data requirement
--- 4. ✅ Created product_packaging_normal_price_view for packaging-level normal prices
--- 5. ✅ Created product_normal_price_view for product-level normal prices
--- 6. ✅ Updated existing product_view to include normal_price column
--- 7. ✅ Set up pg_cron jobs for daily refresh at 2-4 AM
--- 8. ✅ Added appropriate indexes for performance
--- 9. ✅ Granted restricted permissions (SELECT only for anon users)
--- 10. ✅ Enhanced division by zero protection (excludes invalid quantities)
--- 11. ✅ Populated initial data
+-- 2. ✅ Created product_sell_context_normal_price_view with 10-day minimum data requirement
+-- 3. ✅ Created product_packaging_normal_price_view for packaging-level normal prices  
+-- 4. ✅ Created product_normal_price_view for product-level normal prices
+-- 5. ✅ Updated existing product_view to include normal_price column
+-- 6. ✅ Added appropriate indexes for performance
+-- 7. ✅ Granted restricted permissions (SELECT only for anon users)
+-- 8. ✅ Enhanced division by zero protection (excludes invalid quantities)
 
 -- The system now:
 -- - Captures ALL price changes (no data loss)
 -- - Calculates normal prices based on most frequent daily minimum prices
 -- - Requires minimum 10 days of data for reliable normal price calculation
--- - Automatically refreshes daily during low-traffic hours (2-4 AM)
 -- - Provides normal_price_per_unit in the main product_view for easy access
 -- - Enhanced security with restricted anonymous permissions
 -- - Robust error handling and logging for monitoring
 -- - Proper division by zero protection (excludes invalid quantities)
+-- 
+-- NOTE: Cron jobs and initial data population moved to seed.sql
