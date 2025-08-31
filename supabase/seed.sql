@@ -35,38 +35,48 @@ INSERT INTO auth.users (
   ''
 );
 
-INSERT INTO "public"."Country" ("label") VALUES ('MX'), ('QC');
+-- Insert Language data
+INSERT INTO "public"."Language" ("id", "label") VALUES 
+('550e8400-e29b-41d4-a716-446655440001', 'en'),
+('550e8400-e29b-41d4-a716-446655440002', 'fr'), 
+('550e8400-e29b-41d4-a716-446655440003', 'es');
+
+-- Insert QuantityType data (language-specific)
+INSERT INTO "public"."QuantityType" ("id", "label", "internal_label", "unit_label") VALUES 
+('660e8400-e29b-41d4-a716-446655440001', 'Pañales', 'panales_es', 'por pañales'),
+('660e8400-e29b-41d4-a716-446655440002', 'Couches', 'panales_fr', 'par couches'),  
+('660e8400-e29b-41d4-a716-446655440003', 'Diapers', 'panales_en', 'per diapers');
+
+-- Insert Country data with UUID ids and language references
+INSERT INTO "public"."Country" ("id", "label", "language") VALUES 
+('440e8400-e29b-41d4-a716-446655440001', 'MX', '550e8400-e29b-41d4-a716-446655440003'), -- Mexico -> Spanish
+('440e8400-e29b-41d4-a716-446655440002', 'QC', '550e8400-e29b-41d4-a716-446655440002');  -- Quebec -> French
 
 -- INSERT INTO "public"."File" ("id", "is_public", "file_bucket", "file_path") VALUES ('2eee2e9c-8be9-4da7-bf8c-89ffc4b3182a', true, 'product', 'not_found.png');
 
-INSERT INTO "public"."ProductCategory" ("id", "created_at", "label", "slug", "image_bucket", "image_path", "country") VALUES 
-('9b16f8f5-a36b-4a58-a81e-669a711556ba', '2024-10-26 23:49:02.148871+00', 'Toallitas', 'toallitas', null, null, 'MX'), 
-('a1bb06cd-b954-498b-a45e-770900f29466', '2024-09-22 22:43:10.067073+00', 'Pañales', 'panales', null, null, 'MX');
-
-/*
-INSERT INTO "public"."ProductCategory" ("id", "created_at", "label", "slug", "image_bucket", "image_path", "country") VALUES 
-('747061ba-376b-4214-8324-820caaf7febd', '2025-02-28 03:25:01.74025+00', 'Couche', 'couche', null, null, 'QC');
-*/
+-- Insert ProductCategory data with UUID country references and language-specific quantity_type
+INSERT INTO "public"."ProductCategory" ("id", "created_at", "label", "slug", "image_bucket", "image_path", "country", "quantity_type") VALUES 
+('9b16f8f5-a36b-4a58-a81e-669a711556ba', '2024-10-26 23:49:02.148871+00', 'Toallitas', 'toallitas', null, null, '440e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440001'), -- MX, Spanish Pañales
+('a1bb06cd-b954-498b-a45e-770900f29466', '2024-09-22 22:43:10.067073+00', 'Pañales', 'panales', null, null, '440e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440001'), -- MX, Spanish Pañales  
+('747061ba-376b-4214-8324-820caaf7febd', '2025-02-28 03:25:01.74025+00', 'Couches', 'couches', null, null, '440e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440002'); -- QC, French Couches
 
 
-INSERT INTO "public"."Shop" ("id", "label", "img_url") VALUES 
-('192114b2-4c05-4a35-86dc-02c90327720a', 'Mercado Libre', '/shop/mercado-libre.png'),
-('691a4aab-c095-4b3a-a547-df136e66ce25', 'Amazon', '/shop/amazon.png'),
-('86cc689f-f2a6-4350-b88c-60b9d80bf228', 'Walmart', '/shop/walmart.png'),
-('94b9d420-8c12-4b04-9699-a0bfa84649bf', 'Aurrera', '/shop/aurrera.png'),
-('97610a47-57f5-46b4-882e-71df9b19f4a3', 'Ahorro', '/shop/ahorro.png'),
-('b88cd8b0-bbf6-4226-ab94-fca45b41d02f', 'Sam''s club', '/shop/sams-club.png'),
-('f5eb82b7-3d56-45f2-af8a-30d9c6c42779', 'Guadalajara', '/shop/guadalajara.png'),
-('aa936c52-90b6-4010-8f4a-f4f368a871b0', 'Chedraui', '/shop/chedraui.png'),
-('9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'Soriana', '/shop/soriana.png');
-
-/*
-## SHOP QC
-INSERT INTO "public"."Shop" ("id", "created_at", "label", "img_url") VALUES 
-('286c36d4-d9fc-4776-a185-c6fc3098cbb4', '2025-02-28 04:49:54.065665+00', 'AmazonCA', '/shop/amazon-ca.png'),
-('8f8fc18c-2afb-4838-b262-63d852225bed', '2025-02-28 04:49:23.800319+00', 'SuperC', '/shop/superc.png'),
-('9ee99dcd-c884-49e0-9a64-c7badd496884', '2025-02-28 04:09:25.774291+00', 'Jean-Coutu', '/shop/jean.png'),; 
-*/
+-- Insert Shop data with country references
+-- Mexico shops
+INSERT INTO "public"."Shop" ("id", "label", "img_url", "country") VALUES 
+('192114b2-4c05-4a35-86dc-02c90327720a', 'Mercado Libre', '/shop/mercado-libre.png', '440e8400-e29b-41d4-a716-446655440001'),
+('691a4aab-c095-4b3a-a547-df136e66ce25', 'Amazon', '/shop/amazon.png', '440e8400-e29b-41d4-a716-446655440001'),
+('86cc689f-f2a6-4350-b88c-60b9d80bf228', 'Walmart', '/shop/walmart.png', '440e8400-e29b-41d4-a716-446655440001'),
+('94b9d420-8c12-4b04-9699-a0bfa84649bf', 'Aurrera', '/shop/aurrera.png', '440e8400-e29b-41d4-a716-446655440001'),
+('97610a47-57f5-46b4-882e-71df9b19f4a3', 'Ahorro', '/shop/ahorro.png', '440e8400-e29b-41d4-a716-446655440001'),
+('b88cd8b0-bbf6-4226-ab94-fca45b41d02f', 'Sam''s club', '/shop/sams-club.png', '440e8400-e29b-41d4-a716-446655440001'),
+('f5eb82b7-3d56-45f2-af8a-30d9c6c42779', 'Guadalajara', '/shop/guadalajara.png', '440e8400-e29b-41d4-a716-446655440001'),
+('aa936c52-90b6-4010-8f4a-f4f368a871b0', 'Chedraui', '/shop/chedraui.png', '440e8400-e29b-41d4-a716-446655440001'),
+('9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'Soriana', '/shop/soriana.png', '440e8400-e29b-41d4-a716-446655440001'),
+-- Quebec shops
+('286c36d4-d9fc-4776-a185-c6fc3098cbb4', 'AmazonCA', '/shop/amazon-ca.png', '440e8400-e29b-41d4-a716-446655440002'),
+('8f8fc18c-2afb-4838-b262-63d852225bed', 'SuperC', '/shop/superc.png', '440e8400-e29b-41d4-a716-446655440002'),
+('9ee99dcd-c884-49e0-9a64-c7badd496884', 'Jean-Coutu', '/shop/jean.png', '440e8400-e29b-41d4-a716-446655440002');
 
 INSERT INTO "public"."ShopIdentifier" ("id", "shop", "domain") VALUES 
 ('1', '94b9d420-8c12-4b04-9699-a0bfa84649bf', 'bodegaaurrera.com.mx'),
@@ -108,11 +118,10 @@ INSERT INTO "public"."ProductBrandCategory" ("category", "brand") VALUES
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'a0be820a-d5fe-4e94-97e4-96630d3df96f'),
 ('a1bb06cd-b954-498b-a45e-770900f29466', 'f1e5c4a8-9b2d-4c3e-8f7a-1a2b3c4d5e6f');
 
-/*
+-- Quebec ProductBrandCategory entries
 INSERT INTO "public"."ProductBrandCategory" ("category", "brand") VALUES 
 ('747061ba-376b-4214-8324-820caaf7febd', '5631009f-e566-4b1b-a2ba-ada18ed00f9e'),
 ('747061ba-376b-4214-8324-820caaf7febd', '57d490e7-2bad-4bbd-8d6a-dcc1aa077af7');
-*/
 
 
 
@@ -134,7 +143,7 @@ INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "cate
 ('9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f', '2024-11-17 05:08:00.000000+00', 'Sensitive', '8bb603fd-cef0-4732-9790-82925b987f41', 'a1bb06cd-b954-498b-a45e-770900f29466');   
 
 
-/*
+-- Quebec ProductModel entries  
 INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "category") VALUES 
 ('000e3d35-e21a-4349-9cac-5a14d58ad8e1', '2025-03-23 04:33:07.194699+00', 'Little movers', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', '747061ba-376b-4214-8324-820caaf7febd'),
 ('31954f49-5e84-495e-95d7-3db1214650fc', '2025-02-28 03:33:41.63739+00', 'Swaddlers', '57d490e7-2bad-4bbd-8d6a-dcc1aa077af7', '747061ba-376b-4214-8324-820caaf7febd'),
@@ -146,7 +155,6 @@ INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "cate
 ('ddc8569a-7463-4cb4-84dc-d3c0b1c42c27', '2025-02-28 03:34:27.604579+00', 'Cruisers', '57d490e7-2bad-4bbd-8d6a-dcc1aa077af7', '747061ba-376b-4214-8324-820caaf7febd'),
 ('f4dea916-3c4b-4b02-938a-fdb4cc456cbb', '2025-03-23 04:33:58.314951+00', 'Little snugglers', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', '747061ba-376b-4214-8324-820caaf7febd'),
 ('f993dee1-4487-42f5-8ab2-154768070aef', '2025-03-10 16:36:27.389476+00', 'Cruisers 360', '57d490e7-2bad-4bbd-8d6a-dcc1aa077af7', '747061ba-376b-4214-8324-820caaf7febd');
-*/
 
 
 
@@ -164,20 +172,21 @@ INSERT INTO "public"."ProductSpecs" ("id", "created_at", "category", "type", "la
 ('efea6e13-880b-4184-a65b-bb9bf4db4f02', '2024-10-31 03:56:13.849594+00', 'a1bb06cd-b954-498b-a45e-770900f29466', 'gender', 'Niña'),
 ('fbff8811-a780-4e24-ad72-dcc593b39bdc', '2024-11-08 17:06:26.115036+00', 'a1bb06cd-b954-498b-a45e-770900f29466', 'step', 'Etapa 2');
 
-/*
+-- Quebec ProductSpecs entries (French)
 INSERT INTO "public"."ProductSpecs" ("id", "created_at", "category", "type", "label") VALUES 
-('11597c71-dc20-4c05-84c3-d21172bd486b', '2025-02-28 03:36:52.514576+00', '747061ba-376b-4214-8324-820caaf7febd', 'gender', 'unisex'),
-('20729b27-7824-4be5-9d2d-488126906396', '2025-02-28 03:39:19.038103+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '3'),
-('2953ab82-3faf-41dd-b0c9-5d8f1d8aa607', '2025-02-28 03:36:00.632638+00', '747061ba-376b-4214-8324-820caaf7febd', 'gender', 'garcon'),
-('2e1f0e97-191b-49a1-965f-dec8e3f54c2b', '2025-02-28 03:39:06.392031+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '2'),
-('42a76d78-85f4-494b-8768-18945bc8a8f7', '2025-02-28 03:38:51.218423+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '1'),
-('52c3d92d-edce-4d00-9574-a4f91b920e94', '2025-02-28 03:39:29.583042+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '4'),
-('6b1a7832-60cf-4e7d-9733-ace74f16eba3', '2025-02-28 03:36:14.364189+00', '747061ba-376b-4214-8324-820caaf7febd', 'gender', 'fille'),
-('ab928aec-7328-44fe-83e8-73cc812140fa', '2025-03-23 04:38:57.130625+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '7'),
-('c2305726-21be-4e17-a7e8-b15796654eeb', '2025-02-28 03:38:35.1222+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'P0'),
-('c762120e-2b6e-4e8d-b48a-42ac1f8ae919', '2025-02-28 03:39:55.89228+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '6'),
-('cdc24c33-b849-42db-bf72-77fb6fe34f76', '2025-02-28 03:39:44.510538+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', '5');
-*/
+('11597c71-dc20-4c05-84c3-d21172bd486b', '2025-02-28 03:36:52.514576+00', '747061ba-376b-4214-8324-820caaf7febd', 'gender', 'Unisexe'),
+('20729b27-7824-4be5-9d2d-488126906396', '2025-02-28 03:39:19.038103+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Étape 3'),
+('2953ab82-3faf-41dd-b0c9-5d8f1d8aa607', '2025-02-28 03:36:00.632638+00', '747061ba-376b-4214-8324-820caaf7febd', 'gender', 'Garçon'),
+('2e1f0e97-191b-49a1-965f-dec8e3f54c2b', '2025-02-28 03:39:06.392031+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Étape 2'),
+('42a76d78-85f4-494b-8768-18945bc8a8f7', '2025-02-28 03:38:51.218423+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Étape 1'),
+('52c3d92d-edce-4d00-9574-a4f91b920e94', '2025-02-28 03:39:29.583042+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Étape 4'),
+('6b1a7832-60cf-4e7d-9733-ace74f16eba3', '2025-02-28 03:36:14.364189+00', '747061ba-376b-4214-8324-820caaf7febd', 'gender', 'Fille'),
+('ab928aec-7328-44fe-83e8-73cc812140fa', '2025-03-23 04:38:57.130625+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Étape 7'),
+('c2305726-21be-4e17-a7e8-b15796654eeb', '2025-02-28 03:38:35.1222+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Nouveau-né'),
+('c762120e-2b6e-4e8d-b48a-42ac1f8ae919', '2025-02-28 03:39:55.89228+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Étape 6'),
+('cdc24c33-b849-42db-bf72-77fb6fe34f76', '2025-02-28 03:39:44.510538+00', '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Étape 5'),
+-- Additional French specs for completeness
+('f8e12345-1234-5678-9abc-123456789012', NOW(), '747061ba-376b-4214-8324-820caaf7febd', 'step', 'Entraînement');
 
 
 
@@ -269,6 +278,46 @@ VALUES
 ('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-etapa-5/120015_120038_1480026', false),
 ('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-etapa-6/120015_120038_1480027', false),
 ('https://super.walmart.com.mx/browse/bebes/panales-y-toallitas-humedas-para-bebe/panales-etapa-7/120015_120038_1480028', false);
+
+-- AI Context Prompt Data
+
+-- Insert CountryPrompt data for AI currency context (language-specific, generic)
+INSERT INTO "matching"."CountryPrompt" ("country", "ai_currency_context") VALUES 
+('440e8400-e29b-41d4-a716-446655440001', 'El mercado mexicano usa Pesos Mexicanos (MXN). Los precios típicamente se muestran sin impuestos. Buscar símbolo de peso ($) o indicadores MXN. Términos clave: "pesos", "MXN", "$", "precio", "costo", "vale", "importe".'),
+('440e8400-e29b-41d4-a716-446655440002', 'Le marché québécois utilise des Dollars Canadiens (CAD). Les prix incluent les taxes (TPS/TVH). Chercher devise CAD ou symbole $ avec contexte canadien. Mots-clés: "dollars", "CAD", "$", "prix", "coût", "montant", "valeur".');
+
+-- Insert QuantityTypePrompt data for AI quantity context (language-specific)
+INSERT INTO "matching"."QuantityTypePrompt" ("quantity_type", "ai_quantity_context") VALUES 
+('660e8400-e29b-41d4-a716-446655440001', 'Para pañales: Buscar cantidades como "paquete de 20", "84 unidades", "mega pack 132 pzas". Tamaños comunes: 20-40 (paquetes pequeños), 50-90 (paquetes medianos), 100+ (paquetes grandes). Extraer cantidad numérica y tipo de unidad (piezas, unidades, pañales). Términos clave: "piezas", "pzas", "unidades", "uds", "pack", "paquete".'),
+('660e8400-e29b-41d4-a716-446655440002', 'Pour couches: Chercher quantités comme "paquet de 20", "84 unités", "méga pack 132 pcs". Tailles communes: 20-40 (petits paquets), 50-90 (paquets moyens), 100+ (gros paquets). Extraire quantité numérique et type d''unité (pièces, unités, couches). Mots-clés: "pièces", "pcs", "unités", "pack", "paquet".'),
+('660e8400-e29b-41d4-a716-446655440003', 'For diapers: Look for quantities like "pack of 20", "84 units", "mega pack 132 pcs". Common sizes: 20-40 (small packs), 50-90 (medium packs), 100+ (bulk packs). Extract numeric quantity and unit type (pieces, units, diapers). Keywords: "pieces", "pcs", "units", "pack", "package".');
+
+-- Insert ProductSpecsPrompt data for AI specs context (language-specific)
+
+-- Spanish ProductSpecs (Mexico)
+INSERT INTO "matching"."ProductSpecsPrompt" ("product_spec", "ai_specs_context") VALUES 
+('59e04c0c-69d3-4225-8b72-b88166f81209', 'Pañales Etapa 1 para recién nacidos. Buscar indicadores de peso: 2-5kg, RN, "Recién Nacido", "Newborn". Términos comunes: "para recién nacido", "etapa 1", "hasta 5 kg", "0-3 meses", "primera etapa".'),
+('fbff8811-a780-4e24-ad72-dcc593b39bdc', 'Pañales Etapa 2 para bebés. Buscar indicadores de peso: 3-6kg, Talla S, "Small". Términos comunes: "etapa 2", "talla S", "3-6 kg", "bebé pequeño", "segunda etapa".'),
+('7ece90db-f69f-473f-b996-28c779518c93', 'Pañales unisex adecuados para niños y niñas. Buscar términos: "unisex", "niño y niña", "mixto", "para ambos", "universal".'),
+('88193926-2c46-498a-ae59-9c58e2c4642d', 'Pañales para niño. Buscar indicadores específicos: "niño", "boy", "azul", "para él", "masculino".'),
+('efea6e13-880b-4184-a65b-bb9bf4db4f02', 'Pañales para niña. Buscar indicadores específicos: "niña", "girl", "rosa", "para ella", "femenino".'),
+
+-- French ProductSpecs (Quebec)  
+('11597c71-dc20-4c05-84c3-d21172bd486b', 'Couches unisexes convenant aux garçons et filles. Chercher termes: "unisexe", "garçon et fille", "mixte", "pour les deux", "universel".'),
+('42a76d78-85f4-494b-8768-18945bc8a8f7', 'Couches Étape 1 pour nouveau-nés. Chercher indicateurs de poids: 2-5kg, "Nouveau-né", "Newborn". Termes courants: "pour nouveau-né", "étape 1", "jusqu''à 5 kg", "0-3 mois", "première étape".'),
+('2e1f0e97-191b-49a1-965f-dec8e3f54c2b', 'Couches Étape 2 pour bébés. Chercher indicateurs de poids: 3-6kg, Taille S, "Small". Termes courants: "étape 2", "taille S", "3-6 kg", "petit bébé", "deuxième étape".'),
+('2953ab82-3faf-41dd-b0c9-5d8f1d8aa607', 'Couches pour garçon. Chercher indicateurs spécifiques: "garçon", "boy", "bleu", "pour lui", "masculin".'),
+('6b1a7832-60cf-4e7d-9733-ace74f16eba3', 'Couches pour fille. Chercher indicateurs spécifiques: "fille", "girl", "rose", "pour elle", "féminin".'),
+('c2305726-21be-4e17-a7e8-b15796654eeb', 'Couches Nouveau-né pour premiers jours. Chercher indicateurs: "nouveau-né", "prématuré", "P0", "très petit", "0-2.5kg".'),
+('f8e12345-1234-5678-9abc-123456789012', 'Couches d''entraînement pour apprentissage propreté. Chercher termes: "entraînement", "training", "pull-ups", "culotte d''apprentissage", "transition".');
+
+-- Insert CategoryPrompt data for category-specific price and quantity context (language-specific)
+INSERT INTO "matching"."CategoryPrompt" ("category", "ai_price_context", "ai_quantity_context") VALUES 
+-- Mexico categories (Spanish)
+('9b16f8f5-a36b-4a58-a81e-669a711556ba', 'Para toallitas: Rangos de precios típicos 20-200 MXN dependiendo del tamaño del paquete y marca. Precios premium: 100-200 MXN, precios económicos: 20-80 MXN. Buscar indicadores: "oferta", "descuento", "precio especial", "rebaja".', 'Para toallitas: Buscar cantidades específicas como "80 toallitas", "100 piezas", "pack de 4". Formatos comunes: paquete pequeño (40-80), paquete grande (100-200), multipack (200+). Términos: "toallitas", "piezas", "unidades", "pack".'),
+('a1bb06cd-b954-498b-a45e-770900f29466', 'Para pañales: Rangos de precios típicos 50-500 MXN dependiendo del tamaño del paquete y marca. Precios premium: 300-500 MXN, precios económicos: 50-200 MXN. Buscar indicadores: "oferta", "descuento", "precio especial", "rebaja".', 'Para pañales: Buscar cantidades específicas como "20 pañales", "84 unidades", "132 piezas". Formatos comunes: paquete pequeño (20-40), paquete grande (50-90), mega pack (100+). Términos: "paquete", "pack", "unidades", "piezas".'),
+-- Quebec categories (French)  
+('747061ba-376b-4214-8324-820caaf7febd', 'Pour couches: Gammes de prix typiques 15-80 CAD selon la taille du paquet et marque. Prix premium: 40-80 CAD, prix économiques: 15-40 CAD. Chercher indicateurs: "spécial", "rabais", "promotion", "solde".', 'Pour couches: Chercher quantités spécifiques comme "20 couches", "84 unités", "132 pièces". Formats courants: petit paquet (20-40), grand paquet (50-90), méga pack (100+). Termes: "paquet", "pack", "unités", "pièces".');
 
 -- ProductRules for Pañales category
 INSERT INTO "matching"."ProductRules" (category, type, min, max) VALUES 

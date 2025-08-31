@@ -193,6 +193,57 @@ export type Database = {
         };
         Relationships: [];
       };
+      CategoryPrompt: {
+        Row: {
+          ai_price_context: string;
+          ai_quantity_context: string;
+          category: string;
+          created_at: string;
+          id: string;
+          updated_at: string;
+        };
+        Insert: {
+          ai_price_context: string;
+          ai_quantity_context: string;
+          category: string;
+          created_at?: string;
+          id?: string;
+          updated_at?: string;
+        };
+        Update: {
+          ai_price_context?: string;
+          ai_quantity_context?: string;
+          category?: string;
+          created_at?: string;
+          id?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      CountryPrompt: {
+        Row: {
+          ai_currency_context: string;
+          country: string;
+          created_at: string;
+          id: string;
+          updated_at: string;
+        };
+        Insert: {
+          ai_currency_context: string;
+          country: string;
+          created_at?: string;
+          id?: string;
+          updated_at?: string;
+        };
+        Update: {
+          ai_currency_context?: string;
+          country?: string;
+          created_at?: string;
+          id?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       ExtractIntent: {
         Row: {
           created_at: string | null;
@@ -300,8 +351,10 @@ export type Database = {
           label: string;
           model: string;
           process_intent: string;
+          prompt: string;
           prompt_tokens: number;
           time: number;
+          tools: string | null;
           total_tokens: number;
           type: string;
         };
@@ -313,8 +366,10 @@ export type Database = {
           label: string;
           model: string;
           process_intent: string;
+          prompt: string;
           prompt_tokens?: number;
           time?: number;
+          tools?: string | null;
           total_tokens?: number;
           type: string;
         };
@@ -326,8 +381,10 @@ export type Database = {
           label?: string;
           model?: string;
           process_intent?: string;
+          prompt?: string;
           prompt_tokens?: number;
           time?: number;
+          tools?: string | null;
           total_tokens?: number;
           type?: string;
         };
@@ -368,6 +425,54 @@ export type Database = {
           min?: number | null;
           type?: string;
           updated_at?: string | null;
+        };
+        Relationships: [];
+      };
+      ProductSpecsPrompt: {
+        Row: {
+          ai_specs_context: string;
+          created_at: string;
+          id: string;
+          product_spec: string;
+          updated_at: string;
+        };
+        Insert: {
+          ai_specs_context: string;
+          created_at?: string;
+          id?: string;
+          product_spec: string;
+          updated_at?: string;
+        };
+        Update: {
+          ai_specs_context?: string;
+          created_at?: string;
+          id?: string;
+          product_spec?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      QuantityTypePrompt: {
+        Row: {
+          ai_quantity_context: string;
+          created_at: string;
+          id: string;
+          quantity_type: string;
+          updated_at: string;
+        };
+        Insert: {
+          ai_quantity_context: string;
+          created_at?: string;
+          id?: string;
+          quantity_type: string;
+          updated_at?: string;
+        };
+        Update: {
+          ai_quantity_context?: string;
+          created_at?: string;
+          id?: string;
+          quantity_type?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -528,15 +633,32 @@ export type Database = {
     Tables: {
       Country: {
         Row: {
+          created_at: string | null;
+          id: string;
           label: string;
+          language: string;
         };
         Insert: {
+          created_at?: string | null;
+          id?: string;
           label: string;
+          language: string;
         };
         Update: {
+          created_at?: string | null;
+          id?: string;
           label?: string;
+          language?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'Country_language_fkey';
+            columns: ['language'];
+            isOneToOne: false;
+            referencedRelation: 'Language';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       File: {
         Row: {
@@ -559,6 +681,24 @@ export type Database = {
           file_path?: string;
           id?: string;
           is_public?: boolean;
+        };
+        Relationships: [];
+      };
+      Language: {
+        Row: {
+          created_at: string;
+          id: string;
+          label: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          label: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          label?: string;
         };
         Relationships: [];
       };
@@ -729,6 +869,7 @@ export type Database = {
           image_bucket: string | null;
           image_path: string | null;
           label: string;
+          quantity_type: string;
           slug: string;
         };
         Insert: {
@@ -738,6 +879,7 @@ export type Database = {
           image_bucket?: string | null;
           image_path?: string | null;
           label: string;
+          quantity_type: string;
           slug: string;
         };
         Update: {
@@ -747,6 +889,7 @@ export type Database = {
           image_bucket?: string | null;
           image_path?: string | null;
           label?: string;
+          quantity_type?: string;
           slug?: string;
         };
         Relationships: [
@@ -755,7 +898,14 @@ export type Database = {
             columns: ['country'];
             isOneToOne: false;
             referencedRelation: 'Country';
-            referencedColumns: ['label'];
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'ProductCategory_quantity_type_fkey';
+            columns: ['quantity_type'];
+            isOneToOne: false;
+            referencedRelation: 'QuantityType';
+            referencedColumns: ['id'];
           }
         ];
       };
@@ -1097,26 +1247,61 @@ export type Database = {
         };
         Relationships: [];
       };
+      QuantityType: {
+        Row: {
+          created_at: string;
+          id: string;
+          internal_label: string;
+          label: string;
+          unit_label: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          internal_label: string;
+          label: string;
+          unit_label: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          internal_label?: string;
+          label?: string;
+          unit_label?: string;
+        };
+        Relationships: [];
+      };
       Shop: {
         Row: {
+          country: string;
           created_at: string;
           id: string;
           img_url: string;
           label: string;
         };
         Insert: {
+          country: string;
           created_at?: string;
           id?: string;
           img_url: string;
           label: string;
         };
         Update: {
+          country?: string;
           created_at?: string;
           id?: string;
           img_url?: string;
           label?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'Shop_country_fkey';
+            columns: ['country'];
+            isOneToOne: false;
+            referencedRelation: 'Country';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       ShopIdentifier: {
         Row: {
