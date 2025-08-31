@@ -332,3 +332,37 @@ UPDATE "public"."profiles" SET role = 'admin' WHERE id = 'b0860eb9-faa5-48e7-92f
 INSERT INTO "public"."profiles" (id, role) 
 SELECT 'b0860eb9-faa5-48e7-92fa-5b9b3df2d3e9', 'admin'
 WHERE NOT EXISTS (SELECT 1 FROM "public"."profiles" WHERE id = 'b0860eb9-faa5-48e7-92fa-5b9b3df2d3e9');
+
+-- ============================================================================
+-- Normal Price System - Cron Jobs and Initial Data Population
+-- ============================================================================
+
+-- Set up pg_cron jobs for daily refresh (early morning hours)
+
+-- Refresh product_sell_context_normal_price_view at 2:00 AM daily
+SELECT cron.schedule(
+    'refresh-sell-context-normal-prices', 
+    '0 2 * * *', 
+    'REFRESH MATERIALIZED VIEW product_sell_context_normal_price_view;'
+);
+
+-- Refresh product_packaging_normal_price_view at 3:00 AM daily (after sell context view)
+SELECT cron.schedule(
+    'refresh-packaging-normal-prices', 
+    '0 3 * * *', 
+    'REFRESH MATERIALIZED VIEW product_packaging_normal_price_view;'
+);
+
+-- Refresh product_normal_price_view at 4:00 AM daily (after packaging view)
+SELECT cron.schedule(
+    'refresh-product-normal-prices', 
+    '0 4 * * *', 
+    'REFRESH MATERIALIZED VIEW product_normal_price_view;'
+);
+
+-- Initial data population (run the views refresh immediately)
+
+-- Refresh all materialized views to populate with existing data
+REFRESH MATERIALIZED VIEW product_sell_context_normal_price_view;
+REFRESH MATERIALIZED VIEW product_packaging_normal_price_view;
+REFRESH MATERIALIZED VIEW product_normal_price_view;
