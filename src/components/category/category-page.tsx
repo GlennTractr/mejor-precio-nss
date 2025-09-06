@@ -55,35 +55,37 @@ export function CategoryPage({
   const displayName = categoryName || filters.category_name;
 
   return (
-    <div className="space-y-6">
-      <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-primary">{displayName}</h1>
+    <div className="mx-auto w-full max-w-7xl pb-6">
+      <div className="space-y-6">
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl highlight-primary">{displayName}</h1>
+        </div>
+        <ProductListFiltered
+          products={products}
+          totalItems={totalItems}
+          isLoading={isLoading}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          searchQuery={searchQuery}
+          selectedBrands={selectedBrands}
+          selectedModels={selectedModels}
+          selectedSpecLabels={selectedSpecLabels}
+          priceRange={currentPriceRange}
+          minPossiblePrice={minPossiblePrice}
+          maxPossiblePrice={maxPossiblePrice}
+          brandFacets={filters.facets.brand}
+          modelFacets={filters.facets.model}
+          specFacets={filters.specs_facets}
+          onPageChange={setPage}
+          onItemsPerPageChange={setItemsPerPage}
+          onSearchChange={setSearchQuery}
+          onBrandToggle={toggleBrand}
+          onModelToggle={toggleModel}
+          onSpecLabelToggle={toggleSpecLabel}
+          onPriceRangeChange={setPriceRange}
+          onResetFilters={resetFilters}
+        />
       </div>
-      <ProductListFiltered
-        products={products}
-        totalItems={totalItems}
-        isLoading={isLoading}
-        currentPage={currentPage}
-        itemsPerPage={itemsPerPage}
-        searchQuery={searchQuery}
-        selectedBrands={selectedBrands}
-        selectedModels={selectedModels}
-        selectedSpecLabels={selectedSpecLabels}
-        priceRange={currentPriceRange}
-        minPossiblePrice={minPossiblePrice}
-        maxPossiblePrice={maxPossiblePrice}
-        brandFacets={filters.facets.brand}
-        modelFacets={filters.facets.model}
-        specFacets={filters.specs_facets}
-        onPageChange={setPage}
-        onItemsPerPageChange={setItemsPerPage}
-        onSearchChange={setSearchQuery}
-        onBrandToggle={toggleBrand}
-        onModelToggle={toggleModel}
-        onSpecLabelToggle={toggleSpecLabel}
-        onPriceRangeChange={setPriceRange}
-        onResetFilters={resetFilters}
-      />
     </div>
   );
 }
