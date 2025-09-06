@@ -107,23 +107,24 @@ export function FavoritesList() {
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="mb-8 border border-primary-light/20 hover:border-primary-light rounded-lg p-4 bg-transparent mt-6 transition-colors"
+      className="my-6 bg-transparent transition-colors"
     >
       <CollapsibleTrigger asChild>
         <div className="flex items-center justify-between w-full cursor-pointer hover:bg-primary-light/5 rounded-md p-2 -m-2 transition-colors duration-200 group">
           <div className="flex items-center gap-2">
-            <Heart
-              className="h-5 w-5 text-red-500 group-hover:scale-110 transition-transform duration-200"
-              fill="currentColor"
-            />
             <h2 className="text-xl font-bold text-accent group-hover:text-dark-secondary transition-colors duration-200 highlight-primary">
               {tHome('favorites')}
+              {!isLoading && favoriteProducts.length > 0 && (
+                <span className="text-sm text-muted-foreground group-hover:text-dark-secondary/70 transition-colors duration-200 ml-2">
+                  ({favoriteProducts.length})
+                </span>
+              )}
             </h2>
-            {!isLoading && favoriteProducts.length > 0 && (
-              <span className="text-sm text-muted-foreground group-hover:text-dark-secondary/70 transition-colors duration-200">
-                ({favoriteProducts.length})
-              </span>
-            )}
+
+            <Heart
+              className="h-5 w-5 text-red-500 group-hover:scale-110 transition-transform duration-200 ml-3"
+              fill="currentColor"
+            />
           </div>
           <div className="rounded-full p-1 group-hover:bg-primary-light/10 transition-colors duration-200">
             {isOpen ? (
