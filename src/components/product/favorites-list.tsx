@@ -99,7 +99,7 @@ export function FavoritesList() {
     fetchFavorites();
   }, [currentUser.data?.id]);
 
-  if (!currentUser.data) {
+  if (!currentUser.data || (!isLoading && favoriteProducts.length === 0)) {
     return null; // Don't show anything if user is not logged in
   }
 
@@ -107,7 +107,7 @@ export function FavoritesList() {
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="mb-8 border border-secondary-light rounded-lg p-4 bg-white/50 mt-6"
+      className="mb-8 border border-primary-light/20 hover:border-primary-light rounded-lg p-4 bg-white/50 mt-6 transition-colors"
     >
       <CollapsibleTrigger asChild>
         <div className="flex items-center justify-between w-full cursor-pointer hover:bg-primary-light/5 rounded-md p-2 -m-2 transition-colors duration-200 group">
@@ -139,7 +139,11 @@ export function FavoritesList() {
         {isLoading ? (
           <div className="flex gap-4 overflow-x-auto py-2">
             {Array.from({ length: 5 }).map((_, index) => (
-              <Card key={index} className="animate-pulse h-[320px] min-w-[220px] flex-shrink-0">
+              <Card
+                key={index}
+                variant="product"
+                className="animate-pulse h-[320px] min-w-[220px] flex-shrink-0"
+              >
                 <CardContent className="p-0">
                   <div className="h-36 bg-primary-light/10"></div>
                   <div className="p-4 space-y-2">

@@ -103,7 +103,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/producto/${product.product_slug}`}
-      className="block transition-transform hover:scale-105"
+      className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none"
     >
       <Card className="border-primary-light/20 hover:border-primary-light transition-colors h-[320px] flex flex-col relative">
         <TooltipProvider>

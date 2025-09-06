@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from '@/components/ui/button';
-import { Download, Heart, Search, Settings, Trash2 } from 'lucide-react';
+import { Download, Heart, Search, Settings } from 'lucide-react';
 
 const meta: Meta<typeof Button> = {
   title: 'UI/Button',
@@ -9,7 +9,8 @@ const meta: Meta<typeof Button> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A versatile button component with multiple variants using your brand colors (Melon primary and Green secondary). Supports different sizes and states.',
+        component:
+          'A versatile button component with multiple variants using your brand colors (Melon primary and Green secondary). Supports different sizes and states.',
       },
     },
   },
@@ -17,7 +18,18 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'primary', 'secondary', 'outline', 'outline-secondary', 'ghost', 'ghost-secondary', 'destructive', 'link', 'link-secondary'],
+      options: [
+        'default',
+        'primary',
+        'secondary',
+        'outline',
+        'outline-secondary',
+        'ghost',
+        'ghost-secondary',
+        'destructive',
+        'link',
+        'link-secondary',
+      ],
       description: 'The visual style variant of the button',
     },
     size: {
@@ -206,7 +218,7 @@ export const AllVariants: Story = {
           <Button variant="destructive">Destructive</Button>
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-900">Outlined Buttons</h3>
         <div className="flex gap-2 flex-wrap">
@@ -214,7 +226,7 @@ export const AllVariants: Story = {
           <Button variant="outline-secondary">Secondary Outline</Button>
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-900">Text Buttons</h3>
         <div className="flex gap-2 flex-wrap">
@@ -224,22 +236,32 @@ export const AllVariants: Story = {
           <Button variant="link-secondary">Link Secondary</Button>
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-900">Sizes</h3>
         <div className="flex gap-2 items-center flex-wrap">
-          <Button variant="primary" size="sm">Small</Button>
-          <Button variant="primary" size="default">Default</Button>
-          <Button variant="primary" size="lg">Large</Button>
-          <Button variant="primary" size="icon"><Settings className="h-4 w-4" /></Button>
+          <Button variant="primary" size="sm">
+            Small
+          </Button>
+          <Button variant="primary" size="default">
+            Default
+          </Button>
+          <Button variant="primary" size="lg">
+            Large
+          </Button>
+          <Button variant="primary" size="icon">
+            <Settings className="h-4 w-4" />
+          </Button>
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-900">States</h3>
         <div className="flex gap-2 flex-wrap">
           <Button variant="primary">Normal</Button>
-          <Button variant="primary" disabled>Disabled</Button>
+          <Button variant="primary" disabled>
+            Disabled
+          </Button>
         </div>
       </div>
     </div>
@@ -247,7 +269,8 @@ export const AllVariants: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A comprehensive showcase of all button variants, sizes, and states available with your brand colors.',
+        story:
+          'A comprehensive showcase of all button variants, sizes, and states available with your brand colors.',
       },
     },
   },

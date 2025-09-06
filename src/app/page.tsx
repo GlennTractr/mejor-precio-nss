@@ -8,7 +8,6 @@ import { typesenseClient } from '@/lib/typesense-client';
 import { getTranslations } from 'next-intl/server';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { Banner } from '@/components/ui/banner';
-import { Loading } from '@/components/ui/loading';
 
 interface SearchParams {
   page?: string;

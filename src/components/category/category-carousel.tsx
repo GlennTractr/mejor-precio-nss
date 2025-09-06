@@ -44,7 +44,7 @@ async function getCategories(): Promise<Category[]> {
 
 function CategorySkeleton() {
   return (
-    <Card className="w-[180px] h-[180px] flex-shrink-0">
+    <Card variant="interactive" className="w-[180px] h-[180px] flex-shrink-0">
       <CardContent className="p-4 space-y-3">
         <Skeleton className="h-[120px] w-full rounded-lg" />
         <Skeleton className="h-4 w-full" />
@@ -70,11 +70,18 @@ export function CategoryCarousel() {
   }
 
   return (
-    <div className="flex gap-4 overflow-x-auto pb-4">
+    <div className="flex gap-4 overflow-x-auto py-4 px-2">
       {categories?.map(category => (
-        <Link key={category.id} href={`/categoria/${category.slug}`}>
-          <Card className="w-[180px] h-[180px] flex-shrink-0 hover:bg-accent/50 transition-colors">
+        <Link
+          key={category.id}
+          href={`/categoria/${category.slug}`}
+          className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none"
+        >
+          <Card variant="interactive" className="w-[180px] h-[180px] flex-shrink-0">
             <CardContent className="p-4 space-y-3">
+              <h3 className="text-md text-center font-medium truncate text-secondary">
+                <b>{category.label}</b>
+              </h3>
               <div className="relative h-[120px] w-full">
                 <Image
                   src={category.image_url || '/images/placeholder.jpg'}
@@ -86,7 +93,6 @@ export function CategoryCarousel() {
                   quality={80}
                 />
               </div>
-              <h3 className="text-sm font-medium text-center truncate">{category.label}</h3>
             </CardContent>
           </Card>
         </Link>

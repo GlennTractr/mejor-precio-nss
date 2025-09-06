@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/accordion';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { FacetValue, SpecFacet } from '@/types/product';
+import { Card } from '@/components/ui/card';
 
 export interface ProductFiltersProps {
   searchQuery: string;
@@ -93,7 +94,7 @@ export function ProductFilters({
   };
 
   return (
-    <div className="space-y-6 rounded-lg border p-4">
+    <Card variant="interactive" className="space-y-6 p-4">
       <div>
         <h2 className="mb-2 font-medium">{t('filters.search')}</h2>
         <form onSubmit={handleSearchSubmit} className="relative">
@@ -241,6 +242,6 @@ export function ProductFilters({
           {t('filters.resetFilters')}
         </Button>
       )}
-    </div>
+    </Card>
   );
 }
