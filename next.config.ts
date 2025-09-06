@@ -13,6 +13,7 @@ function getSupabaseHostFromUrl(url: string): string | null {
 const supabaseHost = getSupabaseHostFromUrl(process.env.NEXT_PUBLIC_SUPABASE_URL || '');
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NODE_ENV === 'development' ? '.next-dev' : '.next',
   images: {
     domains: supabaseHost ? [supabaseHost] : [],
     remotePatterns: [
