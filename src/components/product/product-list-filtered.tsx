@@ -159,7 +159,7 @@ export function ProductListFiltered({
               onClick={() => typeof page === 'number' && onPageChange(page)}
               disabled={page === '...' || page === currentPage}
               className={`px-3 py-1 rounded border ${
-                page === currentPage ? 'bg-primary text-white' : ''
+                page === currentPage ? 'bg-secondary text-white' : ''
               } ${page === '...' ? 'cursor-default' : ''}`}
             >
               {page}

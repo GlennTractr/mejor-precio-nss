@@ -89,7 +89,7 @@ function ProductListComponent({
               onItemsPerPageChange(parseInt(value));
             }}
           >
-            <SelectTrigger className="w-[100px] border-primary-light focus:ring-primary">
+            <SelectTrigger className="w-[100px] border-secondary-200 focus:ring-secondary">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -115,7 +115,7 @@ function ProductListComponent({
             <PaginationPrevious
               onClick={() => onPageChange(Math.max(1, currentPage - 1))}
               aria-disabled={currentPage === 1}
-              className={`hover:bg-primary-light/10 ${
+              className={`hover:bg-secondary-100/50 ${
                 currentPage === 1 ? 'pointer-events-none opacity-50' : ''
               }`}
             />
@@ -126,7 +126,7 @@ function ProductListComponent({
               <PaginationItem>
                 <PaginationLink
                   onClick={() => onPageChange(1)}
-                  className="hover:bg-primary-light/10"
+                  className="hover:bg-secondary-100/50"
                 >
                   1
                 </PaginationLink>
@@ -142,8 +142,8 @@ function ProductListComponent({
                 isActive={currentPage === page}
                 className={
                   currentPage === page
-                    ? 'bg-primary text-primary-foreground hover:bg-primary-dark'
-                    : 'hover:bg-primary-light/10'
+                    ? 'bg-secondary text-secondary-foreground hover:bg-secondary-800'
+                    : 'hover:bg-secondary-100/50'
                 }
               >
                 {page}
@@ -157,7 +157,7 @@ function ProductListComponent({
               <PaginationItem>
                 <PaginationLink
                   onClick={() => onPageChange(totalPages)}
-                  className="hover:bg-primary-light/10"
+                  className="hover:bg-secondary-100/50"
                 >
                   {totalPages}
                 </PaginationLink>
@@ -169,7 +169,7 @@ function ProductListComponent({
             <PaginationNext
               onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
               aria-disabled={currentPage === totalPages}
-              className={`hover:bg-primary-light/10 ${
+              className={`hover:bg-secondary-100/50 ${
                 currentPage === totalPages ? 'pointer-events-none opacity-50' : ''
               }`}
             />
