@@ -45,29 +45,26 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
     <div className="space-y-8">
       <Banner className="w-full" />
 
-      {/* Loading component test */}
-      <div className="h-32">
-        <Loading size="md" duration={2} />
-      </div>
-
-      {/* Favorites Section - FavoritesList component handles hiding for non-authenticated users */}
-      <Suspense fallback={null}>
-        <FavoritesList />
-      </Suspense>
-
-      <section>
-        <h2 className="text-2xl font-bold text-accent mb-6">{t('categories')}</h2>
-        <Suspense fallback={<CategoryCarouselSkeleton />}>
-          <CategoryCarousel />
+      <div className="pb-[75px] my-6 mx-auto w-full max-w-4xl">
+        {/* Favorites Section - FavoritesList component handles hiding for non-authenticated users */}
+        <Suspense fallback={null}>
+          <FavoritesList />
         </Suspense>
-      </section>
 
-      <section>
-        <h2 className="text-2xl font-bold text-accent mb-6">{t('allProducts')}</h2>
-        <HydrationBoundary state={dehydratedState}>
-          <HomeProductList currentPage={currentPage} itemsPerPage={itemsPerPage} />
-        </HydrationBoundary>
-      </section>
+        <section>
+          <h2 className="text-2xl font-bold text-accent mb-6">{t('categories')}</h2>
+          <Suspense fallback={<CategoryCarouselSkeleton />}>
+            <CategoryCarousel />
+          </Suspense>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-accent mb-6">{t('allProducts')}</h2>
+          <HydrationBoundary state={dehydratedState}>
+            <HomeProductList currentPage={currentPage} itemsPerPage={itemsPerPage} />
+          </HydrationBoundary>
+        </section>
+      </div>
     </div>
   );
 }

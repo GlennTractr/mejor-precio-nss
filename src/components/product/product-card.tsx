@@ -168,12 +168,8 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="text-xs text-muted-foreground line-clamp-1">
             {t('availableAt', { shops: product.shop_names.join(', ') })}
           </p>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full bg-primary-light/5 hover:bg-primary-light/10 border-primary-light/20 text-primary hover:text-primary-dark"
-          >
-            {tActions('seeOffers')}
+          <Button variant="outline-secondary" size="sm" className="w-full">
+            <b>{tActions('seeOffers')}</b>
           </Button>
         </CardFooter>
       </Card>
