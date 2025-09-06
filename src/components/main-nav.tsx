@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { User2, Monitor, LogOut, Menu, Lock, LogIn } from 'lucide-react';
+import { User2, Monitor, LogOut, Menu, Lock, LogIn, Search } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -18,7 +18,7 @@ import { useTranslations } from 'next-intl';
 import { SettingsModal } from '@/components/settings-modal';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useQueryClient } from '@tanstack/react-query';
-import { env } from '@/lib/env';
+import { Logo } from '@/components/ui/logo';
 
 const items: {
   titleKey: string;
@@ -40,6 +40,7 @@ export function MainNav() {
   const [showSettings, setShowSettings] = useState(false);
   const [openMobile, setOpenMobile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const queryClient = useQueryClient();
   const t = useTranslations();
 
@@ -47,6 +48,24 @@ export function MainNav() {
   useEffect(() => {
     setIsAuthenticated(!!currentUser.data);
   }, [currentUser.data, currentUser.status]);
+
+  // Listen for scroll events
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setHasScrolled(scrollTop > 0);
+    };
+
+    // Initial check
+    handleScroll();
+
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   // Listen for auth state changes
   useEffect(() => {
@@ -91,7 +110,10 @@ export function MainNav() {
   };
 
   return (
-    <div className="shadow-md bg-white">
+    <div className={cn(
+      "sticky top-0 z-50 bg-white transition-shadow duration-200",
+      hasScrolled && "shadow-md"
+    )}>
       <Sheet open={openMobile} onOpenChange={setOpenMobile}>
         <div className="flex h-16 items-center px-6 justify-between">
           <div className="flex items-center">
@@ -107,14 +129,11 @@ export function MainNav() {
               </Button>
             </SheetTrigger>
 
-            {/* Logo Text instead of Image */}
-            <Link
-              href="/"
-              className="hover:opacity-80 transition-all ml-2 md:ml-0 text-xl font-bold text-primary"
-              aria-label={t('common.logo')}
-            >
-              {env().NEXT_PUBLIC_SITE_TITLE}
-            </Link>
+            {/* Logo */}
+            <Logo 
+              size="md"
+              className="ml-2 md:ml-0"
+            />
 
             {/* Main Menu (Desktop only) */}
             <nav
@@ -151,6 +170,19 @@ export function MainNav() {
                 )
               )}
             </nav>
+          </div>
+
+          {/* Search Bar (centered middle) */}
+          <div className="flex-1 max-w-md mx-8 hidden md:block">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Buscar productos..."
+                className="w-full pl-10 pr-4 py-2 bg-muted/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                readOnly
+              />
+            </div>
           </div>
 
           {/* Profile Menu or Sign In (moved to right side) */}
@@ -194,13 +226,9 @@ export function MainNav() {
         <SheetContent side="left" className="w-[280px] p-0">
           <div className="flex flex-col h-full">
             <div className="p-4 border-b">
-              <Link
-                href="/"
-                className="text-xl font-bold text-primary"
-                aria-label={t('common.logo')}
-              >
-                {env().NEXT_PUBLIC_SITE_TITLE}
-              </Link>
+              <Logo 
+                size="md"
+              />
             </div>
             <nav className="flex-1 p-4" aria-label={t('navigation.mobile.menu')}>
               {items.map(item => (

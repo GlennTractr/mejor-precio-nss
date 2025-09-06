@@ -64,8 +64,8 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <MainNav />
-              <main className="flex-1 py-6">
-                <div className="container mx-auto px-4">{children}</div>
+              <main>
+                <div>{children}</div>
               </main>
               <Footer />
               <Toaster />

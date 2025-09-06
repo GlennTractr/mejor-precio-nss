@@ -62,3 +62,39 @@ Pull-Ups (culottes d’entraînement) : Tailles de 2T-3T à 4T-5T, disponibles p
    Cette marque offre des couches premium avec un accent sur la performance et le confort.​
 
 -Premium Diapers : Tailles de 1 à 7, pour unisexe
+
+
+
+
+Shop:
+  X "Costco México",
+  X "Sam's Club",
+  X "walmart.com.mx",
+  X "Farmacias Del Ahorro",
+  X "Bodega Aurrera",
+  X "Chedraui",
+  X "Mercado Libre",
+  X "Soriana.com",
+  X "Walmart México",
+
+"Alsuper",
+"City Club",
+"Claro Shop",
+"Coppel",
+"Del Sol",
+"eBay",
+"Farmacia San Jorge",
+"Farmacias Bazar",
+"Farmacias Benavides",
+"Farmacias Klyns",
+"Farmacias YZA",
+"Farmalisto México",
+"H-E-B México",
+"Justo MX",
+"Liverpool",
+"Merco Supermercado",
+"San Pablo Farmacia",
+"Sears México",
+"Suburbia",
+"Surtace",
+"Uber Eats"

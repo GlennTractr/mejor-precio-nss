@@ -7,6 +7,8 @@ import { FavoritesList } from '@/components/product/favorites-list';
 import { typesenseClient } from '@/lib/typesense-client';
 import { getTranslations } from 'next-intl/server';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import { Banner } from '@/components/ui/banner';
+import { Loading } from '@/components/ui/loading';
 
 interface SearchParams {
   page?: string;
@@ -41,20 +43,12 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   return (
     <div className="space-y-8">
-      <section className="relative overflow-hidden bg-primary p-12 rounded-xl shadow-md">
-        <div className="absolute inset-0 opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-light/80 via-primary to-primary-dark/90" />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-6">
-            <span>🎯</span>
-            <span>Comparador de precios para productos de bebé</span>
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-6">{t('heroTitle')}</h1>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-            {t('heroDescription')}
-          </p>
-        </div>
-      </section>
+      <Banner className="w-full" />
+
+      {/* Loading component test */}
+      <div className="h-32">
+        <Loading size="md" duration={2} />
+      </div>
 
       {/* Favorites Section - FavoritesList component handles hiding for non-authenticated users */}
       <Suspense fallback={null}>
