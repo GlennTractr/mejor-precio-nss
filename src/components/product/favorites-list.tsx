@@ -107,26 +107,33 @@ export function FavoritesList() {
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="mb-8 border border-primary-light/20 rounded-lg p-4 bg-white/50"
+      className="mb-8 border border-secondary-light rounded-lg p-4 bg-white/50 mt-6"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Heart className="h-5 w-5 text-red-500" fill="currentColor" />
-          <h2 className="text-xl font-bold text-accent">{tHome('favorites')}</h2>
-          {!isLoading && favoriteProducts.length > 0 && (
-            <span className="text-sm text-muted-foreground">({favoriteProducts.length})</span>
-          )}
-        </div>
-        <CollapsibleTrigger asChild>
-          <button className="rounded-full p-1 hover:bg-primary-light/10">
-            {isOpen ? (
-              <ChevronDown className="h-5 w-5 text-primary" />
-            ) : (
-              <ChevronRight className="h-5 w-5 text-primary" />
+      <CollapsibleTrigger asChild>
+        <div className="flex items-center justify-between w-full cursor-pointer hover:bg-primary-light/5 rounded-md p-2 -m-2 transition-colors duration-200 group">
+          <div className="flex items-center gap-2">
+            <Heart
+              className="h-5 w-5 text-red-500 group-hover:scale-110 transition-transform duration-200"
+              fill="currentColor"
+            />
+            <h2 className="text-xl font-bold text-accent group-hover:text-dark-secondary transition-colors duration-200 highlight-primary">
+              {tHome('favorites')}
+            </h2>
+            {!isLoading && favoriteProducts.length > 0 && (
+              <span className="text-sm text-muted-foreground group-hover:text-dark-secondary/70 transition-colors duration-200">
+                ({favoriteProducts.length})
+              </span>
             )}
-          </button>
-        </CollapsibleTrigger>
-      </div>
+          </div>
+          <div className="rounded-full p-1 group-hover:bg-primary-light/10 transition-colors duration-200">
+            {isOpen ? (
+              <ChevronDown className="h-5 w-5 text-secondary group-hover:text-dark-secondary transition-all duration-200" />
+            ) : (
+              <ChevronRight className="h-5 w-5 text-secondary group-hover:text-dark-secondary transition-all duration-200" />
+            )}
+          </div>
+        </div>
+      </CollapsibleTrigger>
 
       <CollapsibleContent className="mt-4">
         {isLoading ? (

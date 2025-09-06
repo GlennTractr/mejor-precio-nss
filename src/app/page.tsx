@@ -47,19 +47,18 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
       <div className="pb-[75px] my-6 mx-auto w-full max-w-4xl">
         {/* Favorites Section - FavoritesList component handles hiding for non-authenticated users */}
-        <Suspense fallback={null}>
-          <FavoritesList />
-        </Suspense>
 
-        <section>
-          <h2 className="text-2xl font-bold text-accent mb-6">{t('categories')}</h2>
+        <FavoritesList />
+
+        <section className="mt-6">
+          <h2 className="text-2xl text-accent mb-6 highlight-secondary">{t('categories')}</h2>
           <Suspense fallback={<CategoryCarouselSkeleton />}>
             <CategoryCarousel />
           </Suspense>
         </section>
 
-        <section>
-          <h2 className="text-2xl font-bold text-accent mb-6">{t('allProducts')}</h2>
+        <section className="mt-6">
+          <h2 className="text-2xl text-accent mb-6 highlight-primary">{t('allProducts')}</h2>
           <HydrationBoundary state={dehydratedState}>
             <HomeProductList currentPage={currentPage} itemsPerPage={itemsPerPage} />
           </HydrationBoundary>

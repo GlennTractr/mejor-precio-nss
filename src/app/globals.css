@@ -3,11 +3,12 @@
 @tailwind utilities;
 
 @keyframes fadeInOut {
-  0%, 100% { 
-    opacity: 1; 
+  0%,
+  100% {
+    opacity: 1;
   }
-  50% { 
-    opacity: 0; 
+  50% {
+    opacity: 0;
   }
 }
 
@@ -50,8 +51,9 @@ body {
     --sidebar-accent-foreground: 193 18% 35%;
     --sidebar-border: 196 15% 89%;
     --sidebar-ring: 14 82% 84%;
+    --secondary-light: #b4d4c4;
+    --dark-secondary: 193 35% 22%;
   }
-
 }
 
 @layer base {
@@ -60,5 +62,108 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Handmade Highlight Styles */
+  .highlight-primary {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    color: hsl(var(--dark-secondary));
+  }
+
+  .highlight-primary::before {
+    content: '';
+    position: absolute;
+    background: hsl(var(--primary));
+    height: calc(100% - 10px);
+    width: calc(100% + 15px);
+    border-radius: 9999px;
+    z-index: -1;
+    top: 8px;
+    left: -7px;
+    transform: rotate(0.3deg) skewX(1deg);
+    opacity: 0.8;
+  }
+
+  .highlight-secondary {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    color: hsl(var(--dark-secondary));
+  }
+
+  .highlight-secondary::before {
+    content: '';
+    position: absolute;
+    background: var(--secondary-light);
+    height: calc(100% - 10px);
+    width: calc(100% + 15px);
+    border-radius: 9999px;
+    z-index: -1;
+    top: 8px;
+    left: -7px;
+    transform: rotate(0.3deg) skewX(1deg);
+    opacity: 0.8;
+  }
+
+  /* Light variants for more subtle highlighting */
+  .highlight-primary-light::before {
+    background: hsl(var(--primary));
+    opacity: 0.5;
+  }
+
+  .highlight-secondary-light::before {
+    background: hsl(var(--accent));
+    opacity: 0.4;
+  }
+
+  .text-dark-secondary {
+    color: hsl(var(--dark-secondary));
+  }
+
+  /* V2 Highlight Styles - 45 degree inclination with straight edges */
+  .highlight-primary {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    color: hsl(var(--dark-secondary));
+  }
+
+  .highlight-primary::before {
+    content: '';
+    position: absolute;
+    background: hsl(var(--primary));
+    height: calc(100% - 10px);
+    width: calc(100% + 12px);
+    z-index: -1;
+    top: 8px;
+    left: -6px;
+    transform: skewX(-30deg);
+    opacity: 0.8;
+    border-radius: 3px;
+  }
+
+  .highlight-secondary {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    color: hsl(var(--dark-secondary));
+  }
+
+  .highlight-secondary::before {
+    content: '';
+    position: absolute;
+    background: var(--secondary-light);
+    height: calc(100% - 10px);
+    width: calc(100% + 12px);
+    z-index: -1;
+    top: 8px;
+    left: -6px;
+    transform: skewX(-30deg);
+    opacity: 0.8;
+    border-radius: 3px;
   }
 }
