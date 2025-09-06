@@ -45,3 +45,6 @@ next-env.d.ts
 
 typesense-data/*
 !typesense-data/.gitkeep
+
+
+.next-dev/*
