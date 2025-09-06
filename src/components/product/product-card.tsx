@@ -105,7 +105,7 @@ export function ProductCard({ product }: ProductCardProps) {
       href={`/producto/${product.product_slug}`}
       className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none"
     >
-      <Card className="border-primary-light/20 hover:border-primary-light transition-colors h-[320px] flex flex-col relative">
+      <Card className="border-secondary-light hover:border-secondary/40 transition-colors h-[320px] flex flex-col relative bg-white/40 hover:bg-transparent">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -115,14 +115,17 @@ export function ProductCard({ product }: ProductCardProps) {
                 className={cn(
                   'absolute top-2 right-2 z-10 p-2 rounded-full transition-colors',
                   isNotified
-                    ? 'text-red-500 bg-red-50 hover:bg-red-100'
-                    : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                    ? 'text-primary-light bg-primary-light/50 hover:bg-primary-light/10'
+                    : 'text-gray-400 hover:text-red-500 hover:bg-primary-light/50'
                 )}
               >
-                <Bell className="h-5 w-5" fill={isNotified ? 'currentColor' : 'none'} />
+                <Bell
+                  className="h-5 w-5 text-primary"
+                  fill={isNotified ? 'currentColor' : 'none'}
+                />
               </button>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent className="text-secondary bg-white border border-secondary/40">
               {currentUser.data
                 ? isNotified
                   ? tActions('notify.remove')
@@ -148,12 +151,12 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
         </div>
-        <CardHeader className="flex-grow space-y-1 py-2 px-4">
+        <CardHeader className="flex-grow space-y-1 py-2 px-4 overflow-visible">
           <CardTitle className="text-sm font-medium text-accent line-clamp-2 leading-tight">
             {product.title}
           </CardTitle>
-          <CardDescription className="text-xs text-primary line-clamp-1">
-            {product.brand}
+          <CardDescription className="text-sm line-clamp-1 overflow-visible">
+            <span className="highlight-primary">{product.brand}</span>
           </CardDescription>
         </CardHeader>
         <CardContent className="py-1 px-4">

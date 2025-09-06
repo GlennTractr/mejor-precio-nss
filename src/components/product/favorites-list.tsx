@@ -107,7 +107,7 @@ export function FavoritesList() {
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="mb-8 border border-primary-light/20 hover:border-primary-light rounded-lg p-4 bg-white/50 mt-6 transition-colors"
+      className="mb-8 border border-primary-light/20 hover:border-primary-light rounded-lg p-4 bg-transparent mt-6 transition-colors"
     >
       <CollapsibleTrigger asChild>
         <div className="flex items-center justify-between w-full cursor-pointer hover:bg-primary-light/5 rounded-md p-2 -m-2 transition-colors duration-200 group">
@@ -164,7 +164,7 @@ export function FavoritesList() {
           </div>
         ) : (
           <ScrollArea className="w-full">
-            <div className="flex gap-4 py-2">
+            <div className="flex gap-4 py-2 m-4">
               {favoriteProducts.map(product => (
                 <div key={product.id} className="min-w-[220px] flex-shrink-0">
                   <ProductCard product={product} />
