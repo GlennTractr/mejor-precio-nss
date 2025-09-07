@@ -11,6 +11,7 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
 import { FilterSidebarProps } from '../types';
 import { FilterAccordionSection } from './FilterAccordionSection';
+import { AlternatingFilterSections } from './AlternatingFilterSections';
 import { formatPrice, debounce } from '../utils';
 
 function FilterSidebarComponent({
@@ -72,10 +73,10 @@ function FilterSidebarComponent({
   };
 
   return (
-    <Card variant="interactive" className={cn('space-y-6 p-4', className)}>
+    <Card variant="interactive" className={cn('space-y-6 p-4 bg-transparent', className)}>
       {/* Search Section */}
       <div>
-        <h2 className="mb-2 font-medium">{t('filters.search')}</h2>
+        <h2 className="mb-2 font-medium highlight-primary text-sm">{t('filters.search')}</h2>
         <form onSubmit={handleSearchSubmit} className="relative">
           <Input
             type="text"
@@ -98,7 +99,7 @@ function FilterSidebarComponent({
 
       {/* Price Range Section */}
       <div>
-        <h2 className="mb-2 font-medium">{t('filters.price')}</h2>
+        <h2 className="mb-2 font-medium highlight-primary text-sm">{t('filters.price')}</h2>
         <div className="space-y-4">
           <Slider
             min={minPossiblePrice}
@@ -137,21 +138,17 @@ function FilterSidebarComponent({
             selectedItems={modelFilters.selectedItems}
             onToggle={handleModelToggle}
             sortBy="count"
+            variant="secondary"
           />
         )}
 
-        {/* Spec Filters */}
-        {specFilters.map(specFilter => (
-          <FilterAccordionSection
-            key={specFilter.type}
-            title={specFilter.type}
-            items={specFilter.labels}
-            selectedItems={specFilter.selectedItems}
-            onToggle={handleSpecToggle}
-            sortBy="count"
-            maxHeight={160} // Smaller for spec sections
-          />
-        ))}
+        {/* Spec Filters with Alternating Variants */}
+        <AlternatingFilterSections
+          specFilters={specFilters}
+          onToggle={handleSpecToggle}
+          maxHeight={160}
+          startVariant="primary"
+        />
       </Accordion>
 
       {/* Reset Filters Button */}

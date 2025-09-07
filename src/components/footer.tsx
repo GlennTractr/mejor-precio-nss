@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Twitter, Facebook, Instagram } from 'lucide-react';
+import { Logo } from '@/components/ui/logo';
 
 export function Footer() {
   const t = useTranslations('footer');
@@ -14,7 +15,7 @@ export function Footer() {
         <div className="flex flex-col gap-8 lg:flex-row lg:justify-between lg:gap-12">
           {/* Left: Logo + Description */}
           <div className="flex-shrink-0 lg:max-w-md">
-            <h3 className="text-xl font-bold text-primary">SaveOnBaby</h3>
+            <Logo size="md" className="mb-2" />
             <p className="mt-3 text-lg leading-relaxed text-white">{t('description')}</p>
           </div>
 

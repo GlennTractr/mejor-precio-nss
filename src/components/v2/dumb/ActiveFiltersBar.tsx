@@ -24,10 +24,14 @@ function ActiveFiltersBarComponent({
 
   return (
     <div className={cn('flex flex-wrap gap-2 items-center', className)}>
-      <span className="text-sm font-medium">{t('activeFilters')}:</span>
+      <span className="text-sm font-medium font-bold">{t('activeFilters')}:</span>
 
       {activeFilters.map(filter => (
-        <Badge key={filter.id} variant="secondary" className="flex items-center gap-1 max-w-xs">
+        <Badge
+          key={filter.id}
+          variant="outline"
+          className="flex items-center gap-1 max-w-xs hover:border-secondary hover:scale-105 transition-all duration-300"
+        >
           <span className="truncate">
             {formatters.filterLabel
               ? formatters.filterLabel(filter.type, filter.displayValue)
@@ -36,7 +40,7 @@ function ActiveFiltersBarComponent({
           <Button
             variant="ghost"
             size="icon"
-            className="h-4 w-4 p-0 ml-1 hover:bg-destructive/10"
+            className="h-4 w-4 p-0 ml-1 hover:bg-destructive/10 text-secondary"
             onClick={() => onRemoveFilter(filter.id)}
             aria-label={t('removeFilter')}
           >
@@ -48,7 +52,7 @@ function ActiveFiltersBarComponent({
       <Button
         variant="link"
         size="sm"
-        className="text-primary font-medium h-auto p-0"
+        className="text-secondary/70 font-medium h-auto p-0 hover:text-secondary"
         onClick={onClearAll}
       >
         {t('clearAll')}

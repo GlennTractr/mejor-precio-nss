@@ -75,6 +75,7 @@ export interface FilterAccordionSectionProps {
   onToggle: (value: string) => void;
   maxHeight?: number;
   sortBy?: 'count' | 'alphabetical';
+  variant?: 'primary' | 'secondary';
   className?: string;
 }
 

@@ -7,6 +7,21 @@ export function parseUrlToFilters(
   minPossiblePrice: number = 0,
   maxPossiblePrice: number = 1000
 ): FilterState {
+  const rawMinPrice = searchParams.get('min_price');
+  const rawMaxPrice = searchParams.get('max_price');
+  
+  console.log('🔍 [parseUrlToFilters] Raw price values from URL:');
+  console.log('💰 min_price:', rawMinPrice);
+  console.log('💰 max_price:', rawMaxPrice);
+  
+  // Round to 2 decimal places to prevent floating point precision issues
+  const minPrice = rawMinPrice ? Math.round(parseFloat(rawMinPrice) * 100) / 100 : minPossiblePrice;
+  const maxPrice = rawMaxPrice ? Math.round(parseFloat(rawMaxPrice) * 100) / 100 : maxPossiblePrice;
+  
+  console.log('🧮 [parseUrlToFilters] Parsed price values:');
+  console.log('💰 minPrice:', minPrice);
+  console.log('💰 maxPrice:', maxPrice);
+  
   return {
     page: parseInt(searchParams.get('page') || '1', 10),
     itemsPerPage: parseInt(searchParams.get('per_page') || String(defaultItemsPerPage), 10),
@@ -14,10 +29,7 @@ export function parseUrlToFilters(
     selectedBrands: searchParams.get('brands')?.split(',').filter(Boolean) || [],
     selectedModels: searchParams.get('models')?.split(',').filter(Boolean) || [],
     selectedSpecLabels: searchParams.get('specs')?.split(',').filter(Boolean) || [],
-    priceRange: [
-      parseInt(searchParams.get('min_price') || String(minPossiblePrice), 10),
-      parseInt(searchParams.get('max_price') || String(maxPossiblePrice), 10),
-    ],
+    priceRange: [minPrice, maxPrice],
   };
 }
 
@@ -60,8 +72,16 @@ export function filtersToUrlParams(
     filters.priceRange[0] !== minPossiblePrice ||
     filters.priceRange[1] !== maxPossiblePrice
   ) {
-    params.set('min_price', String(filters.priceRange[0]));
-    params.set('max_price', String(filters.priceRange[1]));
+    // Round prices to 2 decimal places to prevent floating point precision issues
+    const roundedMinPrice = Math.round(filters.priceRange[0] * 100) / 100;
+    const roundedMaxPrice = Math.round(filters.priceRange[1] * 100) / 100;
+    
+    console.log('📤 [filtersToUrlParams] Setting price params:');
+    console.log('💰 min_price:', filters.priceRange[0], '-> Rounded:', roundedMinPrice, '-> String:', String(roundedMinPrice));
+    console.log('💰 max_price:', filters.priceRange[1], '-> Rounded:', roundedMaxPrice, '-> String:', String(roundedMaxPrice));
+    
+    params.set('min_price', String(roundedMinPrice));
+    params.set('max_price', String(roundedMaxPrice));
   }
 
   return params;
@@ -110,16 +130,37 @@ export function validateFilterState(
 
 // Check if two filter states are equal (for preventing unnecessary updates)
 export function areFiltersEqual(filters1: FilterState, filters2: FilterState): boolean {
-  return (
-    filters1.page === filters2.page &&
-    filters1.itemsPerPage === filters2.itemsPerPage &&
-    filters1.query === filters2.query &&
-    filters1.priceRange[0] === filters2.priceRange[0] &&
-    filters1.priceRange[1] === filters2.priceRange[1] &&
-    arraysEqual(filters1.selectedBrands, filters2.selectedBrands) &&
-    arraysEqual(filters1.selectedModels, filters2.selectedModels) &&
-    arraysEqual(filters1.selectedSpecLabels, filters2.selectedSpecLabels)
-  );
+  console.log('🔍 [areFiltersEqual] Comparing filter states:');
+  
+  const pageEqual = filters1.page === filters2.page;
+  const itemsPerPageEqual = filters1.itemsPerPage === filters2.itemsPerPage;
+  const queryEqual = filters1.query === filters2.query;
+  
+  // Use tolerance-based comparison for floating-point prices
+  const PRICE_TOLERANCE = 0.005; // 0.5 cent tolerance
+  const priceRange0Equal = Math.abs(filters1.priceRange[0] - filters2.priceRange[0]) < PRICE_TOLERANCE;
+  const priceRange1Equal = Math.abs(filters1.priceRange[1] - filters2.priceRange[1]) < PRICE_TOLERANCE;
+  
+  const brandsEqual = arraysEqual(filters1.selectedBrands, filters2.selectedBrands);
+  const modelsEqual = arraysEqual(filters1.selectedModels, filters2.selectedModels);
+  const specsEqual = arraysEqual(filters1.selectedSpecLabels, filters2.selectedSpecLabels);
+  
+  console.log('📊 [areFiltersEqual] Comparison results:');
+  console.log('  📄 page:', pageEqual, `(${filters1.page} vs ${filters2.page})`);
+  console.log('  📦 itemsPerPage:', itemsPerPageEqual, `(${filters1.itemsPerPage} vs ${filters2.itemsPerPage})`);
+  console.log('  🔍 query:', queryEqual, `("${filters1.query}" vs "${filters2.query}")`);
+  console.log('  💰 priceRange[0]:', priceRange0Equal, `(${filters1.priceRange[0]} vs ${filters2.priceRange[0]}) diff: ${Math.abs(filters1.priceRange[0] - filters2.priceRange[0])}`);
+  console.log('  💰 priceRange[1]:', priceRange1Equal, `(${filters1.priceRange[1]} vs ${filters2.priceRange[1]}) diff: ${Math.abs(filters1.priceRange[1] - filters2.priceRange[1])}`);
+  console.log('  🏷️  brands:', brandsEqual, `(${filters1.selectedBrands.join(',')} vs ${filters2.selectedBrands.join(',')})`);
+  console.log('  🏷️  models:', modelsEqual, `(${filters1.selectedModels.join(',')} vs ${filters2.selectedModels.join(',')})`);
+  console.log('  🏷️  specs:', specsEqual, `(${filters1.selectedSpecLabels.join(',')} vs ${filters2.selectedSpecLabels.join(',')})`);
+
+  const result = pageEqual && itemsPerPageEqual && queryEqual && 
+    priceRange0Equal && priceRange1Equal && brandsEqual && modelsEqual && specsEqual;
+  
+  console.log('🎯 [areFiltersEqual] Final result:', result);
+  
+  return result;
 }
 
 // Helper function to compare arrays
