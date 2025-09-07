@@ -1,0 +1,226 @@
+'use client';
+
+import React from 'react';
+import type { Preview } from '@storybook/nextjs';
+import { NextIntlClientProvider } from 'next-intl';
+import { DocsContainer } from '@storybook/addon-docs/blocks';
+import './preview.css';
+import '../src/app/globals.css';
+
+// Mock translations for Storybook
+const mockMessages = {
+  actions: {
+    login: 'Login',
+    signup: 'Sign up',
+    logout: 'Logout',
+    openSettings: 'Open settings',
+    add: 'Add',
+    buy: 'Buy',
+    seeOffers: 'See offers',
+    buyNow: 'Buy now',
+    notify: {
+      add: 'Add to favorites',
+      remove: 'Remove from favorites',
+    },
+    goHome: 'Go to Home',
+  },
+  category: {
+    results:
+      '{count, plural, =0 {No products found} =1 {1 product found} other {# products found}}',
+    itemsPerPage: 'Items per page:',
+    noResults: 'No products found',
+    tryDifferentFilters: 'Try different filters or search terms',
+    activeFilters: 'Active filters',
+    removeFilter: 'Remove filter',
+    clearAll: 'Clear all',
+    sortBy: 'Sort by:',
+    filters: {
+      search: 'Search',
+      searchPlaceholder: 'Search products...',
+      searchButton: 'Search',
+      price: 'Price Range',
+      brands: 'Brands',
+      models: 'Models',
+      specs: 'Specifications',
+      resetFilters: 'Reset Filters',
+      brand: 'Brand',
+      model: 'Model',
+    },
+  },
+  product: {
+    loading: 'Loading...',
+    error: 'Error: {message}',
+    notFound: 'Product not found',
+    availableFrom: 'Available from',
+    priceAt: 'at {shop}',
+    pricePerUnit: '${price} per unit',
+    filterByQuantity: 'Filter by quantity',
+    showAll: 'All',
+    units: {
+      unit: '{count, plural, =1 {unit} other {units}}',
+    },
+    priceRange: 'Price Range',
+    perUnit: 'per unit',
+    fromMultipleProviders: 'From multiple providers',
+    ourRecommendation: 'Our recommendation',
+    showMore: 'Show more providers',
+    showLess: 'Show fewer providers',
+    similarProducts: 'Similar Products',
+  },
+  filters: {
+    brands: 'Brands',
+    models: 'Models',
+    step: 'Step',
+    gender: 'Gender',
+    priceRange: {
+      title: 'Price per unit range',
+      unit: '€{value}/unit',
+      filter: 'Price per unit: €{min} - €{max}',
+    },
+    search: {
+      title: 'Search',
+      placeholder: 'Search products...',
+      label: 'Search: {query}',
+      clearAria: 'Clear search',
+    },
+    badges: {
+      brand: 'Brand: {name}',
+      model: 'Model: {name}',
+      spec: '{type}: {value}',
+      removeAria: 'Remove {type} filter',
+      clearAll: 'Clear all filters',
+    },
+    products: {
+      found:
+        '{count, plural, =0 {No products found} =1 {1 product found} other {# products found}}',
+      perPage: 'Items per page:',
+      rangePrice: 'Price: {min}MXN - {max}MXN',
+      availableAt: 'Available at: {shops}',
+    },
+  },
+  auth: {
+    signInTitle: 'Sign in to your account',
+    signUpTitle: 'Create your account',
+    signUpSuccess: 'Account created successfully! Please check your email to verify your account.',
+    signingUp: 'Signing up...',
+    signingIn: 'Signing in...',
+    alreadyHaveAccount: 'Already have an account? Sign in',
+    dontHaveAccount: "Don't have an account? Sign up",
+    emailLabel: 'Email address',
+    emailPlaceholder: 'Email address',
+    emailRequired: 'Email is required',
+    emailInvalid: 'Invalid email address',
+    passwordLabel: 'Password',
+    passwordPlaceholder: 'Password',
+    passwordRequired: 'Password is required',
+    passwordMinLength: 'Password must be at least 6 characters',
+    loginToFavorite: 'Login to add to favorites',
+  },
+  home: {
+    welcome: 'Welcome back, {email}',
+    description:
+      'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!',
+    categories: 'Categories',
+    allProducts: 'All Products',
+    heroTitle: 'Find the Best Prices for Your Baby',
+    heroDescription:
+      'Compare baby product prices across major online stores. Find the best deals on diapers, formula, strollers, and everything your baby needs, all in one place.',
+    favorites: 'Your Favorites',
+    noFavorites: "You don't have any favorite products yet",
+  },
+  common: {
+    logo: 'Logo',
+    loading: 'Loading',
+    pleaseWait: 'Please wait...',
+    redirecting: 'Redirecting',
+    error: 'Error',
+    unexpectedError: 'An unexpected error occurred',
+  },
+  navigation: {
+    home: 'Home',
+    mainMenu: 'Main menu',
+    todos: 'Todos',
+    profile: 'Profile',
+    settings: 'Settings',
+    changePassword: 'Change Password',
+    logout: 'Logout',
+    about: 'About',
+    mobile: {
+      menu: 'Mobile Menu',
+    },
+  },
+  settings: {
+    title: 'Settings',
+    theme: {
+      label: 'Theme',
+      placeholder: 'Select theme',
+      light: 'Light',
+      dark: 'Dark',
+      system: 'System',
+    },
+    language: {
+      label: 'Language',
+      placeholder: 'Select language',
+    },
+  },
+  todos: {
+    title: 'Todos',
+    newTodoPlaceholder: 'Add a new todo...',
+    noTodos: 'No todos yet',
+    showAll: 'Show all',
+  },
+  footer: {
+    description: 'Find the best prices for your favorite products',
+    quickLinks: 'Quick Links',
+    legal: 'Legal',
+    connect: 'Connect',
+    home: 'Home',
+    about: 'About',
+    contact: 'Contact',
+    privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service',
+    allRightsReserved: 'All rights reserved',
+  },
+  favorites: {
+    processing: 'Processing favorite',
+    loginRequired: 'You must be logged in to add favorites',
+  },
+};
+
+const IntlDocsContainer = (props: any) => {
+  const { children, context } = props;
+  return (
+    <NextIntlClientProvider locale="en" messages={mockMessages}>
+      <DocsContainer context={context}>{children}</DocsContainer>
+    </NextIntlClientProvider>
+  );
+};
+
+const preview: Preview = {
+  parameters: {
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+    nextjs: {
+      appDirectory: false,
+      rsc: false,
+    },
+    docs: {
+      container: IntlDocsContainer,
+    },
+  },
+  decorators: [
+    Story => (
+      <NextIntlClientProvider locale="en" messages={mockMessages}>
+        <div className="min-h-screen bg-background text-foreground">
+          <Story />
+        </div>
+      </NextIntlClientProvider>
+    ),
+  ],
+};
+
+export default preview;

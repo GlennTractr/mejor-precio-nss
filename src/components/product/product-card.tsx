@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
 import { Product } from '@/types/product';
 import Link from 'next/link';

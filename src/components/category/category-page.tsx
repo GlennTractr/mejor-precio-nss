@@ -1,8 +1,7 @@
 'use client';
 
-import { ProductListFiltered } from '@/components/product/product-list-filtered';
+import { CategoryProductListContainer } from '@/components/v2/smart/CategoryProductListContainer';
 import type { CategoryFilters } from '@/lib/api/category-queries';
-import useCategoryData from '@/hooks/use-category-data';
 
 interface CategoryPageProps {
   categorySlug: string;
@@ -23,36 +22,7 @@ export function CategoryPage({
   minPossiblePrice,
   maxPossiblePrice,
 }: CategoryPageProps) {
-  const {
-    products,
-    totalItems,
-    filters,
-    isLoading,
-    currentPage,
-    itemsPerPage,
-    searchQuery,
-    selectedBrands,
-    selectedModels,
-    selectedSpecLabels,
-    currentPriceRange,
-    setPage,
-    setItemsPerPage,
-    setSearchQuery,
-    toggleBrand,
-    toggleModel,
-    toggleSpecLabel,
-    setPriceRange,
-    resetFilters,
-  } = useCategoryData({
-    categorySlug,
-    initialPage,
-    initialItemsPerPage,
-    initialFilters,
-    minPossiblePrice,
-    maxPossiblePrice,
-  });
-
-  const displayName = categoryName || filters.category_name;
+  const displayName = categoryName || initialFilters.category_name;
 
   return (
     <div className="mx-auto w-full max-w-7xl pb-6">
@@ -60,30 +30,14 @@ export function CategoryPage({
         <div className="mb-6 text-center">
           <h1 className="text-2xl highlight-primary">{displayName}</h1>
         </div>
-        <ProductListFiltered
-          products={products}
-          totalItems={totalItems}
-          isLoading={isLoading}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-          searchQuery={searchQuery}
-          selectedBrands={selectedBrands}
-          selectedModels={selectedModels}
-          selectedSpecLabels={selectedSpecLabels}
-          priceRange={currentPriceRange}
+        <CategoryProductListContainer
+          categorySlug={categorySlug}
+          categoryName={categoryName}
+          initialFilters={initialFilters}
           minPossiblePrice={minPossiblePrice}
           maxPossiblePrice={maxPossiblePrice}
-          brandFacets={filters.facets.brand}
-          modelFacets={filters.facets.model}
-          specFacets={filters.specs_facets}
-          onPageChange={setPage}
-          onItemsPerPageChange={setItemsPerPage}
-          onSearchChange={setSearchQuery}
-          onBrandToggle={toggleBrand}
-          onModelToggle={toggleModel}
-          onSpecLabelToggle={toggleSpecLabel}
-          onPriceRangeChange={setPriceRange}
-          onResetFilters={resetFilters}
+          initialPage={initialPage}
+          initialItemsPerPage={initialItemsPerPage}
         />
       </div>
     </div>
