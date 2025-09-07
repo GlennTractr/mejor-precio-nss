@@ -110,17 +110,19 @@ export function MainNav() {
   };
 
   return (
-    <div className={cn(
-      "sticky top-0 z-50 bg-white transition-shadow duration-200",
-      hasScrolled && "shadow-md"
-    )}>
+    <div
+      className={cn(
+        'sticky top-0 z-50 bg-white transition-shadow duration-200',
+        hasScrolled && 'shadow-md'
+      )}
+    >
       <Sheet open={openMobile} onOpenChange={setOpenMobile}>
         <div className="flex h-16 items-center px-6 justify-between">
           <div className="flex items-center">
             {/* Burger Menu (Mobile) */}
             <SheetTrigger asChild>
               <Button
-                variant="ghost"
+                variant="ghost-secondary"
                 size="icon"
                 className="md:hidden"
                 aria-label={t('navigation.mobile.menu')}
@@ -130,10 +132,7 @@ export function MainNav() {
             </SheetTrigger>
 
             {/* Logo */}
-            <Logo 
-              size="md"
-              className="ml-2 md:ml-0"
-            />
+            <Logo size="md" className="ml-2 md:ml-0" />
 
             {/* Main Menu (Desktop only) */}
             <nav
@@ -191,8 +190,8 @@ export function MainNav() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant="ghost"
-                    className="flex items-center space-x-2 h-9 px-3 text-sm font-medium text-muted-foreground hover:text-primary"
+                    variant="ghost-secondary"
+                    className="flex items-center space-x-2 h-9 px-3 text-sm font-medium"
                   >
                     <User2 className="h-4 w-4" />
                     <span>{currentUser?.data?.email || t('navigation.profile')}</span>
@@ -212,7 +211,7 @@ export function MainNav() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button variant="ghost" className="flex items-center space-x-2" asChild>
+              <Button variant="ghost-secondary" className="flex items-center space-x-2" asChild>
                 <Link href="/auth/login">
                   <LogIn className="h-4 w-4 mr-2" />
                   <span>{t('actions.login')}</span>
@@ -226,9 +225,7 @@ export function MainNav() {
         <SheetContent side="left" className="w-[280px] p-0">
           <div className="flex flex-col h-full">
             <div className="p-4 border-b">
-              <Logo 
-                size="md"
-              />
+              <Logo size="md" />
             </div>
             <nav className="flex-1 p-4" aria-label={t('navigation.mobile.menu')}>
               {items.map(item => (
@@ -252,7 +249,7 @@ export function MainNav() {
                 <>
                   <div className="flex items-center justify-between">
                     <Button
-                      variant="ghost"
+                      variant="secondary"
                       className="w-full flex items-center justify-between h-9 px-3 text-sm font-medium text-muted-foreground hover:text-primary"
                       onClick={() => setShowSettings(true)}
                     >
@@ -272,7 +269,7 @@ export function MainNav() {
                     </div>
                   </Link>
                   <Button
-                    variant="ghost"
+                    variant="secondary"
                     className="w-full flex items-center justify-between h-9 px-3 text-sm font-medium text-muted-foreground hover:text-primary mt-2"
                     onClick={logout}
                   >
@@ -283,7 +280,7 @@ export function MainNav() {
                   </Button>
                 </>
               ) : (
-                <Button variant="ghost" className="w-full flex items-center" asChild>
+                <Button variant="secondary" className="w-full flex items-center" asChild>
                   <Link href="/auth/login">
                     <LogIn className="h-4 w-4 mr-2" />
                     <span>{t('actions.login')}</span>

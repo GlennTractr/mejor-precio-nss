@@ -76,19 +76,19 @@ function FilterSidebarComponent({
     <Card variant="interactive" className={cn('space-y-6 p-4 bg-transparent', className)}>
       {/* Search Section */}
       <div>
-        <h2 className="mb-2 font-medium highlight-primary text-sm">{t('filters.search')}</h2>
+        <h2 className="mb-4 font-medium highlight-secondary text-sm">{t('filters.search')}</h2>
         <form onSubmit={handleSearchSubmit} className="relative">
           <Input
             type="text"
             value={searchInputValue}
             onChange={handleSearchInput}
             placeholder={t('filters.searchPlaceholder')}
-            className="pr-10"
+            className="pr-10 border-secondary/50 hover:border-secondary/80 focus:border-secondary transition-all duration-300 focus:ring-secondary/50"
           />
           <Button
             type="submit"
             size="icon"
-            variant="ghost"
+            variant="ghost-secondary"
             className="absolute right-0 top-0 h-full px-3"
             aria-label={t('filters.searchButton')}
           >
@@ -99,7 +99,7 @@ function FilterSidebarComponent({
 
       {/* Price Range Section */}
       <div>
-        <h2 className="mb-2 font-medium highlight-primary text-sm">{t('filters.price')}</h2>
+        <h2 className="mb-4 font-medium highlight-primary text-sm">{t('filters.price')}</h2>
         <div className="space-y-4">
           <Slider
             min={minPossiblePrice}

@@ -4,15 +4,7 @@ import { memo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Product } from '@/types/product';
 import { ProductCard } from './product-card';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
+import { SharedPagination } from '@/components/ui/shared-pagination';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import {
   Select,
@@ -22,7 +14,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const MAX_VISIBLE_PAGES = 5;
 const PER_PAGE_OPTIONS = [10, 20, 50];
 
 interface ProductListProps {
@@ -57,12 +48,6 @@ function ProductSkeleton() {
   );
 }
 
-function getVisiblePages(currentPage: number, totalPages: number) {
-  const startPage = Math.max(1, currentPage - Math.floor(MAX_VISIBLE_PAGES / 2));
-  const endPage = Math.min(totalPages, startPage + MAX_VISIBLE_PAGES - 1);
-  return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-}
-
 function ProductListComponent({
   products,
   isProductsLoading,
@@ -73,8 +58,6 @@ function ProductListComponent({
   onItemsPerPageChange,
 }: ProductListProps) {
   const t = useTranslations('filters.products');
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const visiblePages = getVisiblePages(currentPage, totalPages);
 
   return (
     <div className="space-y-6">
@@ -109,73 +92,13 @@ function ProductListComponent({
           : products.map(product => <ProductCard key={product.id} product={product} />)}
       </div>
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-              aria-disabled={currentPage === 1}
-              className={`hover:bg-secondary-100/50 ${
-                currentPage === 1 ? 'pointer-events-none opacity-50' : ''
-              }`}
-            />
-          </PaginationItem>
-
-          {visiblePages[0] > 1 && (
-            <>
-              <PaginationItem>
-                <PaginationLink
-                  onClick={() => onPageChange(1)}
-                  className="hover:bg-secondary-100/50"
-                >
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              {visiblePages[0] > 2 && <PaginationEllipsis />}
-            </>
-          )}
-
-          {visiblePages.map(page => (
-            <PaginationItem key={page}>
-              <PaginationLink
-                onClick={() => onPageChange(page)}
-                isActive={currentPage === page}
-                className={
-                  currentPage === page
-                    ? 'bg-secondary text-secondary-foreground hover:bg-secondary-800'
-                    : 'hover:bg-secondary-100/50'
-                }
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-
-          {visiblePages[visiblePages.length - 1] < totalPages && (
-            <>
-              {visiblePages[visiblePages.length - 1] < totalPages - 1 && <PaginationEllipsis />}
-              <PaginationItem>
-                <PaginationLink
-                  onClick={() => onPageChange(totalPages)}
-                  className="hover:bg-secondary-100/50"
-                >
-                  {totalPages}
-                </PaginationLink>
-              </PaginationItem>
-            </>
-          )}
-
-          <PaginationItem>
-            <PaginationNext
-              onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-              aria-disabled={currentPage === totalPages}
-              className={`hover:bg-secondary-100/50 ${
-                currentPage === totalPages ? 'pointer-events-none opacity-50' : ''
-              }`}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <SharedPagination
+        currentPage={currentPage}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        onPageChange={onPageChange}
+        maxPagesToShow={5}
+      />
     </div>
   );
 }

@@ -78,6 +78,11 @@ function FilterAccordionSectionComponent({
                 checked={selectedItems.includes(item.value)}
                 onCheckedChange={() => onToggle(item.value)}
                 disabled={item.disabled || item.count === 0}
+                className={cn(
+                  variant === 'secondary' 
+                    ? 'data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600 border-gray-300' 
+                    : 'data-[state=checked]:bg-primary data-[state=checked]:border-primary border-primary/30'
+                )}
               />
               <label
                 htmlFor={`filter-${title}-${item.value}`}

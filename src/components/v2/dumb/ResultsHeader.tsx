@@ -2,6 +2,13 @@
 
 import { memo } from 'react';
 import { useTranslations } from 'next-intl';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { ResultsHeaderProps } from '../types';
 
@@ -16,7 +23,7 @@ function ResultsHeaderComponent({
 }: ResultsHeaderProps) {
   const t = useTranslations('category');
 
-  const itemsPerPageOptions = [20, 40, 60];
+  const itemsPerPageOptions = [10, 20, 50];
 
   return (
     <div className={cn('flex justify-between items-center', className)}>
@@ -29,34 +36,42 @@ function ResultsHeaderComponent({
         {sortOptions && sortOptions.length > 0 && onSortChange && (
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">{t('sortBy')}</span>
-            <select
+            <Select
               value={currentSort || ''}
-              onChange={e => onSortChange(e.target.value)}
-              className="border rounded p-1 text-sm"
+              onValueChange={onSortChange}
             >
-              {sortOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-[160px] border-secondary-200 focus:ring-secondary">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {sortOptions.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         )}
 
         {/* Items per page */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">{t('itemsPerPage')}</span>
-          <select
-            value={itemsPerPage}
-            onChange={e => onItemsPerPageChange(Number(e.target.value))}
-            className="border rounded p-1 text-sm"
+          <Select
+            value={String(itemsPerPage)}
+            onValueChange={value => onItemsPerPageChange(Number(value))}
           >
-            {itemsPerPageOptions.map(option => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-[100px] border-secondary-200 focus:ring-secondary">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {itemsPerPageOptions.map(option => (
+                <SelectItem key={option} value={String(option)}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>
