@@ -155,7 +155,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         <CardHeader className="flex-grow space-y-1 py-2 px-4 overflow-visible">
           <CardTitle className="text-sm font-medium text-accent line-clamp-2 leading-tight">
-            {product.title}
+            <b>{product.title}</b>
           </CardTitle>
           <CardDescription className="text-sm line-clamp-1 overflow-visible">
             <span className="highlight-primary">{product.brand}</span>

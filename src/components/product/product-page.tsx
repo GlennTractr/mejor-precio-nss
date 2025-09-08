@@ -83,10 +83,9 @@ function ProductPageSkeleton() {
           {/* Right column - Product details skeleton */}
           <div className="space-y-6">
             <div className="space-y-3">
-              <Skeleton className="h-9 w-3/4" />
               <div className="flex items-center gap-2">
-                <Skeleton className="h-5 w-24" />
-                <Skeleton className="h-5 w-24" />
+                <Skeleton className="h-5 w-24 highlight-secondary" />
+                <Skeleton className="h-5 w-24 highlight-primary" />
                 <Skeleton className="h-5 w-24" />
               </div>
               <div className="flex flex-wrap gap-1.5 pt-2">
@@ -98,6 +97,7 @@ function ProductPageSkeleton() {
 
             {/* Price card skeleton */}
             <div className="border-t border-b border-primary-light/20 py-6 space-y-3 bg-white/50 rounded-lg px-4 shadow-sm">
+              <Skeleton className="h-6 w-32 highlight-secondary mb-2" />
               <div className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
                   <div className="flex items-baseline gap-3">
@@ -115,7 +115,7 @@ function ProductPageSkeleton() {
 
             {/* Product list skeleton */}
             <div className="bg-white rounded-lg shadow-sm border border-primary-light/20 p-4 space-y-4">
-              <Skeleton className="h-7 w-48" />
+              <Skeleton className="h-7 w-48 highlight-secondary" />
               <div className="space-y-3">
                 {[1, 2, 3].map(i => (
                   <div
@@ -360,7 +360,9 @@ export function ProductPage({ productSlug }: ProductPageProps) {
           <div className="space-y-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold text-accent">{product.title}</h1>
+                <h1 className="text-3xl font-bold text-accent highlight-primary">
+                  {product.title}
+                </h1>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -422,7 +424,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
             <div className="bg-white rounded-lg shadow-sm border border-primary-light/20 p-4">
               {pricePerUnitData.length > 0 && (
                 <div className="mb-6 pb-4 border-b border-primary-light/20">
-                  <h2 className="text-lg font-medium text-accent mb-2">
+                  <h2 className="text-lg font-medium text-accent mb-2 highlight-secondary">
                     {t('product.priceRange')}
                   </h2>
                   <div className="flex items-baseline gap-3">
@@ -444,7 +446,9 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                 </div>
               )}
 
-              <h2 className="text-lg font-medium text-accent mb-4">{t('product.availableFrom')}</h2>
+              <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary">
+                {t('product.availableFrom')}
+              </h2>
               <div className="space-y-3">
                 {displayedProviders.map((item, index) => (
                   <div
