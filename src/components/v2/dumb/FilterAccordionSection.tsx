@@ -7,6 +7,7 @@ import { FilterItem } from '../types/filters';
 
 function FilterAccordionSectionComponent({
   title,
+  internalId,
   items,
   selectedItems,
   onToggle,
@@ -52,7 +53,7 @@ function FilterAccordionSectionComponent({
   const styles = getVariantStyles();
 
   return (
-    <AccordionItem value={title.toLowerCase().replace(/\s+/g, '-')} className={className}>
+    <AccordionItem value={internalId} className={className}>
       <AccordionTrigger className={cn(styles.trigger, 'hover:no-underline')}>
         <div className="flex-0">
           <div className={styles.title}>{title}</div>
@@ -74,18 +75,18 @@ function FilterAccordionSectionComponent({
           {sortedItems.map((item: FilterItem) => (
             <div key={item.value} className="flex items-center gap-2">
               <Checkbox
-                id={`filter-${title}-${item.value}`}
+                id={`filter-${internalId}-${item.value}`}
                 checked={selectedItems.includes(item.value)}
                 onCheckedChange={() => onToggle(item.value)}
                 disabled={item.disabled || item.count === 0}
                 className={cn(
-                  variant === 'secondary' 
-                    ? 'data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600 border-gray-300' 
+                  variant === 'secondary'
+                    ? 'data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600 border-gray-300'
                     : 'data-[state=checked]:bg-primary data-[state=checked]:border-primary border-primary/30'
                 )}
               />
               <label
-                htmlFor={`filter-${title}-${item.value}`}
+                htmlFor={`filter-${internalId}-${item.value}`}
                 className={cn(
                   'text-sm flex-1 cursor-pointer',
                   variant === 'secondary' ? 'text-gray-600' : '',

@@ -38,21 +38,27 @@ function AlternatingFilterSectionsComponent({
   onToggle,
   maxHeight = 160,
   startVariant = 'primary',
-  className
+  className,
 }: AlternatingFilterSectionsProps) {
   return (
     <div className={className}>
       {specFilters.map((specFilter, index) => {
         // Alternate variants based on index and starting variant
         const isEven = index % 2 === 0;
-        const variant = startVariant === 'primary' 
-          ? (isEven ? 'primary' : 'secondary')
-          : (isEven ? 'secondary' : 'primary');
+        const variant =
+          startVariant === 'primary'
+            ? isEven
+              ? 'primary'
+              : 'secondary'
+            : isEven
+            ? 'secondary'
+            : 'primary';
 
         return (
           <FilterAccordionSection
             key={specFilter.type}
             title={specFilter.type}
+            internalId={`spec-${specFilter.type}`}
             items={specFilter.labels}
             selectedItems={specFilter.selectedItems}
             onToggle={onToggle}

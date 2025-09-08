@@ -70,6 +70,7 @@ export interface ProductPaginationProps {
 // FilterAccordionSection component props
 export interface FilterAccordionSectionProps {
   title: string;
+  internalId: string;
   items: FilterItem[];
   selectedItems: string[];
   onToggle: (value: string) => void;

@@ -118,11 +118,12 @@ function FilterSidebarComponent({
       </div>
 
       {/* Filter Accordion Sections */}
-      <Accordion type="multiple" defaultValue={['brands', 'models', 'specs']}>
+      <Accordion type="multiple" defaultValue={['brands', 'models']}>
         {/* Brand Filters */}
         {brandFilters.items.length > 0 && (
           <FilterAccordionSection
             title={t('filters.brands')}
+            internalId="brands"
             items={brandFilters.items}
             selectedItems={brandFilters.selectedItems}
             onToggle={handleBrandToggle}
@@ -134,6 +135,7 @@ function FilterSidebarComponent({
         {modelFilters.items.length > 0 && (
           <FilterAccordionSection
             title={t('filters.models')}
+            internalId="models"
             items={modelFilters.items}
             selectedItems={modelFilters.selectedItems}
             onToggle={handleModelToggle}
