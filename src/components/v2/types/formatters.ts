@@ -18,8 +18,8 @@ export interface FilterDisplayFormatters {
 
 // URL formatting functions
 export interface UrlFormatters {
-  buildFilterParams: (filters: Record<string, any>) => URLSearchParams;
-  parseFilterParams: (params: URLSearchParams) => Record<string, any>;
+  buildFilterParams: (filters: Record<string, unknown>) => URLSearchParams;
+  parseFilterParams: (params: URLSearchParams) => Record<string, unknown>;
 }
 
 // Combined formatter interface

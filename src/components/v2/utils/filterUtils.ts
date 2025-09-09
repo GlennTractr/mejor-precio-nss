@@ -1,4 +1,4 @@
-import { FilterState, ActiveFilter, FilterType } from '../types';
+import { FilterState, ActiveFilter } from '../types';
 
 // Check if any filters are currently active
 export function hasActiveFilters(
@@ -66,10 +66,7 @@ export function getActiveFilters(
   });
 
   // Price filter
-  if (
-    filters.priceRange[0] > minPossiblePrice ||
-    filters.priceRange[1] < maxPossiblePrice
-  ) {
+  if (filters.priceRange[0] > minPossiblePrice || filters.priceRange[1] < maxPossiblePrice) {
     activeFilters.push({
       id: 'price',
       type: 'price',
@@ -112,10 +109,7 @@ export function removeFilterById(
 }
 
 // Toggle a filter value (add/remove)
-export function toggleFilterValue(
-  currentValues: string[],
-  value: string
-): string[] {
+export function toggleFilterValue(currentValues: string[], value: string): string[] {
   if (currentValues.includes(value)) {
     return currentValues.filter(v => v !== value);
   }

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { AlternatingFilterSections } from '../../../components/v2/dumb/AlternatingFilterSections';
 import { Accordion } from '@/components/ui/accordion';
 
@@ -82,7 +82,7 @@ export const Default: Story = {
     startVariant: 'primary',
   },
   decorators: [
-    (Story) => (
+    Story => (
       <div className="w-80 max-w-sm">
         <Accordion type="multiple" defaultValue={mockSpecFilters.map(f => f.type)}>
           <Story />

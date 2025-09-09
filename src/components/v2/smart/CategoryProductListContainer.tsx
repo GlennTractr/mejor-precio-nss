@@ -4,21 +4,21 @@ import { useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getCategoryData, getInitialFilters } from '@/lib/api/category-queries';
 import type { CategoryFilters } from '@/lib/api/category-queries';
-import { 
-  ProductGrid, 
-  FilterSidebar, 
-  ActiveFiltersBar, 
-  ResultsHeader, 
-  ProductPagination 
+import {
+  ProductGrid,
+  FilterSidebar,
+  ActiveFiltersBar,
+  ResultsHeader,
+  ProductPagination,
 } from '../dumb';
 import { useProductFilters } from './hooks';
-import { 
-  getActiveFilters, 
-  hasActiveFilters, 
-  createDefaultFormatters, 
-  removeFilterById 
+import {
+  getActiveFilters,
+  hasActiveFilters,
+  createDefaultFormatters,
+  removeFilterById,
 } from '../utils';
-import { FilterState, FilterType } from '../types';
+import { FilterType } from '../types';
 
 interface CategoryProductListContainerProps {
   categorySlug: string;
@@ -39,7 +39,7 @@ export function CategoryProductListContainer({
   initialPage = 1,
   initialItemsPerPage = 20,
 }: CategoryProductListContainerProps) {
-  
+  console.debug(categoryName);
   // Filter state management
   const {
     filters,
@@ -97,7 +97,7 @@ export function CategoryProductListContainer({
   // Transform data for V2 components
   const transformedData = useMemo(() => {
     const currentFilters = categoryData?.filters || filtersData;
-    
+
     return {
       products: categoryData?.products || [],
       totalItems: categoryData?.totalItems || 0,
@@ -124,7 +124,7 @@ export function CategoryProductListContainer({
           count: label.count,
           disabled: label.count === 0,
         })),
-        selectedItems: filters.selectedSpecLabels.filter(selectedSpec => 
+        selectedItems: filters.selectedSpecLabels.filter(selectedSpec =>
           specFacet.labels.some(label => label.value === selectedSpec)
         ),
       })),
@@ -135,78 +135,89 @@ export function CategoryProductListContainer({
   const formatters = useMemo(() => createDefaultFormatters(), []);
 
   // Active filters logic
-  const activeFilters = useMemo(() => 
-    getActiveFilters(
-      filters,
-      minPossiblePrice,
-      maxPossiblePrice,
-      formatters.price
-    ), 
+  const activeFilters = useMemo(
+    () => getActiveFilters(filters, minPossiblePrice, maxPossiblePrice, formatters.price),
     [filters, minPossiblePrice, maxPossiblePrice, formatters.price]
   );
 
-  const hasActiveFiltersFlag = useMemo(() =>
-    hasActiveFilters(filters, minPossiblePrice, maxPossiblePrice),
+  const hasActiveFiltersFlag = useMemo(
+    () => hasActiveFilters(filters, minPossiblePrice, maxPossiblePrice),
     [filters, minPossiblePrice, maxPossiblePrice]
   );
 
   // Handle active filter removal
-  const handleRemoveFilter = useCallback((filterId: string) => {
-    const updates = removeFilterById(filters, filterId, minPossiblePrice, maxPossiblePrice);
-    
-    // Apply the updates using individual setters
-    Object.entries(updates).forEach(([key, value]) => {
-      switch (key) {
-        case 'query':
-          setQuery(value as string);
-          break;
-        case 'selectedBrands':
-          // This is more complex, we need to set the entire array
-          // We'll handle this case by case
-          if (filterId.startsWith('brand-')) {
-            const brandToRemove = filterId.replace('brand-', '');
-            toggleBrand(brandToRemove);
-          }
-          break;
-        case 'selectedModels':
-          if (filterId.startsWith('model-')) {
-            const modelToRemove = filterId.replace('model-', '');
-            toggleModel(modelToRemove);
-          }
-          break;
-        case 'selectedSpecLabels':
-          if (filterId.startsWith('spec-')) {
-            const specToRemove = filterId.replace('spec-', '');
-            toggleSpec(specToRemove);
-          }
-          break;
-        case 'priceRange':
-          setPriceRange(value as [number, number]);
-          break;
-        case 'page':
-          setPage(value as number);
-          break;
-      }
-    });
-  }, [filters, minPossiblePrice, maxPossiblePrice, setQuery, toggleBrand, toggleModel, toggleSpec, setPriceRange, setPage]);
+  const handleRemoveFilter = useCallback(
+    (filterId: string) => {
+      const updates = removeFilterById(filters, filterId, minPossiblePrice, maxPossiblePrice);
+
+      // Apply the updates using individual setters
+      Object.entries(updates).forEach(([key, value]) => {
+        switch (key) {
+          case 'query':
+            setQuery(value as string);
+            break;
+          case 'selectedBrands':
+            // This is more complex, we need to set the entire array
+            // We'll handle this case by case
+            if (filterId.startsWith('brand-')) {
+              const brandToRemove = filterId.replace('brand-', '');
+              toggleBrand(brandToRemove);
+            }
+            break;
+          case 'selectedModels':
+            if (filterId.startsWith('model-')) {
+              const modelToRemove = filterId.replace('model-', '');
+              toggleModel(modelToRemove);
+            }
+            break;
+          case 'selectedSpecLabels':
+            if (filterId.startsWith('spec-')) {
+              const specToRemove = filterId.replace('spec-', '');
+              toggleSpec(specToRemove);
+            }
+            break;
+          case 'priceRange':
+            setPriceRange(value as [number, number]);
+            break;
+          case 'page':
+            setPage(value as number);
+            break;
+        }
+      });
+    },
+    [
+      filters,
+      minPossiblePrice,
+      maxPossiblePrice,
+      setQuery,
+      toggleBrand,
+      toggleModel,
+      toggleSpec,
+      setPriceRange,
+      setPage,
+    ]
+  );
 
   // Handle filter toggle for different types
-  const handleFilterToggle = useCallback((type: FilterType, value: string) => {
-    switch (type) {
-      case 'brand':
-        toggleBrand(value);
-        break;
-      case 'model':
-        toggleModel(value);
-        break;
-      case 'spec':
-        toggleSpec(value);
-        break;
-      default:
-        // Handle other filter types if needed
-        break;
-    }
-  }, [toggleBrand, toggleModel, toggleSpec]);
+  const handleFilterToggle = useCallback(
+    (type: FilterType, value: string) => {
+      switch (type) {
+        case 'brand':
+          toggleBrand(value);
+          break;
+        case 'model':
+          toggleModel(value);
+          break;
+        case 'spec':
+          toggleSpec(value);
+          break;
+        default:
+          // Handle other filter types if needed
+          break;
+      }
+    },
+    [toggleBrand, toggleModel, toggleSpec]
+  );
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-4">

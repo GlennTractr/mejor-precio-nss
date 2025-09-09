@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { fn } from 'storybook/test';
 import { ActiveFiltersBar } from '@/components/v2/dumb/ActiveFiltersBar';
-import { ActiveFilter, FilterType } from '@/components/v2/types';
+import { FilterType } from '@/components/v2/types';
 
 // Mock formatters
 const mockFormatters = {
-  price: (price: number) => new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-  }).format(price),
+  price: (price: number) =>
+    new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(price),
   filterLabel: (type: FilterType, value: string) => {
     const typeLabels: Record<string, string> = {
       search: 'Search',
@@ -142,7 +143,12 @@ export const MultipleFilters: Story = {
 export const ManyFilters: Story = {
   args: {
     activeFilters: [
-      { id: 'search', type: 'search', label: 'Search', displayValue: 'smartphone with great camera' },
+      {
+        id: 'search',
+        type: 'search',
+        label: 'Search',
+        displayValue: 'smartphone with great camera',
+      },
       { id: 'brand-samsung', type: 'brand', label: 'Brand', displayValue: 'Samsung' },
       { id: 'brand-apple', type: 'brand', label: 'Brand', displayValue: 'Apple' },
       { id: 'brand-google', type: 'brand', label: 'Brand', displayValue: 'Google' },

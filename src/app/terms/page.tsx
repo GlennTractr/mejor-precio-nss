@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 export default async function TermsOfServicePage() {
   const t = await getTranslations('terms');
+  console.debug('🚀 [TermsOfServicePage] Initializing with t:', t);
 
   return (
     <div className="mx-auto max-w-4xl p-6 my-6">

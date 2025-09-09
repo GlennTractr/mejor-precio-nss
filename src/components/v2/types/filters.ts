@@ -1,5 +1,4 @@
-import { FacetValue, SpecFacet, Product } from '@/types/product';
-import { ReactNode } from 'react';
+import { FacetValue, SpecFacet } from '@/types/product';
 
 // Core filter types
 export interface FilterState {

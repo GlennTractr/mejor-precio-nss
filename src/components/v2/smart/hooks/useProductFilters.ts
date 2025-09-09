@@ -1,11 +1,11 @@
 import { useCallback, useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FilterState } from '../../types';
-import { 
-  parseUrlToFilters, 
-  filtersToUrlParams, 
-  areFiltersEqual, 
-  validateFilterState 
+import {
+  parseUrlToFilters,
+  filtersToUrlParams,
+  areFiltersEqual,
+  validateFilterState,
 } from '../../utils';
 
 interface UseProductFiltersProps {
@@ -23,6 +23,7 @@ export function useProductFilters({
   maxPossiblePrice,
   onFiltersChange,
 }: UseProductFiltersProps) {
+  console.debug('🚀 [useProductFilters] Initializing with initialPage:', initialPage);
   const router = useRouter();
   const pathname = usePathname() || '';
   const searchParams = useSearchParams();
@@ -34,53 +35,56 @@ export function useProductFilters({
     minPossiblePrice,
     maxPossiblePrice
   );
-  
+
   console.log('🚀 [useProductFilters] Initializing with URL params:', searchParams?.toString());
   console.log('🎯 [useProductFilters] Initial filters parsed:', initialFilters);
 
   // Validate and set initial filters
-  const [filters, setFilters] = useState<FilterState>(() => 
+  const [filters, setFilters] = useState<FilterState>(() =>
     validateFilterState(initialFilters, minPossiblePrice, maxPossiblePrice)
   );
 
   // Update filters function with validation
-  const updateFilters = useCallback((newFilters: Partial<FilterState>) => {
-    setFilters(prevFilters => {
-      const updatedFilters = { ...prevFilters, ...newFilters };
-      const validatedFilters = validateFilterState(
-        updatedFilters,
-        minPossiblePrice,
-        maxPossiblePrice
-      );
-      
-      return validatedFilters;
-    });
-  }, [minPossiblePrice, maxPossiblePrice]);
+  const updateFilters = useCallback(
+    (newFilters: Partial<FilterState>) => {
+      setFilters(prevFilters => {
+        const updatedFilters = { ...prevFilters, ...newFilters };
+        const validatedFilters = validateFilterState(
+          updatedFilters,
+          minPossiblePrice,
+          maxPossiblePrice
+        );
+
+        return validatedFilters;
+      });
+    },
+    [minPossiblePrice, maxPossiblePrice]
+  );
 
   // Individual filter update functions
-  const updateFilter = useCallback(<K extends keyof FilterState>(
-    key: K,
-    value: FilterState[K]
-  ) => {
-    // Reset to page 1 for most filter changes
-    const updates: Partial<FilterState> = { [key]: value };
-    if (key !== 'page') {
-      updates.page = 1;
-    }
-    updateFilters(updates);
-  }, [updateFilters]);
+  const updateFilter = useCallback(
+    <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
+      // Reset to page 1 for most filter changes
+      const updates: Partial<FilterState> = { [key]: value };
+      if (key !== 'page') {
+        updates.page = 1;
+      }
+      updateFilters(updates);
+    },
+    [updateFilters]
+  );
 
-  const toggleFilterValue = useCallback((
-    type: 'selectedBrands' | 'selectedModels' | 'selectedSpecLabels',
-    value: string
-  ) => {
-    const currentValues = filters[type];
-    const newValues = currentValues.includes(value)
-      ? currentValues.filter(v => v !== value)
-      : [...currentValues, value];
-    
-    updateFilter(type, newValues);
-  }, [filters, updateFilter]);
+  const toggleFilterValue = useCallback(
+    (type: 'selectedBrands' | 'selectedModels' | 'selectedSpecLabels', value: string) => {
+      const currentValues = filters[type];
+      const newValues = currentValues.includes(value)
+        ? currentValues.filter(v => v !== value)
+        : [...currentValues, value];
+
+      updateFilter(type, newValues);
+    },
+    [filters, updateFilter]
+  );
 
   const resetAllFilters = useCallback(() => {
     const resetFilters: FilterState = {
@@ -99,14 +103,14 @@ export function useProductFilters({
   useEffect(() => {
     console.log('🔄 [useProductFilters] URL update effect triggered');
     console.log('📊 [useProductFilters] Current filters:', filters);
-    
+
     const params = filtersToUrlParams(
       filters,
       minPossiblePrice,
       maxPossiblePrice,
       initialItemsPerPage
     );
-    
+
     const queryString = params.toString();
     const url = queryString ? `${pathname}?${queryString}` : pathname;
     const currentUrl = `${pathname}?${searchParams?.toString() || ''}`;
@@ -137,19 +141,15 @@ export function useProductFilters({
   useEffect(() => {
     console.log('📥 [useProductFilters] URL sync effect triggered');
     console.log('🔗 [useProductFilters] Current searchParams:', searchParams?.toString());
-    
+
     const urlFilters = parseUrlToFilters(
       searchParams || new URLSearchParams(),
       initialItemsPerPage,
       minPossiblePrice,
       maxPossiblePrice
     );
-    
-    const validatedUrlFilters = validateFilterState(
-      urlFilters,
-      minPossiblePrice,
-      maxPossiblePrice
-    );
+
+    const validatedUrlFilters = validateFilterState(urlFilters, minPossiblePrice, maxPossiblePrice);
 
     console.log('🆚 [useProductFilters] URL filters vs current filters:');
     console.log('📊 URL filters:', validatedUrlFilters);
@@ -170,12 +170,12 @@ export function useProductFilters({
     updateFilters,
     toggleFilterValue,
     resetAllFilters,
-    
+
     // Convenience methods for specific filter types
     toggleBrand: (brand: string) => toggleFilterValue('selectedBrands', brand),
     toggleModel: (model: string) => toggleFilterValue('selectedModels', model),
     toggleSpec: (spec: string) => toggleFilterValue('selectedSpecLabels', spec),
-    
+
     setPage: (page: number) => updateFilter('page', page),
     setItemsPerPage: (perPage: number) => updateFilters({ itemsPerPage: perPage, page: 1 }),
     setQuery: (query: string) => updateFilters({ query, page: 1 }),

@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 export default async function ContactPage() {
   const t = await getTranslations('contact');
+  console.debug('🚀 [ContactPage] Initializing with t:', t);
 
   return (
     <div className="mx-auto max-w-4xl p-6 my-6">

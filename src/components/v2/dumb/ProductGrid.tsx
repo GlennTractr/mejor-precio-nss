@@ -4,7 +4,6 @@ import { memo } from 'react';
 import { useTranslations } from 'next-intl';
 import { ProductCard } from '@/components/product/product-card';
 import { Loading } from '@/components/ui/loading';
-import { LoadingSkeletons } from './LoadingSkeletons';
 import { cn } from '@/lib/utils';
 import { ProductGridProps } from '../types';
 
@@ -16,6 +15,7 @@ function ProductGridComponent({
   loadingComponent,
   className,
 }: ProductGridProps) {
+  console.debug('🚀 [ProductGridComponent] Initializing with itemsPerPage:', itemsPerPage);
   const t = useTranslations('category');
 
   // Default empty state
@@ -33,11 +33,9 @@ function ProductGridComponent({
         <Loading size="md" />
       </div>
     );
-    
+
     return (
-      <div className={cn('w-full', className)}>
-        {loadingComponent || defaultLoadingComponent}
-      </div>
+      <div className={cn('w-full', className)}>{loadingComponent || defaultLoadingComponent}</div>
     );
   }
 

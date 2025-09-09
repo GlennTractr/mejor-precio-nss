@@ -1,10 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterType, PriceFormatterOptions } from '../types';
 
 // Default price formatter (matches existing implementation)
-export function formatPrice(
-  price: number,
-  options: PriceFormatterOptions = {}
-): string {
+export function formatPrice(price: number, options: PriceFormatterOptions = {}): string {
   const {
     locale = 'es-ES',
     currency = 'EUR',
@@ -88,7 +86,7 @@ export function debounce<T extends (...args: any[]) => any>(
     }
 
     timeoutId = setTimeout(() => {
-      func.apply(null, args);
+      func(...args);
     }, delay);
   };
 }

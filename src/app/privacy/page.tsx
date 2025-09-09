@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 export default async function PrivacyPolicyPage() {
   const t = await getTranslations('privacy');
+  console.debug('🚀 [PrivacyPolicyPage] Initializing with t:', t);
 
   return (
     <div className="mx-auto max-w-4xl p-6 my-6">
