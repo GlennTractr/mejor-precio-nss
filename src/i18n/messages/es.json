@@ -40,6 +40,7 @@
         "error": "Error: {message}",
         "notFound": "Producto no encontrado",
         "availableFrom": "Disponible en",
+        "comparePrices": "Comparar precios",
         "priceAt": "en {shop}",
         "pricePerUnit": "${price} por unidad",
         "filterByQuantity": "Filtrar por cantidad",

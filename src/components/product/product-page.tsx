@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRouter } from 'next/navigation';
 import { SimilarProductsCarousel } from './similar-products-carousel';
+import { Button } from '../ui/button';
 
 type ProductSellContext = {
   price: number;
@@ -327,13 +328,6 @@ export function ProductPage({ productSlug }: ProductPageProps) {
   // Sort by price per unit to find the best deal
   const sortedPricePerUnit = [...pricePerUnitData].sort((a, b) => a.pricePerUnit - b.pricePerUnit);
 
-  // Calculate price range
-  const minPricePerUnit = Math.min(...pricePerUnitData.map(p => p.pricePerUnit));
-  const maxPricePerUnit = Math.max(...pricePerUnitData.map(p => p.pricePerUnit));
-
-  // Get unique providers
-  const uniqueProviders = Array.from(new Set(pricePerUnitData.map(p => p.shop)));
-
   // Limit displayed providers based on state
   const displayedProviders = showAllProviders ? sortedPricePerUnit : sortedPricePerUnit.slice(0, 5);
   const hasMoreProviders = sortedPricePerUnit.length > 5;
@@ -420,41 +414,13 @@ export function ProductPage({ productSlug }: ProductPageProps) {
               )}
             </div>
 
-            {/* Integrated Provider List with Price Range Header */}
-            <div className="bg-white rounded-lg shadow-sm border border-primary-light/20 p-4">
-              {pricePerUnitData.length > 0 && (
-                <div className="mb-6 pb-4 border-b border-primary-light/20">
-                  <h2 className="text-lg font-medium text-accent mb-2 highlight-secondary">
-                    {t('product.priceRange')}
-                  </h2>
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-2xl font-bold text-accent">
-                      ${minPricePerUnit.toFixed(2)} - ${maxPricePerUnit.toFixed(2)}
-                    </span>
-                    <span className="text-sm text-muted-foreground">{t('product.perUnit')}</span>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 mt-3">
-                    {uniqueProviders.map((provider, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-light/10 text-primary"
-                      >
-                        {provider}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary">
-                {t('product.availableFrom')}
-              </h2>
-              <div className="space-y-3">
-                {displayedProviders.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-white rounded-lg border border-primary-light/20 hover:border-primary-light/50 transition-colors shadow-sm"
-                  >
+            <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary">
+              {t('product.comparePrices')}
+            </h2>
+            <div className="space-y-3">
+              {displayedProviders.map((item, index) => (
+                <div key={index} className="space-y-2">
+                  <div className="flex items-center justify-between py-1 px-2 bg-white rounded-lg border border-secondary/20 hover:border-secondary/50 hover:scale-[1.02] transition-all duration-200 ease-in-out shadow-sm hover:shadow-md">
                     <div className="flex items-center gap-4">
                       {/* Shop Logo */}
                       <div className="relative w-12 h-12 flex-shrink-0 bg-white rounded-lg p-1 border border-primary-light/10">
@@ -470,16 +436,18 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-medium text-accent">{item.shop}</span>
-                          {index === 0 && (
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-600 text-white shadow-sm">
-                              {t('product.ourRecommendation')}
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {item.quantity} {t('product.units.unit', { count: item.quantity })}
                         </div>
                       </div>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="font-medium text-accent">
+                        {item.quantity} {t('product.units.unit', { count: item.quantity })}
+                      </span>
+                      {index === 0 && (
+                        <div className="bg-primary text-secondary text-xs font-medium px-2 py-1 rounded-full shadow-sm">
+                          {t('product.ourRecommendation')}
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center gap-6">
                       {/* Price Info */}
@@ -487,36 +455,38 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                         <div className="text-lg font-semibold text-accent">
                           ${item.price.toFixed(2)}
                         </div>
-                        <div className="text-sm text-primary-dark">
+                        <div className="text-xs text-primary-dark">
                           {t('product.pricePerUnit', {
                             price: item.pricePerUnit.toFixed(2),
                           })}
                         </div>
                       </div>
+                    </div>
+                    <div className="flex items-center gap-2">
                       {/* Buy Button */}
-                      <a
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+                      <Button
+                        variant="outline-secondary"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => window.open(item.link, '_blank')}
                       >
                         {t('actions.buy')}
-                      </a>
+                      </Button>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
 
-                {hasMoreProviders && (
-                  <div className="flex justify-center pt-2">
-                    <button
-                      onClick={() => setShowAllProviders(!showAllProviders)}
-                      className="text-sm font-medium text-primary hover:text-primary-dark focus:outline-none focus:underline transition-colors"
-                    >
-                      {showAllProviders ? t('product.showLess') : t('product.showMore')}
-                    </button>
-                  </div>
-                )}
-              </div>
+              {hasMoreProviders && (
+                <div className="flex justify-center pt-2">
+                  <button
+                    onClick={() => setShowAllProviders(!showAllProviders)}
+                    className="text-sm font-medium text-primary hover:text-primary-dark focus:outline-none focus:underline transition-colors"
+                  >
+                    {showAllProviders ? t('product.showLess') : t('product.showMore')}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
