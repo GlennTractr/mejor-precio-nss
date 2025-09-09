@@ -130,15 +130,17 @@ export default async function Page({ params, searchParams }: PageProps) {
   const { initialFilters, categoryName } = await getInitialFiltersAndName(categorySlug);
 
   return (
-    <CategoryPage
-      categorySlug={categorySlug}
-      categoryName={categoryName}
-      initialPage={currentPage}
-      initialItemsPerPage={itemsPerPage}
-      initialFilters={initialFilters}
-      minPossiblePrice={initialFilters.price_range.min}
-      maxPossiblePrice={initialFilters.price_range.max}
-    />
+    <div className="py-6 my-6">
+      <CategoryPage
+        categorySlug={categorySlug}
+        categoryName={categoryName}
+        initialPage={currentPage}
+        initialItemsPerPage={itemsPerPage}
+        initialFilters={initialFilters}
+        minPossiblePrice={initialFilters.price_range.min}
+        maxPossiblePrice={initialFilters.price_range.max}
+      />
+    </div>
   );
 }
 
