@@ -40,12 +40,13 @@ const meta: Meta<typeof FilterAccordionSection> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Reusable accordion section for filter categories with sorting and scroll support.',
+        component:
+          'Reusable accordion section for filter categories with sorting and scroll support.',
       },
     },
   },
   decorators: [
-    (Story) => (
+    Story => (
       <div className="w-80">
         <Accordion type="multiple" defaultValue={['test']}>
           <Story />

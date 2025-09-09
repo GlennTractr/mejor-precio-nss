@@ -51,8 +51,8 @@ function AlternatingFilterSectionsComponent({
               ? 'primary'
               : 'secondary'
             : isEven
-            ? 'secondary'
-            : 'primary';
+              ? 'secondary'
+              : 'primary';
 
         return (
           <FilterAccordionSection

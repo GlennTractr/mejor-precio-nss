@@ -37,7 +37,7 @@ async function getCategories(): Promise<Category[]> {
               ? await supabase.storage.from(category.image_bucket).getPublicUrl(category.image_path)
                   ?.data?.publicUrl
               : undefined,
-        } as Category)
+        }) as Category
     )
   );
 }

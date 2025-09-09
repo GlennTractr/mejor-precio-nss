@@ -9,7 +9,8 @@ const meta: Meta<typeof ProductPagination> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Pagination component for navigating through product pages with ellipsis support for many pages.',
+        component:
+          'Pagination component for navigating through product pages with ellipsis support for many pages.',
       },
     },
   },

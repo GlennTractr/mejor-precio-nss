@@ -60,7 +60,8 @@ const meta: Meta<typeof FilterSidebar> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Complete filter sidebar with search, price range, and accordion sections for different filter types.',
+        component:
+          'Complete filter sidebar with search, price range, and accordion sections for different filter types.',
       },
     },
   },

@@ -218,16 +218,19 @@ export function CategoryProductList({
     }
     if (selectedSpecLabels.length > 0) {
       // Group spec labels by their type
-      const specLabelsByType = selectedSpecLabels.reduce((acc, label) => {
-        const specType = specFacets.find(spec => spec.labels.some(l => l.value === label))?.type;
-        if (specType) {
-          if (!acc[specType]) {
-            acc[specType] = [];
+      const specLabelsByType = selectedSpecLabels.reduce(
+        (acc, label) => {
+          const specType = specFacets.find(spec => spec.labels.some(l => l.value === label))?.type;
+          if (specType) {
+            if (!acc[specType]) {
+              acc[specType] = [];
+            }
+            acc[specType].push(label);
           }
-          acc[specType].push(label);
-        }
-        return acc;
-      }, {} as Record<string, string[]>);
+          return acc;
+        },
+        {} as Record<string, string[]>
+      );
 
       // Create filter conditions for each spec type
       const specFilters = Object.entries(specLabelsByType)

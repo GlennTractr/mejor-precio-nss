@@ -8,7 +8,8 @@ const meta: Meta<typeof Loading> = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'A loading component that displays an animated logo with fade in/out effect. Perfect for showing loading states across your application.',
+        component:
+          'A loading component that displays an animated logo with fade in/out effect. Perfect for showing loading states across your application.',
       },
     },
   },
@@ -125,14 +126,14 @@ export const SizeComparison: Story = {
           <Loading size="sm" duration={2} />
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-center text-gray-900">Medium</h3>
         <div className="h-32 border border-gray-200 rounded-lg">
           <Loading size="md" duration={2} />
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-center text-gray-900">Large</h3>
         <div className="h-32 border border-gray-200 rounded-lg">
@@ -160,14 +161,14 @@ export const AnimationSpeeds: Story = {
           <Loading size="md" duration={1} />
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-center text-gray-900">Normal (2s)</h3>
         <div className="h-32 border border-gray-200 rounded-lg">
           <Loading size="md" duration={2} />
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-center text-gray-900">Slow (4s)</h3>
         <div className="h-32 border border-gray-200 rounded-lg">
@@ -179,7 +180,8 @@ export const AnimationSpeeds: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of different animation speeds to help choose the right timing for your use case',
+        story:
+          'Comparison of different animation speeds to help choose the right timing for your use case',
       },
     },
   },

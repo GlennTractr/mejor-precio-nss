@@ -11,9 +11,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        'mulish': ['var(--font-mulish)', 'sans-serif'],
-        'quicksand': ['var(--font-quicksand)', 'sans-serif'],
-        'sans': ['var(--font-mulish)', 'sans-serif'],
+        mulish: ['var(--font-mulish)', 'sans-serif'],
+        quicksand: ['var(--font-quicksand)', 'sans-serif'],
+        sans: ['var(--font-mulish)', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

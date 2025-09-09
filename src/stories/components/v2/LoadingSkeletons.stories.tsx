@@ -8,7 +8,8 @@ const meta: Meta<typeof LoadingSkeletons> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Flexible skeleton loading components for different content types with customizable count.',
+        component:
+          'Flexible skeleton loading components for different content types with customizable count.',
       },
     },
   },

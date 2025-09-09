@@ -36,10 +36,7 @@ function ResultsHeaderComponent({
         {sortOptions && sortOptions.length > 0 && onSortChange && (
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">{t('sortBy')}</span>
-            <Select
-              value={currentSort || ''}
-              onValueChange={onSortChange}
-            >
+            <Select value={currentSort || ''} onValueChange={onSortChange}>
               <SelectTrigger className="w-[160px] border-secondary-200 focus:ring-secondary">
                 <SelectValue />
               </SelectTrigger>

@@ -28,8 +28,8 @@ const createMockProducts = (count: number): Product[] => {
     ...mockProduct,
     id: String(i + 1),
     title: `Product ${i + 1} - ${mockProduct.title}`,
-    best_price_per_unit: mockProduct.best_price_per_unit + (i * 50),
-    max_price_per_unit: mockProduct.max_price_per_unit + (i * 100),
+    best_price_per_unit: mockProduct.best_price_per_unit + i * 50,
+    max_price_per_unit: mockProduct.max_price_per_unit + i * 100,
   }));
 };
 
@@ -40,7 +40,8 @@ const meta: Meta<typeof ProductGrid> = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'A pure presentation component that displays a grid of products with loading and empty states.',
+        component:
+          'A pure presentation component that displays a grid of products with loading and empty states.',
       },
     },
   },
@@ -151,9 +152,7 @@ export const CustomEmptyState: Story = {
         <div className="text-6xl mb-4">🔍</div>
         <h3 className="text-xl font-semibold mb-2">No products found</h3>
         <p className="text-gray-500 mb-4">Try adjusting your search criteria</p>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded">
-          Clear Filters
-        </button>
+        <button className="px-4 py-2 bg-blue-500 text-white rounded">Clear Filters</button>
       </div>
     ),
   },

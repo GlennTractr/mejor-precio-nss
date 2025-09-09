@@ -3,11 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { LoadingSkeletonsProps } from '../types';
 
-function LoadingSkeletonsComponent({
-  count,
-  type,
-  className,
-}: LoadingSkeletonsProps) {
+function LoadingSkeletonsComponent({ count, type, className }: LoadingSkeletonsProps) {
   const renderProductSkeleton = () => (
     <div className="border rounded-lg p-4 space-y-3">
       <Skeleton className="h-40 w-full" />
@@ -58,9 +54,7 @@ function LoadingSkeletonsComponent({
     return (
       <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4', className)}>
         {Array.from({ length: count }).map((_, i) => (
-          <div key={i}>
-            {renderSkeleton()}
-          </div>
+          <div key={i}>{renderSkeleton()}</div>
         ))}
       </div>
     );
@@ -70,19 +64,13 @@ function LoadingSkeletonsComponent({
     return (
       <div className={cn('space-y-6', className)}>
         {Array.from({ length: count }).map((_, i) => (
-          <div key={i}>
-            {renderSkeleton()}
-          </div>
+          <div key={i}>{renderSkeleton()}</div>
         ))}
       </div>
     );
   }
 
-  return (
-    <div className={cn('w-full', className)}>
-      {renderSkeleton()}
-    </div>
-  );
+  return <div className={cn('w-full', className)}>{renderSkeleton()}</div>;
 }
 
 // Memoize the component to prevent unnecessary re-renders

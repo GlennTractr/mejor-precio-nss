@@ -1,174 +1,174 @@
 {
-    "actions": {
-        "login": "Iniciar sesión",
-        "signup": "Registrarse",
-        "logout": "Cerrar sesión",
-        "openSettings": "Abrir configuración",
-        "add": "Agregar",
-        "buy": "Comprar",
-        "seeOffers": "Ver ofertas",
-        "buyNow": "Comprar ahora",
-        "notify": {
-            "add": "Añadir a favoritos",
-            "remove": "Eliminar de favoritos"
-        },
-        "goHome": "Ir a Inicio"
+  "actions": {
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "logout": "Cerrar sesión",
+    "openSettings": "Abrir configuración",
+    "add": "Agregar",
+    "buy": "Comprar",
+    "seeOffers": "Ver ofertas",
+    "buyNow": "Comprar ahora",
+    "notify": {
+      "add": "Añadir a favoritos",
+      "remove": "Eliminar de favoritos"
     },
-    "category": {
-        "results": "{count, plural, =0 {No se encontraron productos} =1 {1 producto encontrado} other {# productos encontrados}}",
-        "itemsPerPage": "Productos por página:",
-        "noResults": "No se encontraron productos",
-        "tryDifferentFilters": "Prueba con diferentes filtros o términos de búsqueda",
-        "activeFilters": "Filtros activos",
-        "removeFilter": "Eliminar filtro",
-        "clearAll": "Limpiar todo",
-        "filters": {
-            "search": "Buscar",
-            "searchPlaceholder": "Buscar productos...",
-            "searchButton": "Buscar",
-            "price": "Rango de precio",
-            "brands": "Marcas",
-            "models": "Modelos",
-            "specs": "Especificaciones",
-            "resetFilters": "Restablecer filtros",
-            "brand": "Marca",
-            "model": "Modelo"
-        }
-    },
-    "product": {
-        "loading": "Cargando...",
-        "error": "Error: {message}",
-        "notFound": "Producto no encontrado",
-        "availableFrom": "Disponible en",
-        "comparePrices": "Comparar precios",
-        "priceAt": "en {shop}",
-        "pricePerUnit": "${price} por unidad",
-        "filterByQuantity": "Filtrar por cantidad",
-        "showAll": "Todos",
-        "units": {
-            "unit": "{count, plural, =1 {unidad} other {unidades}}"
-        },
-        "priceRange": "Rango de Precio",
-        "perUnit": "por unidad",
-        "fromMultipleProviders": "De múltiples proveedores",
-        "ourRecommendation": "Nuestra recomendación",
-        "showMore": "Mostrar más proveedores",
-        "showLess": "Mostrar menos proveedores",
-        "similarProducts": "Productos Similares"
-    },
+    "goHome": "Ir a Inicio"
+  },
+  "category": {
+    "results": "{count, plural, =0 {No se encontraron productos} =1 {1 producto encontrado} other {# productos encontrados}}",
+    "itemsPerPage": "Productos por página:",
+    "noResults": "No se encontraron productos",
+    "tryDifferentFilters": "Prueba con diferentes filtros o términos de búsqueda",
+    "activeFilters": "Filtros activos",
+    "removeFilter": "Eliminar filtro",
+    "clearAll": "Limpiar todo",
     "filters": {
-        "brands": "Marcas",
-        "models": "Modelos",
-        "step": "Paso",
-        "gender": "Género",
-        "priceRange": {
-            "title": "Rango de precio por unidad",
-            "unit": "€{value}/unidad",
-            "filter": "Precio por unidad: €{min} - €{max}"
-        },
-        "search": {
-            "title": "Buscar",
-            "placeholder": "Buscar productos...",
-            "label": "Búsqueda: {query}",
-            "clearAria": "Limpiar búsqueda"
-        },
-        "badges": {
-            "brand": "Marca: {name}",
-            "model": "Modelo: {name}",
-            "spec": "{type}: {value}",
-            "removeAria": "Eliminar filtro {type}",
-            "clearAll": "Limpiar todos los filtros"
-        },
-        "products": {
-            "found": "{count, plural, =0 {No se encontraron productos} =1 {1 producto encontrado} other {# productos encontrados}}",
-            "perPage": "Productos por página:",
-            "rangePrice": "Precio: {min}$ - {max}$",
-            "availableAt": "Disponible en: {shops}"
-        }
-    },
-    "auth": {
-        "signInTitle": "Inicia sesión en tu cuenta",
-        "signUpTitle": "Crea tu cuenta",
-        "signUpSuccess": "¡Cuenta creada exitosamente! Por favor revisa tu correo electrónico para verificar tu cuenta.",
-        "signingUp": "Registrando...",
-        "signingIn": "Iniciando sesión...",
-        "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",
-        "dontHaveAccount": "¿No tienes una cuenta? Regístrate",
-        "emailLabel": "Correo electrónico",
-        "emailPlaceholder": "Correo electrónico",
-        "emailRequired": "El correo electrónico es requerido",
-        "emailInvalid": "Correo electrónico inválido",
-        "passwordLabel": "Contraseña",
-        "passwordPlaceholder": "Contraseña",
-        "passwordRequired": "La contraseña es requerida",
-        "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
-        "loginToFavorite": "Inicia sesión para añadir a favoritos"
-    },
-    "home": {
-        "welcome": "Bienvenido de nuevo, {email}",
-        "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!",
-        "categories": "Categorías",
-        "allProducts": "Todos los productos",
-        "heroTitle": "Encuentra los Mejores Precios para tu Bebé",
-        "heroDescription": "Compara precios de productos para bebés entre las principales tiendas en linea de Mexico. Encuentra las mejores ofertas en pañales, fórmulas, carriolas y todo lo que tu bebé necesita, todo en un solo lugar.",
-        "favorites": "Favoritos",
-        "noFavorites": "No tienes favoritos"
-    },
-    "common": {
-        "logo": "Logo",
-        "loading": "Cargando",
-        "pleaseWait": "Por favor espera...",
-        "redirecting": "Redirigiendo",
-        "error": "Error",
-        "unexpectedError": "Ha ocurrido un error inesperado"
-    },
-    "navigation": {
-        "home": "Inicio",
-        "mainMenu": "Menú principal",
-        "todos": "Tareas",
-        "profile": "Perfil",
-        "settings": "Configuración",
-        "changePassword": "Cambiar Contraseña",
-        "logout": "Cerrar Sesión",
-        "about": "Acerca de",
-        "mobile": {
-            "menu": "Menú Móvil"
-        }
-    },
-    "settings": {
-        "title": "Configuración",
-        "theme": {
-            "label": "Tema",
-            "placeholder": "Seleccionar tema",
-            "light": "Claro",
-            "dark": "Oscuro",
-            "system": "Sistema"
-        },
-        "language": {
-            "label": "Idioma",
-            "placeholder": "Seleccionar idioma"
-        }
-    },
-    "todos": {
-        "title": "Tareas",
-        "newTodoPlaceholder": "Agregar una nueva tarea...",
-        "noTodos": "No hay tareas aún",
-        "showAll": "Mostrar todo"
-    },
-    "footer": {
-        "description": "Encuentra los mejores precios para tus productos favoritos",
-        "quickLinks": "Enlaces rápidos",
-        "legal": "Legal",
-        "connect": "Conectar",
-        "home": "Inicio",
-        "about": "Acerca de",
-        "contact": "Contacto",
-        "privacyPolicy": "Política de privacidad",
-        "termsOfService": "Términos de servicio",
-        "allRightsReserved": "Todos los derechos reservados"
-    },
-    "favorites": {
-        "processing": "Procesando favorito",
-        "loginRequired": "Debes iniciar sesión para añadir favoritos"
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar productos...",
+      "searchButton": "Buscar",
+      "price": "Rango de precio",
+      "brands": "Marcas",
+      "models": "Modelos",
+      "specs": "Especificaciones",
+      "resetFilters": "Restablecer filtros",
+      "brand": "Marca",
+      "model": "Modelo"
     }
+  },
+  "product": {
+    "loading": "Cargando...",
+    "error": "Error: {message}",
+    "notFound": "Producto no encontrado",
+    "availableFrom": "Disponible en",
+    "comparePrices": "Comparar precios",
+    "priceAt": "en {shop}",
+    "pricePerUnit": "${price} por unidad",
+    "filterByQuantity": "Filtrar por cantidad",
+    "showAll": "Todos",
+    "units": {
+      "unit": "{count, plural, =1 {unidad} other {unidades}}"
+    },
+    "priceRange": "Rango de Precio",
+    "perUnit": "por unidad",
+    "fromMultipleProviders": "De múltiples proveedores",
+    "ourRecommendation": "Nuestra recomendación",
+    "showMore": "Mostrar más proveedores",
+    "showLess": "Mostrar menos proveedores",
+    "similarProducts": "Productos Similares"
+  },
+  "filters": {
+    "brands": "Marcas",
+    "models": "Modelos",
+    "step": "Paso",
+    "gender": "Género",
+    "priceRange": {
+      "title": "Rango de precio por unidad",
+      "unit": "€{value}/unidad",
+      "filter": "Precio por unidad: €{min} - €{max}"
+    },
+    "search": {
+      "title": "Buscar",
+      "placeholder": "Buscar productos...",
+      "label": "Búsqueda: {query}",
+      "clearAria": "Limpiar búsqueda"
+    },
+    "badges": {
+      "brand": "Marca: {name}",
+      "model": "Modelo: {name}",
+      "spec": "{type}: {value}",
+      "removeAria": "Eliminar filtro {type}",
+      "clearAll": "Limpiar todos los filtros"
+    },
+    "products": {
+      "found": "{count, plural, =0 {No se encontraron productos} =1 {1 producto encontrado} other {# productos encontrados}}",
+      "perPage": "Productos por página:",
+      "rangePrice": "Precio: {min}$ - {max}$",
+      "availableAt": "Disponible en: {shops}"
+    }
+  },
+  "auth": {
+    "signInTitle": "Inicia sesión en tu cuenta",
+    "signUpTitle": "Crea tu cuenta",
+    "signUpSuccess": "¡Cuenta creada exitosamente! Por favor revisa tu correo electrónico para verificar tu cuenta.",
+    "signingUp": "Registrando...",
+    "signingIn": "Iniciando sesión...",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",
+    "dontHaveAccount": "¿No tienes una cuenta? Regístrate",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "Correo electrónico",
+    "emailRequired": "El correo electrónico es requerido",
+    "emailInvalid": "Correo electrónico inválido",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "Contraseña",
+    "passwordRequired": "La contraseña es requerida",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "loginToFavorite": "Inicia sesión para añadir a favoritos"
+  },
+  "home": {
+    "welcome": "Bienvenido de nuevo, {email}",
+    "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!",
+    "categories": "Categorías",
+    "allProducts": "Todos los productos",
+    "heroTitle": "Encuentra los Mejores Precios para tu Bebé",
+    "heroDescription": "Compara precios de productos para bebés entre las principales tiendas en linea de Mexico. Encuentra las mejores ofertas en pañales, fórmulas, carriolas y todo lo que tu bebé necesita, todo en un solo lugar.",
+    "favorites": "Favoritos",
+    "noFavorites": "No tienes favoritos"
+  },
+  "common": {
+    "logo": "Logo",
+    "loading": "Cargando",
+    "pleaseWait": "Por favor espera...",
+    "redirecting": "Redirigiendo",
+    "error": "Error",
+    "unexpectedError": "Ha ocurrido un error inesperado"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "mainMenu": "Menú principal",
+    "todos": "Tareas",
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "changePassword": "Cambiar Contraseña",
+    "logout": "Cerrar Sesión",
+    "about": "Acerca de",
+    "mobile": {
+      "menu": "Menú Móvil"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "theme": {
+      "label": "Tema",
+      "placeholder": "Seleccionar tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "language": {
+      "label": "Idioma",
+      "placeholder": "Seleccionar idioma"
+    }
+  },
+  "todos": {
+    "title": "Tareas",
+    "newTodoPlaceholder": "Agregar una nueva tarea...",
+    "noTodos": "No hay tareas aún",
+    "showAll": "Mostrar todo"
+  },
+  "footer": {
+    "description": "Encuentra los mejores precios para tus productos favoritos",
+    "quickLinks": "Enlaces rápidos",
+    "legal": "Legal",
+    "connect": "Conectar",
+    "home": "Inicio",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "privacyPolicy": "Política de privacidad",
+    "termsOfService": "Términos de servicio",
+    "allRightsReserved": "Todos los derechos reservados"
+  },
+  "favorites": {
+    "processing": "Procesando favorito",
+    "loginRequired": "Debes iniciar sesión para añadir favoritos"
+  }
 }

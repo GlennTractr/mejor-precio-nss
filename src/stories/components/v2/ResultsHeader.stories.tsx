@@ -9,7 +9,8 @@ const meta: Meta<typeof ResultsHeader> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Header component showing results count and pagination controls with optional sorting.',
+        component:
+          'Header component showing results count and pagination controls with optional sorting.',
       },
     },
   },

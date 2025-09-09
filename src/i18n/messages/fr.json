@@ -1,174 +1,174 @@
 {
-    "actions": {
-        "login": "Se connecter",
-        "signup": "S'inscrire",
-        "logout": "Se déconnecter",
-        "openSettings": "Ouvrir les paramètres",
-        "add": "Ajouter",
-        "buy": "Acheter",
-        "seeOffers": "Voir les offres",
-        "buyNow": "Acheter maintenant",
-        "notify": {
-            "add": "Ajouter aux favoris",
-            "remove": "Retirer des favoris"
-        },
-        "goHome": "Aller à l'accueil"
+  "actions": {
+    "login": "Se connecter",
+    "signup": "S'inscrire",
+    "logout": "Se déconnecter",
+    "openSettings": "Ouvrir les paramètres",
+    "add": "Ajouter",
+    "buy": "Acheter",
+    "seeOffers": "Voir les offres",
+    "buyNow": "Acheter maintenant",
+    "notify": {
+      "add": "Ajouter aux favoris",
+      "remove": "Retirer des favoris"
     },
-    "category": {
-        "results": "{count, plural, =0 {Aucun produit trouvé} =1 {1 produit trouvé} other {# produits trouvés}}",
-        "itemsPerPage": "Produits par page:",
-        "noResults": "Aucun produit trouvé",
-        "tryDifferentFilters": "Essayez différents filtres ou termes de recherche",
-        "activeFilters": "Filtres actifs",
-        "removeFilter": "Supprimer le filtre",
-        "clearAll": "Tout effacer",
-        "filters": {
-            "search": "Rechercher",
-            "searchPlaceholder": "Rechercher des produits...",
-            "searchButton": "Rechercher",
-            "price": "Fourchette de prix",
-            "brands": "Marques",
-            "models": "Modèles",
-            "specs": "Spécifications",
-            "resetFilters": "Réinitialiser les filtres",
-            "brand": "Marque",
-            "model": "Modèle"
-        }
-    },
-    "product": {
-        "loading": "Chargement...",
-        "error": "Erreur: {message}",
-        "notFound": "Produit non trouvé",
-        "availableFrom": "Disponible chez",
-        "comparePrices": "Comparer les prix",
-        "priceAt": "chez {shop}",
-        "pricePerUnit": "${price} par unité",
-        "filterByQuantity": "Filtrer par quantité",
-        "showAll": "Tous",
-        "units": {
-            "unit": "{count, plural, =1 {unité} other {unités}}"
-        },
-        "priceRange": "Fourchette de Prix",
-        "perUnit": "par unité",
-        "fromMultipleProviders": "De plusieurs fournisseurs",
-        "ourRecommendation": "Notre recommandation",
-        "showMore": "Afficher plus de fournisseurs",
-        "showLess": "Afficher moins de fournisseurs",
-        "similarProducts": "Produits Similaires"
-    },
+    "goHome": "Aller à l'accueil"
+  },
+  "category": {
+    "results": "{count, plural, =0 {Aucun produit trouvé} =1 {1 produit trouvé} other {# produits trouvés}}",
+    "itemsPerPage": "Produits par page:",
+    "noResults": "Aucun produit trouvé",
+    "tryDifferentFilters": "Essayez différents filtres ou termes de recherche",
+    "activeFilters": "Filtres actifs",
+    "removeFilter": "Supprimer le filtre",
+    "clearAll": "Tout effacer",
     "filters": {
-        "brands": "Marques",
-        "models": "Modèles",
-        "step": "Étape",
-        "gender": "Genre",
-        "priceRange": {
-            "title": "Fourchette de prix par unité",
-            "unit": "€{value}/unité",
-            "filter": "Prix par unité: €{min} - €{max}"
-        },
-        "search": {
-            "title": "Rechercher",
-            "placeholder": "Rechercher des produits...",
-            "label": "Recherche: {query}",
-            "clearAria": "Effacer la recherche"
-        },
-        "badges": {
-            "brand": "Marque: {name}",
-            "model": "Modèle: {name}",
-            "spec": "{type}: {value}",
-            "removeAria": "Supprimer le filtre {type}",
-            "clearAll": "Effacer tous les filtres"
-        },
-        "products": {
-            "found": "{count, plural, =0 {Aucun produit trouvé} =1 {1 produit trouvé} other {# produits trouvés}}",
-            "perPage": "Produits par page:",
-            "rangePrice": "Prix: {min}$ - {max}$",
-            "availableAt": "Disponible chez: {shops}"
-        }
-    },
-    "auth": {
-        "signInTitle": "Connectez-vous à votre compte",
-        "signUpTitle": "Créez votre compte",
-        "signUpSuccess": "Compte créé avec succès ! Veuillez vérifier votre e-mail pour confirmer votre compte.",
-        "signingUp": "Inscription en cours...",
-        "signingIn": "Connexion en cours...",
-        "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous",
-        "dontHaveAccount": "Vous n'avez pas de compte ? Inscrivez-vous",
-        "emailLabel": "Adresse e-mail",
-        "emailPlaceholder": "Adresse e-mail",
-        "emailRequired": "L'adresse e-mail est requise",
-        "emailInvalid": "Adresse e-mail invalide",
-        "passwordLabel": "Mot de passe",
-        "passwordPlaceholder": "Mot de passe",
-        "passwordRequired": "Le mot de passe est requis",
-        "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères",
-        "loginToFavorite": "Connectez-vous pour ajouter aux favoris"
-    },
-    "home": {
-        "welcome": "Bienvenue, {email}",
-        "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!",
-        "categories": "Catégories",
-        "allProducts": "Tous les produits",
-        "heroTitle": "Trouvez les meilleurs prix pour votre bébé",
-        "heroDescription": "Comparez les prix des produits pour bébés dans les principales boutiques en ligne du Québec. Trouvez les meilleures offres sur les couches, les formules, les poussettes et tout ce dont votre bébé a besoin, le tout en un seul endroit.",
-        "favorites": "Vos Favoris",
-        "noFavorites": "Vous n'avez pas encore de produits favoris"
-    },
-    "common": {
-        "logo": "Logo",
-        "loading": "Chargement",
-        "pleaseWait": "Veuillez patienter...",
-        "redirecting": "Redirection en cours",
-        "error": "Erreur",
-        "unexpectedError": "Une erreur inattendue s'est produite"
-    },
-    "navigation": {
-        "home": "Accueil",
-        "mainMenu": "Menu principal",
-        "todos": "Tâches",
-        "profile": "Profil",
-        "settings": "Paramètres",
-        "changePassword": "Changer le mot de passe",
-        "logout": "Se déconnecter",
-        "about": "À propos",
-        "mobile": {
-            "menu": "Menu mobile"
-        }
-    },
-    "settings": {
-        "title": "Paramètres",
-        "theme": {
-            "label": "Thème",
-            "placeholder": "Sélectionner un thème",
-            "light": "Clair",
-            "dark": "Sombre",
-            "system": "Système"
-        },
-        "language": {
-            "label": "Langue",
-            "placeholder": "Sélectionner une langue"
-        }
-    },
-    "todos": {
-        "title": "Tâches",
-        "newTodoPlaceholder": "Ajouter une nouvelle tâche...",
-        "noTodos": "Pas encore de tâches",
-        "showAll": "Afficher tout"
-    },
-    "footer": {
-        "description": "Trouvez les meilleurs prix pour vos produits préférés",
-        "quickLinks": "Liens rapides",
-        "legal": "Mentions légales",
-        "connect": "Connexion",
-        "home": "Accueil",
-        "about": "À propos",
-        "contact": "Contact",
-        "privacyPolicy": "Politique de confidentialité",
-        "termsOfService": "Conditions d'utilisation",
-        "allRightsReserved": "Tous droits réservés"
-    },
-    "favorites": {
-        "processing": "Traitement du favori",
-        "loginRequired": "Vous devez être connecté pour ajouter des favoris"
+      "search": "Rechercher",
+      "searchPlaceholder": "Rechercher des produits...",
+      "searchButton": "Rechercher",
+      "price": "Fourchette de prix",
+      "brands": "Marques",
+      "models": "Modèles",
+      "specs": "Spécifications",
+      "resetFilters": "Réinitialiser les filtres",
+      "brand": "Marque",
+      "model": "Modèle"
     }
+  },
+  "product": {
+    "loading": "Chargement...",
+    "error": "Erreur: {message}",
+    "notFound": "Produit non trouvé",
+    "availableFrom": "Disponible chez",
+    "comparePrices": "Comparer les prix",
+    "priceAt": "chez {shop}",
+    "pricePerUnit": "${price} par unité",
+    "filterByQuantity": "Filtrer par quantité",
+    "showAll": "Tous",
+    "units": {
+      "unit": "{count, plural, =1 {unité} other {unités}}"
+    },
+    "priceRange": "Fourchette de Prix",
+    "perUnit": "par unité",
+    "fromMultipleProviders": "De plusieurs fournisseurs",
+    "ourRecommendation": "Notre recommandation",
+    "showMore": "Afficher plus de fournisseurs",
+    "showLess": "Afficher moins de fournisseurs",
+    "similarProducts": "Produits Similaires"
+  },
+  "filters": {
+    "brands": "Marques",
+    "models": "Modèles",
+    "step": "Étape",
+    "gender": "Genre",
+    "priceRange": {
+      "title": "Fourchette de prix par unité",
+      "unit": "€{value}/unité",
+      "filter": "Prix par unité: €{min} - €{max}"
+    },
+    "search": {
+      "title": "Rechercher",
+      "placeholder": "Rechercher des produits...",
+      "label": "Recherche: {query}",
+      "clearAria": "Effacer la recherche"
+    },
+    "badges": {
+      "brand": "Marque: {name}",
+      "model": "Modèle: {name}",
+      "spec": "{type}: {value}",
+      "removeAria": "Supprimer le filtre {type}",
+      "clearAll": "Effacer tous les filtres"
+    },
+    "products": {
+      "found": "{count, plural, =0 {Aucun produit trouvé} =1 {1 produit trouvé} other {# produits trouvés}}",
+      "perPage": "Produits par page:",
+      "rangePrice": "Prix: {min}$ - {max}$",
+      "availableAt": "Disponible chez: {shops}"
+    }
+  },
+  "auth": {
+    "signInTitle": "Connectez-vous à votre compte",
+    "signUpTitle": "Créez votre compte",
+    "signUpSuccess": "Compte créé avec succès ! Veuillez vérifier votre e-mail pour confirmer votre compte.",
+    "signingUp": "Inscription en cours...",
+    "signingIn": "Connexion en cours...",
+    "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous",
+    "dontHaveAccount": "Vous n'avez pas de compte ? Inscrivez-vous",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "Adresse e-mail",
+    "emailRequired": "L'adresse e-mail est requise",
+    "emailInvalid": "Adresse e-mail invalide",
+    "passwordLabel": "Mot de passe",
+    "passwordPlaceholder": "Mot de passe",
+    "passwordRequired": "Le mot de passe est requis",
+    "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères",
+    "loginToFavorite": "Connectez-vous pour ajouter aux favoris"
+  },
+  "home": {
+    "welcome": "Bienvenue, {email}",
+    "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!",
+    "categories": "Catégories",
+    "allProducts": "Tous les produits",
+    "heroTitle": "Trouvez les meilleurs prix pour votre bébé",
+    "heroDescription": "Comparez les prix des produits pour bébés dans les principales boutiques en ligne du Québec. Trouvez les meilleures offres sur les couches, les formules, les poussettes et tout ce dont votre bébé a besoin, le tout en un seul endroit.",
+    "favorites": "Vos Favoris",
+    "noFavorites": "Vous n'avez pas encore de produits favoris"
+  },
+  "common": {
+    "logo": "Logo",
+    "loading": "Chargement",
+    "pleaseWait": "Veuillez patienter...",
+    "redirecting": "Redirection en cours",
+    "error": "Erreur",
+    "unexpectedError": "Une erreur inattendue s'est produite"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "mainMenu": "Menu principal",
+    "todos": "Tâches",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "changePassword": "Changer le mot de passe",
+    "logout": "Se déconnecter",
+    "about": "À propos",
+    "mobile": {
+      "menu": "Menu mobile"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "theme": {
+      "label": "Thème",
+      "placeholder": "Sélectionner un thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "language": {
+      "label": "Langue",
+      "placeholder": "Sélectionner une langue"
+    }
+  },
+  "todos": {
+    "title": "Tâches",
+    "newTodoPlaceholder": "Ajouter une nouvelle tâche...",
+    "noTodos": "Pas encore de tâches",
+    "showAll": "Afficher tout"
+  },
+  "footer": {
+    "description": "Trouvez les meilleurs prix pour vos produits préférés",
+    "quickLinks": "Liens rapides",
+    "legal": "Mentions légales",
+    "connect": "Connexion",
+    "home": "Accueil",
+    "about": "À propos",
+    "contact": "Contact",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "allRightsReserved": "Tous droits réservés"
+  },
+  "favorites": {
+    "processing": "Traitement du favori",
+    "loginRequired": "Vous devez être connecté pour ajouter des favoris"
+  }
 }

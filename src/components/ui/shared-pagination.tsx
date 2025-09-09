@@ -48,7 +48,7 @@ function SharedPaginationComponent({
   className,
 }: SharedPaginationProps) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  
+
   // Don't render pagination if there's only one page or no items
   if (totalPages <= 1 || totalItems === 0) {
     return null;
