@@ -15,8 +15,8 @@ export function Footer() {
         <div className="flex flex-col gap-8 lg:flex-row lg:justify-between lg:gap-12">
           {/* Left: Logo + Description */}
           <div className="flex-shrink-0 lg:max-w-md">
-            <Logo size="md" className="mb-2" />
-            <p className="mt-3 text-lg leading-relaxed text-white">{t('description')}</p>
+            <Logo size="lg" className="mb-2" inverted clickable={false} />
+            <p className="px-3 mt-3 text-lg leading-relaxed text-white">{t('description')}</p>
           </div>
 
           {/* Right: Link Lists */}

@@ -1,3 +1,4 @@
+import { Mulish, Quicksand } from 'next/font/google';
 import { Metadata } from 'next';
 import { getLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
@@ -6,21 +7,18 @@ import { MainNav } from '@/components/main-nav';
 import { Toaster } from '@/components/ui/toaster';
 import { ReactQueryProvider } from '@/components/react-query-provider';
 import { GoogleAnalyticsScript } from '@/components/google-analytics';
-import localFont from 'next/font/local';
 import { Footer } from '@/components/footer';
 import { env } from '@/lib/env';
 import './globals.css';
 
-const geistSans = localFont({
-  src: '../fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
+const mulish = Mulish({
+  subsets: ['latin'],
+  variable: '--font-mulish',
 });
 
-const geistMono = localFont({
-  src: '../fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
+const quicksand = Quicksand({
+  subsets: ['latin'],
+  variable: '--font-quicksand',
 });
 
 export const metadata: Metadata = {
@@ -58,7 +56,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-layout-background`}
+        className={`${mulish.variable} ${quicksand.variable} antialiased min-h-screen flex flex-col bg-layout-background`}
       >
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>

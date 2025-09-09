@@ -132,7 +132,7 @@ export function MainNav() {
             </SheetTrigger>
 
             {/* Logo */}
-            <Logo size="md" className="ml-2 md:ml-0" />
+            <Logo size="lg" className="ml-2 md:ml-0" />
 
             {/* Main Menu (Desktop only) */}
             <nav

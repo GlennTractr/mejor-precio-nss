@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardContent, CardTitle, CardFooter } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
-import LayoutSidebar from '@/components/layout-sidebar';
 import { useQueryClient } from '@tanstack/react-query';
 
 import {
@@ -79,11 +78,7 @@ export default function LoginPage() {
   };
 
   return (
-    <LayoutSidebar
-      isOpen={false}
-      containerClassName="bg-muted/50"
-      contentClassName="flex w-full items-center justify-center"
-    >
+    <div className="flex w-full items-center justify-center p-6 my-6">
       <Card className="max-w-md w-full">
         <CardHeader className="flex justify-center items-center gap-4">
           <CardTitle className="text-center text-lg font-extrabold">
@@ -127,7 +122,7 @@ export default function LoginPage() {
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button variant="secondary" type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -149,11 +144,11 @@ export default function LoginPage() {
           </Form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button variant="link" onClick={toggleMode} type="button" className="text-sm">
+          <Button variant="link-secondary" onClick={toggleMode} type="button" className="text-sm">
             {isSignup ? t('auth.alreadyHaveAccount') : t('auth.dontHaveAccount')}
           </Button>
         </CardFooter>
       </Card>
-    </LayoutSidebar>
+    </div>
   );
 }
