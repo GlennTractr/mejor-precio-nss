@@ -36,6 +36,7 @@ type ProductModel = {
   };
   category: {
     label: string;
+    slug: string;
   };
 };
 
@@ -189,7 +190,8 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                 label
               ),
               category (
-                label
+                label,
+                slug
               )
             ),
             image (
@@ -354,9 +356,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
           <div className="space-y-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold text-accent highlight-primary">
-                  {product.title}
-                </h1>
+                <h1 className="text-3xl font-bold text-accent">{product.title}</h1>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -405,7 +405,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                   {product.ProductSpecs.map((spec, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-light/10 text-primary"
+                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/50 text-accent/80"
                     >
                       {spec.type}: {spec.label}
                     </span>
@@ -417,10 +417,10 @@ export function ProductPage({ productSlug }: ProductPageProps) {
             <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary">
               {t('product.comparePrices')}
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-1">
               {displayedProviders.map((item, index) => (
-                <div key={index} className="space-y-2">
-                  <div className="flex items-center justify-between py-1 px-2 bg-white rounded-lg border border-secondary/20 hover:border-secondary/50 hover:scale-[1.02] transition-all duration-200 ease-in-out shadow-sm hover:shadow-md">
+                <div key={index}>
+                  <div className="flex items-center justify-between py-1 px-2 bg-white border border-secondary/20 hover:border-secondary/50 hover:scale-[1.02] transition-all duration-200 ease-in-out shadow-sm hover:shadow-md">
                     <div className="flex items-center gap-4">
                       {/* Shop Logo */}
                       <div className="relative w-12 h-12 flex-shrink-0 bg-white rounded-lg p-1 border border-primary-light/10">
@@ -479,12 +479,13 @@ export function ProductPage({ productSlug }: ProductPageProps) {
 
               {hasMoreProviders && (
                 <div className="flex justify-center pt-2">
-                  <button
+                  <Button
+                    variant="ghost"
                     onClick={() => setShowAllProviders(!showAllProviders)}
                     className="text-sm font-medium text-primary hover:text-primary-dark focus:outline-none focus:underline transition-colors"
                   >
                     {showAllProviders ? t('product.showLess') : t('product.showMore')}
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -497,7 +498,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
             title={t('product.similarProducts')}
             query={product.model?.category?.label || ''}
             productId={product.id}
-            categorySlug={product.model?.category?.label?.toLowerCase().replace(/\s+/g, '-')}
+            categorySlug={product.model?.category?.slug}
             specs={product.ProductSpecs}
             perPage={10}
           />

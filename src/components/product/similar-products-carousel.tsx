@@ -83,15 +83,29 @@ export function SimilarProductsCarousel({
           params.append('filter_by', filterBy);
         }
 
-        const response = await fetch(`/api/typesense/similar-products?${params.toString()}`);
+        const response = await fetch(`/api/typesense-/similar-products?${params.toString()}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
+
+        if (data.error) {
+          throw new Error(data.error);
+        }
 
         if (data.hits) {
           setProducts(data.hits.map((hit: { document: Product }) => hit.document));
           setTotalFound(data.found || 0);
+        } else {
+          setProducts([]);
+          setTotalFound(0);
         }
       } catch (error) {
         console.error('Error fetching similar products:', error);
+        setProducts([]);
+        setTotalFound(0);
       } finally {
         setIsLoading(false);
         // Reset scroll position and navigation states when new products load
@@ -159,6 +173,9 @@ export function SimilarProductsCarousel({
       scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
     }
   };
+
+  console.log('similar products carousel totalFound', totalFound);
+  console.log('similar products carousel isLoading', isLoading);
 
   // Don't render if no similar products found
   if (!isLoading && totalFound === 0) {

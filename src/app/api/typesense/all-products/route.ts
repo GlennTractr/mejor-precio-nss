@@ -7,6 +7,9 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get('page') || '1');
     const perPage = parseInt(searchParams.get('per_page') || '10');
 
+    // Get collection name from environment or fallback to 'product'
+    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
+
     const searchParameters = {
       q: '*',
       query_by: 'title',
@@ -16,13 +19,13 @@ export async function GET(request: Request) {
     };
 
     const searchResults = await typesenseClient
-      .collections('product')
+      .collections(collectionName)
       .documents()
       .search(searchParameters, {});
 
     return NextResponse.json(searchResults);
   } catch (error) {
-    console.error('Error searching products:', error);
+    console.error('All products search error:', error);
     return NextResponse.json({ error: 'Failed to search products' }, { status: 500 });
   }
 }

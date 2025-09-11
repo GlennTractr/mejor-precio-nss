@@ -27,20 +27,26 @@ export async function GET(request: NextRequest) {
   const filterBy = searchParams.get('filter_by') || '';
 
   try {
+    // Get collection name from environment or fallback to 'product'
+    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
+
     // Get all basic facets and price range in one query
-    const basicFacetsResponse = (await typesenseClient.collections('product').documents().search(
-      {
-        q: query,
-        query_by: 'title,brand,model',
-        filter_by: filterBy,
-        facet_by: 'brand,model,specs.type,best_price_per_unit',
-        max_facet_values: 100,
-        page: 1,
-        per_page: 0,
-        facet_query: 'best_price_per_unit:*',
-      },
-      {}
-    )) as SearchResponseWithStats;
+    const basicFacetsResponse = (await typesenseClient
+      .collections(collectionName)
+      .documents()
+      .search(
+        {
+          q: query,
+          query_by: 'title,brand,model',
+          filter_by: filterBy,
+          facet_by: 'brand,model,specs.type,best_price_per_unit',
+          max_facet_values: 100,
+          page: 1,
+          per_page: 0,
+          facet_query: 'best_price_per_unit:*',
+        },
+        {}
+      )) as SearchResponseWithStats;
 
     // Get price range from facet stats
     const priceStats = basicFacetsResponse.facet_stats?.best_price_per_unit;
@@ -60,7 +66,7 @@ export async function GET(request: NextRequest) {
         .find((f: FacetCount) => f.field_name === 'specs.type')
         ?.counts.map(async specType => {
           const labelResponse = await typesenseClient
-            .collections('product')
+            .collections(collectionName)
             .documents()
             .search(
               {
@@ -95,7 +101,7 @@ export async function GET(request: NextRequest) {
       specs_facets: specTypesWithLabels,
     });
   } catch (error) {
-    console.error('Filters error:', error);
+    console.error('Filters search error:', error);
     return Response.json({ error: 'Failed to fetch filters' }, { status: 500 });
   }
 }

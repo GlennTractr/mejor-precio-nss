@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { ProductList } from './product-list';
 import { useRouter, usePathname } from 'next/navigation';
-import { typesenseClient } from '@/lib/typesense-client';
 import type { Product, SearchResponse } from '@/types/product';
 
 interface HomeProductListProps {
@@ -12,18 +11,13 @@ interface HomeProductListProps {
 }
 
 async function getProducts(page: number, perPage: number): Promise<SearchResponse> {
-  const searchParameters = {
-    q: '*',
-    query_by: 'title',
-    page,
-    per_page: perPage,
-    sort_by: 'best_price_per_unit:asc',
-  };
+  const response = await fetch(`/api/typesense/all-products?page=${page}&per_page=${perPage}`);
 
-  return typesenseClient
-    .collections('product')
-    .documents()
-    .search(searchParameters, {}) as Promise<SearchResponse>;
+  if (!response.ok) {
+    throw new Error('Failed to fetch products');
+  }
+
+  return response.json();
 }
 
 export function HomeProductList({ currentPage, itemsPerPage }: HomeProductListProps) {

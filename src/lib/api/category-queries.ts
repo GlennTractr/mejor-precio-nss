@@ -87,8 +87,9 @@ export async function getInitialFilters(categorySlug: string): Promise<CategoryF
     );
 
     // 3. Get counts from Typesense
+    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
     const facetsResponse = (await typesenseClient
-      .collections('product')
+      .collections(collectionName)
       .documents()
       .search(
         {
@@ -141,7 +142,6 @@ export async function getInitialFilters(categorySlug: string): Promise<CategoryF
       category_name: category.label,
     };
   } catch (error) {
-    console.error('Failed to fetch initial filters:', error);
     throw error;
   }
 }
@@ -208,8 +208,9 @@ export async function getFilteredProducts(
   };
 
   try {
+    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
     const response = (await typesenseClient
-      .collections('product')
+      .collections(collectionName)
       .documents()
       .search(searchParams, {})) as SearchResponse;
 
@@ -219,7 +220,6 @@ export async function getFilteredProducts(
       facetCounts: response.facet_counts || [],
     };
   } catch (error) {
-    console.error('Failed to fetch products:', error);
     throw error;
   }
 }

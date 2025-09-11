@@ -15,6 +15,7 @@ interface SearchParams {
 }
 
 async function getProducts(page: number, perPage: number) {
+  const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
   const searchParameters = {
     q: '*',
     query_by: 'title',
@@ -23,7 +24,7 @@ async function getProducts(page: number, perPage: number) {
     sort_by: 'best_price_per_unit:asc',
   };
 
-  return typesenseClient.collections('product').documents().search(searchParameters, {});
+  return typesenseClient.collections(collectionName).documents().search(searchParameters, {});
 }
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<SearchParams> }) {

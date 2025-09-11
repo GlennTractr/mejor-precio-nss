@@ -25,12 +25,18 @@ export async function GET(request: NextRequest) {
       // Parse the specs JSON string
       try {
         const specsArray = JSON.parse(specs);
+        const specFilters: string[] = [];
         specsArray.forEach((spec: { type: string; label: string }) => {
           if (spec.type && spec.label) {
-            // Add each spec as a filter
-            filters.push(`specs.type:=${spec.type} && specs.label:=${spec.label}`);
+            // Create individual spec filters that will be combined with OR
+            specFilters.push(`(specs.type:=${spec.type} && specs.label:=${spec.label})`);
           }
         });
+
+        // Combine spec filters with OR logic
+        if (specFilters.length > 0) {
+          filters.push(`(${specFilters.join(' || ')})`);
+        }
       } catch (e) {
         console.error('Error parsing specs JSON:', e);
       }
@@ -49,8 +55,11 @@ export async function GET(request: NextRequest) {
     // Combine all filters with AND operator
     const finalFilter = filters.join(' && ');
 
+    // Get collection name from environment or fallback to 'product'
+    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
+
     // Get similar products based on the query and filters
-    const searchResults = (await typesenseClient.collections('product').documents().search(
+    const searchResults = (await typesenseClient.collections(collectionName).documents().search(
       {
         q: query,
         query_by: 'title,brand,model,category',

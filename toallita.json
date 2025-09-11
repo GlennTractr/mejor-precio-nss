@@ -1,0 +1,101 @@
+{
+    "Huggies": [
+        "Natural Care",
+        "One & Done",
+        "Simply Clean",
+        "Triple Clean",
+        "Puro y Natural",
+        "Limpieza Efectiva",
+        "Cuidado Hidratante"
+    ],
+    "Pampers": [
+        "Sensitive",
+        "Fresh Clean",
+        "Aqua Pure"
+    ],
+    "Babysec": [
+        "Clásicas",
+        "Sensitive",
+        "Antibacteriales",
+        "Ultra"
+    ],
+    "Kleenex": [
+        "Humeditas",
+        "Humeditas Aloe",
+        "Humeditas Manzanilla",
+        "Antibacterial",
+        "Sensitive"
+    ],
+    "Johnson's": [
+        "Baby",
+        "Extra Sensitive",
+        "Bedtime",
+        "Cottontouch",
+        "Head-to-Toe"
+    ],
+    "Suavinex": [
+        "Zero",
+        "Pediatric",
+        "Dermohidratantes",
+        "Sensitive"
+    ],
+    "Neutrogena": [
+        "Baby"
+    ],
+    "Parent's Choice": [
+        "Classic",
+        "Sensitive",
+        "Purified Water",
+        "Aloe & Vitamin E"
+    ],
+    "WaterWipes": [
+        "Original",
+        "Textured Clean"
+    ],
+    "Mustela": [
+        "Dermolimpiadoras",
+        "Stelatopia"
+    ],
+    "Bbtips": [
+        "Sensitive",
+        "Aqua Care",
+        "Manzanilla"
+    ],
+    "BioBaby": [
+        "Natural Care",
+        "Sensitive",
+        "Biodegradables"
+    ],
+    "Baby Dove": [
+        "Sensitive Moisture",
+        "Rich Moisture"
+    ],
+    "Member's Mark": [
+        "Sensitive",
+        "Aloe & Vitamin E"
+    ],
+    "Kirkland Signature": [
+        "Ultra Soft",
+        "Fragrance-Free"
+    ],
+    "Chicco": [
+        "Baby Moments",
+        "Natural Sensation"
+    ],
+    "Pigeon": [
+        "Sensitive",
+        "Manzanilla"
+    ],
+    "Bambo Nature": [
+        "Eco",
+        "Fragrance-Free"
+    ],
+    "The Honest Company": [
+        "Fragrance Free",
+        "Plant-Based"
+    ],
+    "Seventh Generation": [
+        "Free & Clear",
+        "Baby"
+    ]
+}

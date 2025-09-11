@@ -1,0 +1,178 @@
+{
+    "Nestlé": {
+        "Nan Pro": [
+            1,
+            2,
+            3
+        ],
+        "Nan Optipro": [
+            1,
+            2,
+            3
+        ],
+        "Nan Supreme": [
+            1,
+            2,
+            3
+        ],
+        "Nan Sin Lactosa": "sin-etapa",
+        "Nan Soya": "sin-etapa",
+        "Nan AR": "sin-etapa",
+        "Nan HA": [
+            1,
+            2
+        ],
+        "Nan Confort Total": [
+            1,
+            2
+        ],
+        "PreNan (prematuros)": "sin-etapa",
+        "Althéra (hidrolizada extensamente)": "sin-etapa",
+        "Alfamino (aminoácidos)": "sin-etapa",
+        "S-26 Gold": [
+            1,
+            2,
+            3
+        ],
+        "S-26 Progress": [
+            1,
+            2,
+            3
+        ],
+        "Nido Kinder 1+ (no es fórmula infantil)": "sin-etapa"
+    },
+    "Enfamil": {
+        "Enfamil Premium": [
+            1,
+            2,
+            3
+        ],
+        "Enfamil ProSobee (soya)": "sin-etapa",
+        "Enfamil Sin Lactosa / O-Lac": "sin-etapa",
+        "Enfamil AR": "sin-etapa",
+        "Enfamil Gentlease": [
+            1,
+            2,
+            3
+        ],
+        "Enfamil Confort": [
+            1,
+            2
+        ],
+        "Nutramigen LGG (hidrolizada extensamente)": "sin-etapa",
+        "Enfacare (post‑alta prematuros)": "sin-etapa",
+        "Prematuros": "sin-etapa"
+    },
+    "Similac": {
+        "Similac Advance": [
+            1,
+            2,
+            3
+        ],
+        "Similac Pro-Advance": [
+            1,
+            2,
+            3
+        ],
+        "Similac Sensitive": "sin-etapa",
+        "Similac Soya / Isomil": "sin-etapa",
+        "Similac Total Comfort": [
+            1,
+            2,
+            3
+        ],
+        "Similac Alimentum (hidrolizada extensamente)": "sin-etapa",
+        "Similac NeoSure (post‑alta prematuros)": "sin-etapa",
+        "Similac AR": "sin-etapa"
+    },
+    "Nutrilon": {
+        "Nutrilon Profutura": [
+            1,
+            2,
+            3
+        ],
+        "Nutrilon Premium": [
+            1,
+            2,
+            3
+        ],
+        "Nutrilon Soya": "sin-etapa",
+        "Nutrilon Sin Lactosa": "sin-etapa",
+        "Nutrilon AR": [
+            1,
+            2
+        ],
+        "Nutrilon HA": [
+            1,
+            2
+        ],
+        "Nutrilon Confort": [
+            1,
+            2
+        ]
+    },
+    "Kendamil": {
+        "Kendamil Orgánica": [
+            1,
+            2,
+            3
+        ],
+        "Kendamil Clásica": [
+            1,
+            2,
+            3
+        ],
+        "Kendamil Goat (cabra)": [
+            1,
+            2,
+            3
+        ]
+    },
+    "HiPP": {
+        "HiPP Orgánica": [
+            1,
+            2,
+            3
+        ],
+        "HiPP Comfort": "sin-etapa",
+        "HiPP HA Combiotic": [
+            1,
+            2
+        ],
+        "HiPP AR": [
+            1,
+            2
+        ]
+    },
+    "Novamil": {
+        "Novamil": [
+            1,
+            2,
+            3
+        ],
+        "Novamil AR": "sin-etapa",
+        "Novamil Confort": "sin-etapa",
+        "Novamil Sin Lactosa": "sin-etapa",
+        "Novamil Soya": "sin-etapa"
+    },
+    "Blemil": {
+        "Blemil Plus": [
+            1,
+            2,
+            3
+        ],
+        "Blemil Confort": "sin-etapa",
+        "Blemil AR": "sin-etapa",
+        "Blemil HA": "sin-etapa",
+        "Blemil Sin Lactosa": "sin-etapa",
+        "Blemil Soya": "sin-etapa",
+        "Blemil Prematuros": "sin-etapa"
+    },
+    "Capricare": {
+        "Capricare Cabra": [
+            1,
+            2,
+            3
+        ]
+    }
+}

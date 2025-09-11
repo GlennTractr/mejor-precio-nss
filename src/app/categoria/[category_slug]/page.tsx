@@ -57,8 +57,9 @@ async function getInitialFiltersAndName(categorySlug: string) {
     );
 
     // 3. Get counts from Typesense
+    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
     const facetsResponse = await typesenseClient
-      .collections('product')
+      .collections(collectionName)
       .documents()
       .search(
         {

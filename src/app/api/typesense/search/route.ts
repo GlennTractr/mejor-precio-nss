@@ -11,8 +11,11 @@ export async function GET(request: NextRequest) {
   const sortBy = searchParams.get('sort_by') || 'best_price_per_unit:asc';
 
   try {
+    // Get collection name from environment or fallback to 'product'
+    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
+    
     // Get search results with facet counts for updating filter counts
-    const searchResults = (await typesenseClient.collections('product').documents().search(
+    const searchResults = (await typesenseClient.collections(collectionName).documents().search(
       {
         q: query,
         query_by: 'title,brand,model',
@@ -31,7 +34,7 @@ export async function GET(request: NextRequest) {
 
     // Get facets with all possible values (without filters)
     const facetsResponse = await typesenseClient
-      .collections('product')
+      .collections(collectionName)
       .documents()
       .search(
         {
@@ -48,7 +51,7 @@ export async function GET(request: NextRequest) {
       );
 
     // Get filtered facet counts
-    const filteredFacetsResponse = await typesenseClient.collections('product').documents().search(
+    const filteredFacetsResponse = await typesenseClient.collections(collectionName).documents().search(
       {
         q: query,
         query_by: 'title',
@@ -94,7 +97,7 @@ export async function GET(request: NextRequest) {
       specTypes.map(async specType => {
         // Get all possible labels for this type
         const allLabelsResponse = await typesenseClient
-          .collections('product')
+          .collections(collectionName)
           .documents()
           .search(
             {
@@ -116,7 +119,7 @@ export async function GET(request: NextRequest) {
 
         // Get filtered label counts
         const filteredLabelsResponse = await typesenseClient
-          .collections('product')
+          .collections(collectionName)
           .documents()
           .search(
             {
