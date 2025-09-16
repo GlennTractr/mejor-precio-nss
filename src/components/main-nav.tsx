@@ -10,17 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import {
-  User2,
-  Monitor,
-  LogOut,
-  Menu,
-  Lock,
-  LogIn,
-  Search,
-  Grid3X3,
-  ChevronRight,
-} from 'lucide-react';
+import { User2, LogOut, Menu, Lock, LogIn, Search, Grid3X3, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -185,54 +175,54 @@ export function MainNav() {
             </nav>
           </div>
 
-            {/* Search Bar (centered middle) */}
-            <div className="flex-1 max-w-md mx-8 hidden md:block">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Buscar productos..."
-                  className="w-full pl-10 pr-4 py-2 bg-muted/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  readOnly
-                />
-              </div>
+          {/* Search Bar (centered middle) */}
+          <div className="flex-1 max-w-md mx-8 hidden md:block">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Buscar productos..."
+                className="w-full pl-10 pr-4 py-2 bg-muted/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                readOnly
+              />
             </div>
+          </div>
 
-            {/* Profile Menu or Sign In (moved to right side) */}
-            <div className="flex items-center">
-              {isAuthenticated ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost-secondary"
-                      className="flex items-center space-x-2 h-9 px-3 text-sm font-medium"
-                    >
-                      <User2 className="h-4 w-4" />
-                      <span>{currentUser?.data?.email || t('navigation.profile')}</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href="/change-password">
-                        <Lock className="mr-2 h-4 w-4" />
-                        <span>{t('navigation.changePassword')}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={logout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>{t('navigation.logout')}</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Button variant="ghost-secondary" className="flex items-center space-x-2" asChild>
-                  <Link href="/auth/login">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    <span>{t('actions.login')}t3</span>
-                  </Link>
-                </Button>
-              )}
-            </div>
+          {/* Profile Menu or Sign In (moved to right side) */}
+          <div className="flex items-center">
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost-secondary"
+                    className="flex items-center space-x-2 h-9 px-3 text-sm font-medium"
+                  >
+                    <User2 className="h-4 w-4" />
+                    <span>{currentUser?.data?.email || t('navigation.profile')}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href="/change-password">
+                      <Lock className="mr-2 h-4 w-4" />
+                      <span>{t('navigation.changePassword')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={logout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>{t('navigation.logout')}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button variant="ghost-secondary" className="flex items-center space-x-2" asChild>
+                <Link href="/auth/login">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  <span>{t('actions.login')}t3</span>
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Categories Sheet - unified for both mobile and desktop */}
@@ -302,10 +292,7 @@ export function MainNav() {
                   className="w-full flex items-center justify-center border-primary/30 text-primary hover:bg-primary hover:text-secondary"
                   asChild
                 >
-                  <Link
-                    href="/auth/login"
-                    onClick={() => setOpenCategories(false)}
-                  >
+                  <Link href="/auth/login" onClick={() => setOpenCategories(false)}>
                     <LogIn className="h-4 w-4 mr-2" />
                     <span>{t('actions.login')}</span>
                   </Link>

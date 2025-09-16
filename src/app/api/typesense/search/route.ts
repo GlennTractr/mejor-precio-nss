@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   try {
     // Get collection name from environment or fallback to 'product'
     const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
-    
+
     // Get search results with facet counts for updating filter counts
     const searchResults = (await typesenseClient.collections(collectionName).documents().search(
       {
@@ -51,17 +51,20 @@ export async function GET(request: NextRequest) {
       );
 
     // Get filtered facet counts
-    const filteredFacetsResponse = await typesenseClient.collections(collectionName).documents().search(
-      {
-        q: query,
-        query_by: 'title',
-        filter_by: filterBy,
-        facet_by: 'brand,model,specs.type,specs.label',
-        max_facet_values: 100,
-        per_page: 0,
-      },
-      {}
-    );
+    const filteredFacetsResponse = await typesenseClient
+      .collections(collectionName)
+      .documents()
+      .search(
+        {
+          q: query,
+          query_by: 'title',
+          filter_by: filterBy,
+          facet_by: 'brand,model,specs.type,specs.label',
+          max_facet_values: 100,
+          per_page: 0,
+        },
+        {}
+      );
 
     // Extract facet counts
     const allFacetCounts = facetsResponse.facet_counts || [];
