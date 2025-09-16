@@ -46,8 +46,8 @@ function CategorySkeleton() {
   return (
     <Card variant="interactive" className="w-[180px] h-[180px] flex-shrink-0">
       <CardContent className="p-4 space-y-3">
-        <Skeleton className="h-[120px] w-full rounded-lg" />
         <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-[120px] w-full rounded-lg" />
       </CardContent>
     </Card>
   );
@@ -62,7 +62,7 @@ export function CategoryCarousel() {
   if (isLoading) {
     return (
       <div className="flex gap-4 overflow-x-auto pb-4">
-        {Array.from({ length: 5 }).map((_, i) => (
+        {Array.from({ length: 4 }).map((_, i) => (
           <CategorySkeleton key={i} />
         ))}
       </div>

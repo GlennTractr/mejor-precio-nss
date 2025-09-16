@@ -83,7 +83,10 @@
       "found": "{count, plural, =0 {No products found} =1 {1 product found} other {# products found}}",
       "perPage": "Items per page:",
       "rangePrice": "Price: {min}MXN - {max}MXN",
-      "availableAt": "Available at: {shops}"
+      "fromPrice": "From {price}MXN",
+      "perUnit": "per unit",
+      "availableAt": "Available at: {shops}",
+      "availableAtLength": "Available from {length} shops"
     }
   },
   "auth": {

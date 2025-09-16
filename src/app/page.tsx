@@ -42,28 +42,34 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-0">
       <Banner className="w-full" />
 
-      <div className="pb-[75px] my-6 mx-auto w-full max-w-4xl">
+      <section className="mx-auto w-full max-w-4xl">
         {/* Favorites Section - FavoritesList component handles hiding for non-authenticated users */}
-
         <FavoritesList />
+      </section>
 
-        <section className="mt-6">
-          <h2 className="text-2xl text-accent mb-6 highlight-secondary">{t('categories')}</h2>
+      <section className="bg-secondary-light z-1 my-0">
+        <div className="py-[75px] mx-auto w-full max-w-4xl text-center">
+          <h2 className="text-2xl text-accent mb-6 highlight-sand">{t('categories')}</h2>
           <Suspense fallback={<CategoryCarouselSkeleton />}>
             <CategoryCarousel />
           </Suspense>
-        </section>
+        </div>
+      </section>
 
-        <section className="mt-6">
+      <section className="mt-6 mx-auto w-full max-w-4xl py-[75px]">
+        <div className="text-center">
           <h2 className="text-2xl text-accent mb-6 highlight-primary">{t('allProducts')}</h2>
-          <HydrationBoundary state={dehydratedState}>
-            <HomeProductList currentPage={currentPage} itemsPerPage={itemsPerPage} />
-          </HydrationBoundary>
-        </section>
-      </div>
+          <p className="text-secondary mb-6 max-w-md mx-auto text-md">
+            {t('allProductsDescription')}
+          </p>
+        </div>
+        <HydrationBoundary state={dehydratedState}>
+          <HomeProductList currentPage={currentPage} itemsPerPage={itemsPerPage} />
+        </HydrationBoundary>
+      </section>
     </div>
   );
 }

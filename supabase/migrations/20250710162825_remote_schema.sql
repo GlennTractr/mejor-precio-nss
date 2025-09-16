@@ -838,7 +838,8 @@ CREATE TABLE IF NOT EXISTS "public"."ProductCategory" (
     "slug" "text" NOT NULL,
     "image_bucket" "text",
     "image_path" "text",
-    "country" "text" NOT NULL
+    "country" "text" NOT NULL,
+    "description" "text"
 );
 
 
@@ -1010,6 +1011,7 @@ CREATE OR REPLACE VIEW "public"."product_view" WITH ("security_invoker"='on') AS
     "pm"."label" AS "model",
     "pb"."label" AS "brand",
     "pc"."label" AS "category",
+    "qt"."unit_label" AS "quantity_type",
     "f"."file_bucket" AS "main_image_bucket",
     "f"."file_path" AS "main_image_path",
     "regexp_replace"("lower"("public"."unaccent"("pc"."label")), ' '::"text", '-'::"text", 'g'::"text") AS "category_slug"
@@ -1035,6 +1037,7 @@ CREATE OR REPLACE VIEW "public"."product_view" WITH ("security_invoker"='on') AS
      LEFT JOIN "public"."ProductModel" "pm" ON (("pm"."id" = "p"."model")))
      LEFT JOIN "public"."ProductBrand" "pb" ON (("pb"."id" = "pm"."brand")))
      LEFT JOIN "public"."ProductCategory" "pc" ON (("pc"."id" = "pm"."category")))
+     LEFT JOIN "public"."QuantityType" "qt" ON (("qt"."id" = "pc"."quantity_type")))
      LEFT JOIN "public"."File" "f" ON (("f"."id" = "p"."image")));
 
 

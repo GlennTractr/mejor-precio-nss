@@ -49,6 +49,7 @@
     --sidebar-accent-foreground: 193 18% 35%;
     --sidebar-border: 196 15% 89%;
     --sidebar-ring: 14 82% 84%;
+    --sand: 31 29% 94%;
     --secondary-light: #b6d9d0;
     --dark-secondary: 193 35% 22%;
   }
@@ -136,6 +137,7 @@
     display: inline-block;
     font-weight: bold;
     color: hsl(var(--dark-secondary));
+    z-index: 2;
   }
 
   .highlight-primary::before {
@@ -157,12 +159,57 @@
     display: inline-block;
     font-weight: bold;
     color: hsl(var(--dark-secondary));
+    z-index: 2;
   }
 
   .highlight-secondary::before {
     content: '';
     position: absolute;
     background: var(--secondary-light);
+    height: calc(100% - 10px);
+    width: calc(100% + 12px);
+    z-index: -1;
+    top: 8px;
+    left: -6px;
+    transform: skewX(-30deg);
+    opacity: 0.8;
+    border-radius: 3px;
+  }
+
+  .highlight-white {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    color: hsl(var(--dark-secondary));
+    z-index: 2;
+  }
+
+  .highlight-white::before {
+    content: '';
+    position: absolute;
+    background: #ffffff;
+    height: calc(100% - 10px);
+    width: calc(100% + 12px);
+    z-index: -1;
+    top: 8px;
+    left: -6px;
+    transform: skewX(-30deg);
+    opacity: 0.8;
+    border-radius: 3px;
+  }
+
+  .highlight-sand {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    color: hsl(var(--dark-secondary));
+    z-index: 2;
+  }
+
+  .highlight-sand::before {
+    content: '';
+    position: absolute;
+    background: hsl(var(--sand));
     height: calc(100% - 10px);
     width: calc(100% + 12px);
     z-index: -1;

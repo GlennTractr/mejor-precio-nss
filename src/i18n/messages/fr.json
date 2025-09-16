@@ -83,7 +83,10 @@
       "found": "{count, plural, =0 {Aucun produit trouvé} =1 {1 produit trouvé} other {# produits trouvés}}",
       "perPage": "Produits par page:",
       "rangePrice": "Prix: {min}$ - {max}$",
-      "availableAt": "Disponible chez: {shops}"
+      "fromPrice": "De {price}$",
+      "perUnit": "par unité",
+      "availableAt": "Disponible chez: {shops}",
+      "availableAtLength": "Disponible chez {length} boutiques"
     }
   },
   "auth": {

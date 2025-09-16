@@ -30,7 +30,7 @@ async function getInitialFiltersAndName(categorySlug: string) {
     // 1. Get category ID and name from slug
     const { data: category } = await supabase
       .from('ProductCategory')
-      .select('id, label')
+      .select('id, label, description')
       .eq('slug', categorySlug)
       .single();
 
@@ -113,6 +113,7 @@ async function getInitialFiltersAndName(categorySlug: string) {
         category_name: category.label,
       },
       categoryName: category.label,
+      categoryDescription: category.description,
     };
   } catch (error) {
     console.error('Failed to fetch initial filters:', error);
@@ -128,20 +129,20 @@ export default async function Page({ params, searchParams }: PageProps) {
   const itemsPerPage = parseInt(searchParamsAwaited.per_page || '20');
 
   // Get initial filters and category name
-  const { initialFilters, categoryName } = await getInitialFiltersAndName(categorySlug);
+  const { initialFilters, categoryName, categoryDescription } =
+    await getInitialFiltersAndName(categorySlug);
 
   return (
-    <div className="py-6 my-6">
-      <CategoryPage
-        categorySlug={categorySlug}
-        categoryName={categoryName}
-        initialPage={currentPage}
-        initialItemsPerPage={itemsPerPage}
-        initialFilters={initialFilters}
-        minPossiblePrice={initialFilters.price_range.min}
-        maxPossiblePrice={initialFilters.price_range.max}
-      />
-    </div>
+    <CategoryPage
+      categorySlug={categorySlug}
+      categoryName={categoryName}
+      initialPage={currentPage}
+      initialItemsPerPage={itemsPerPage}
+      initialFilters={initialFilters}
+      minPossiblePrice={initialFilters.price_range.min}
+      maxPossiblePrice={initialFilters.price_range.max}
+      description={categoryDescription}
+    />
   );
 }
 

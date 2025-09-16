@@ -11,11 +11,13 @@ interface CategoryPageProps {
   minPossiblePrice: number;
   maxPossiblePrice: number;
   initialFilters: CategoryFilters;
+  description?: string;
 }
 
 export function CategoryPage({
   categorySlug,
   categoryName,
+  description,
   initialPage,
   initialItemsPerPage,
   initialFilters,
@@ -25,21 +27,32 @@ export function CategoryPage({
   const displayName = categoryName || initialFilters.category_name;
 
   return (
-    <div className="mx-auto w-full max-w-7xl pb-6">
-      <div className="space-y-6">
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl highlight-primary">{displayName}</h1>
+    <>
+      <div className="bg-secondary-light">
+        <div className="mx-auto w-full max-w-7xl py-[25px]">
+          <div className="mb-6 text-center">
+            <h1 className="text-2xl highlight-sand mb-4">{displayName}</h1>
+            {description && (
+              <p className="text-secondary mb-6 max-w-2xl mx-auto text-sm font-bold">
+                {description}
+              </p>
+            )}
+          </div>
         </div>
-        <CategoryProductListContainer
-          categorySlug={categorySlug}
-          categoryName={categoryName}
-          initialFilters={initialFilters}
-          minPossiblePrice={minPossiblePrice}
-          maxPossiblePrice={maxPossiblePrice}
-          initialPage={initialPage}
-          initialItemsPerPage={initialItemsPerPage}
-        />
       </div>
-    </div>
+      <div className="mx-auto w-full max-w-7xl pt-[25px] pb-[75px]">
+        <div className="space-y-6">
+          <CategoryProductListContainer
+            categorySlug={categorySlug}
+            categoryName={categoryName}
+            initialFilters={initialFilters}
+            minPossiblePrice={minPossiblePrice}
+            maxPossiblePrice={maxPossiblePrice}
+            initialPage={initialPage}
+            initialItemsPerPage={initialItemsPerPage}
+          />
+        </div>
+      </div>
+    </>
   );
 }

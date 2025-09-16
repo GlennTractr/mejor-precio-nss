@@ -103,6 +103,7 @@ const config: Config = {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
+        sand: 'hsl(var(--sand))',
       },
       borderRadius: {
         lg: 'var(--radius)',

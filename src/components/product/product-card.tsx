@@ -163,15 +163,19 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardHeader>
         <CardContent className="py-1 px-4">
           <p className="text-base font-semibold text-accent">
-            {t('rangePrice', {
-              min: product.best_price_per_unit.toFixed(2),
-              max: product.max_price_per_unit.toFixed(2),
+            {t('fromPrice', {
+              price: product.best_price_per_unit.toFixed(2),
             })}
+            <small className="text-muted-foreground ml-2">
+              ({product.quantity_type ? product.quantity_type : t('perUnit')})
+            </small>
           </p>
         </CardContent>
         <CardFooter className="pt-0 pb-2 px-4 flex flex-col gap-2">
           <p className="text-xs text-muted-foreground line-clamp-1">
-            {t('availableAt', { shops: product.shop_names.join(', ') })}
+            {product.shop_names.length < 3
+              ? t('availableAt', { shops: product.shop_names.join(', ') })
+              : t('availableAtLength', { length: product.shop_names.length })}
           </p>
           <Button variant="outline-secondary" size="sm" className="w-full">
             <b>{tActions('seeOffers')}</b>

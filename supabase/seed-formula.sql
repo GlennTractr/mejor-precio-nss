@@ -17,8 +17,8 @@ INSERT INTO "public"."QuantityType" ("id", "label", "internal_label", "unit_labe
 -- ==============================================================================
 
 -- Insert ProductCategory data for formula (Mexico only - Spanish)
-INSERT INTO "public"."ProductCategory" ("id", "created_at", "label", "slug", "image_bucket", "image_path", "country", "quantity_type") VALUES 
-('f1bb06cd-b954-498b-a45e-770900f29466', NOW(), 'Fórmula Infantil', 'formula-infantil', null, null, '440e8400-e29b-41d4-a716-446655440001', '880e8400-e29b-41d4-a716-446655440001'); -- MX, Spanish Formula
+INSERT INTO "public"."ProductCategory" ("id", "created_at", "label", "slug", "image_bucket", "image_path", "country", "quantity_type", "description") VALUES 
+('f1bb06cd-b954-498b-a45e-770900f29466', NOW(), 'Fórmula Infantil', 'formula-infantil', null, null, '440e8400-e29b-41d4-a716-446655440001', '880e8400-e29b-41d4-a716-446655440001', 'Encuentra la fórmula infantil perfecta para tu bebé al mejor precio del mercado. Comparamos todas las marcas premium como Nestlé, Enfamil, Similac y más, en todas las tiendas para que elijas la nutrición ideal según la edad y necesidades específicas de tu pequeño. Desde etapa 1 para recién nacidos hasta fórmulas especializadas sin lactosa, de soya o hipoalergénicas. La alimentación de tu bebé es fundamental para su desarrollo, por eso te ayudamos a encontrar la mejor fórmula con la mejor relación calidad-precio.'); -- MX, Spanish Formula
 
 -- ==============================================================================
 -- PRODUCT BRANDS FOR FORMULA

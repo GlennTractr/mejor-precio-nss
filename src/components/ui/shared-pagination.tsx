@@ -55,13 +55,15 @@ function SharedPaginationComponent({
   }
 
   // Generate visible page numbers with ellipsis logic
-  const getVisiblePages = (currentPage: number, totalPages: number) => {
-    const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-    const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+  const getVisiblePages = (currentPage: number, totalPages: number, maxPages: number) => {
+    const startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+    const endPage = Math.min(totalPages, startPage + maxPages - 1);
     return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   };
 
-  const visiblePages = getVisiblePages(currentPage, totalPages);
+  // Get different page sets for mobile and desktop
+  const mobileVisiblePages = getVisiblePages(currentPage, totalPages, 3);
+  const desktopVisiblePages = getVisiblePages(currentPage, totalPages, maxPagesToShow);
 
   return (
     <div className={cn('flex justify-center mt-6', className)}>
@@ -78,9 +80,10 @@ function SharedPaginationComponent({
             />
           </PaginationItem>
 
-          {visiblePages[0] > 1 && (
+          {/* First page and ellipsis for mobile */}
+          {mobileVisiblePages[0] > 1 && (
             <>
-              <PaginationItem>
+              <PaginationItem className="sm:hidden">
                 <PaginationLink
                   onClick={() => onPageChange(1)}
                   className="hover:bg-secondary-100/50"
@@ -88,12 +91,36 @@ function SharedPaginationComponent({
                   1
                 </PaginationLink>
               </PaginationItem>
-              {visiblePages[0] > 2 && <PaginationEllipsis />}
+              {mobileVisiblePages[0] > 2 && (
+                <PaginationItem className="sm:hidden">
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
             </>
           )}
 
-          {visiblePages.map(page => (
-            <PaginationItem key={page}>
+          {/* First page and ellipsis for desktop */}
+          {desktopVisiblePages[0] > 1 && (
+            <>
+              <PaginationItem className="hidden sm:block">
+                <PaginationLink
+                  onClick={() => onPageChange(1)}
+                  className="hover:bg-secondary-100/50"
+                >
+                  1
+                </PaginationLink>
+              </PaginationItem>
+              {desktopVisiblePages[0] > 2 && (
+                <PaginationItem className="hidden sm:block">
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+            </>
+          )}
+
+          {/* Mobile visible pages */}
+          {mobileVisiblePages.map(page => (
+            <PaginationItem key={`mobile-${page}`} className="sm:hidden">
               <PaginationLink
                 onClick={() => onPageChange(page)}
                 isActive={currentPage === page}
@@ -108,10 +135,51 @@ function SharedPaginationComponent({
             </PaginationItem>
           ))}
 
-          {visiblePages[visiblePages.length - 1] < totalPages && (
+          {/* Desktop visible pages */}
+          {desktopVisiblePages.map(page => (
+            <PaginationItem key={`desktop-${page}`} className="hidden sm:block">
+              <PaginationLink
+                onClick={() => onPageChange(page)}
+                isActive={currentPage === page}
+                className={
+                  currentPage === page
+                    ? 'bg-secondary text-secondary-foreground hover:bg-secondary-800'
+                    : 'hover:bg-secondary-100/50'
+                }
+              >
+                {page}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          {/* Last page and ellipsis for mobile */}
+          {mobileVisiblePages[mobileVisiblePages.length - 1] < totalPages && (
             <>
-              {visiblePages[visiblePages.length - 1] < totalPages - 1 && <PaginationEllipsis />}
-              <PaginationItem>
+              {mobileVisiblePages[mobileVisiblePages.length - 1] < totalPages - 1 && (
+                <PaginationItem className="sm:hidden">
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+              <PaginationItem className="sm:hidden">
+                <PaginationLink
+                  onClick={() => onPageChange(totalPages)}
+                  className="hover:bg-secondary-100/50"
+                >
+                  {totalPages}
+                </PaginationLink>
+              </PaginationItem>
+            </>
+          )}
+
+          {/* Last page and ellipsis for desktop */}
+          {desktopVisiblePages[desktopVisiblePages.length - 1] < totalPages && (
+            <>
+              {desktopVisiblePages[desktopVisiblePages.length - 1] < totalPages - 1 && (
+                <PaginationItem className="hidden sm:block">
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+              <PaginationItem className="hidden sm:block">
                 <PaginationLink
                   onClick={() => onPageChange(totalPages)}
                   className="hover:bg-secondary-100/50"

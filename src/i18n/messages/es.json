@@ -83,7 +83,10 @@
       "found": "{count, plural, =0 {No se encontraron productos} =1 {1 producto encontrado} other {# productos encontrados}}",
       "perPage": "Productos por página:",
       "rangePrice": "Precio: {min}$ - {max}$",
-      "availableAt": "Disponible en: {shops}"
+      "fromPrice": "Desde {price}$",
+      "perUnit": "por unidad",
+      "availableAt": "Disponible en: {shops}",
+      "availableAtLength": "Disponible en {length} tiendas"
     }
   },
   "auth": {
@@ -108,7 +111,8 @@
     "welcome": "Bienvenido de nuevo, {email}",
     "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos atque nisi necessitatibus neque voluptates libero aperiam nam repellat quam, ab perferendis cum animi repellendus ratione eius dolores et iure rerum!",
     "categories": "Categorías",
-    "allProducts": "Todos los productos",
+    "allProducts": "Nuestra selección",
+    "allProductsDescription": "Encuentra los mejores precios en una lista de productos seleccionados para tu bebé",
     "heroTitle": "Encuentra los Mejores Precios para tu Bebé",
     "heroDescription": "Compara precios de productos para bebés entre las principales tiendas en linea de Mexico. Encuentra las mejores ofertas en pañales, fórmulas, carriolas y todo lo que tu bebé necesita, todo en un solo lugar.",
     "favorites": "Favoritos",
