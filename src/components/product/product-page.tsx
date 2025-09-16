@@ -339,7 +339,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left column - Image */}
-          <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-md border border-primary-light/20">
+          <div className="relative aspect-square bg-white rounded-lg overflow-hidden hover:border hover:border-secondary/50">
             {imageUrl && (
               <Image
                 src={imageUrl}
@@ -405,90 +405,105 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                   {product.ProductSpecs.map((spec, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/50 text-accent/80"
+                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary text-secondary font-bold"
                     >
-                      {spec.type}: {spec.label}
+                      {spec.label}
                     </span>
                   ))}
                 </div>
               )}
             </div>
 
-            <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary">
+            <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary ">
               {t('product.comparePrices')}
             </h2>
-            <div className="space-y-1">
-              {displayedProviders.map((item, index) => (
-                <div key={index}>
-                  <div className="flex items-center justify-between py-1 px-2 bg-white border border-secondary/20 hover:border-secondary/50 hover:scale-[1.02] transition-all duration-200 ease-in-out shadow-sm hover:shadow-md">
-                    <div className="flex items-center gap-4">
-                      {/* Shop Logo */}
-                      <div className="relative w-12 h-12 flex-shrink-0 bg-white rounded-lg p-1 border border-primary-light/10">
-                        <Image
-                          src={item.shopImg}
-                          alt={item.shop}
-                          fill
-                          className="object-contain"
-                          sizes="48px"
-                        />
-                      </div>
-                      {/* Shop Info */}
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-accent">{item.shop}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="font-medium text-accent">
-                        {item.quantity} {t('product.units.unit', { count: item.quantity })}
-                      </span>
-                      {index === 0 && (
-                        <div className="bg-primary text-secondary text-xs font-medium px-2 py-1 rounded-full shadow-sm">
-                          {t('product.ourRecommendation')}
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-6">
-                      {/* Price Info */}
-                      <div className="text-right">
-                        <div className="text-lg font-semibold text-accent">
-                          ${item.price.toFixed(2)}
-                        </div>
-                        <div className="text-xs text-primary-dark">
-                          {t('product.pricePerUnit', {
-                            price: item.pricePerUnit.toFixed(2),
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {/* Buy Button */}
-                      <Button
-                        variant="outline-secondary"
-                        size="sm"
-                        className="w-full"
-                        onClick={() => window.open(item.link, '_blank')}
-                      >
-                        {t('actions.buy')}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {hasMoreProviders && (
-                <div className="flex justify-center pt-2">
-                  <Button
-                    variant="ghost"
-                    onClick={() => setShowAllProviders(!showAllProviders)}
-                    className="text-sm font-medium text-primary hover:text-primary-dark focus:outline-none focus:underline transition-colors"
+            <table className="w-full border-collapse table-fixed">
+              <tbody>
+                {displayedProviders.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="border border-secondary/20 hover:border-secondary/50 hover:scale-[1.02] transition-all duration-200 ease-in-out shadow-sm hover:shadow-md text-white mb-1 block"
+                    style={{ marginBottom: '4px' }}
                   >
-                    {showAllProviders ? t('product.showLess') : t('product.showMore')}
-                  </Button>
-                </div>
-              )}
-            </div>
+                    <td className="w-1/3 py-1 px-2 inline-block align-middle">
+                      <div className="flex items-center gap-4 h-16">
+                        {/* Shop Logo */}
+                        <div className="relative w-12 h-12 flex-shrink-0 rounded-lg p-1">
+                          <Image
+                            src={item.shopImg}
+                            alt={item.shop}
+                            fill
+                            className="object-contain"
+                            sizes="48px"
+                          />
+                        </div>
+                        {/* Shop Info */}
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-accent">{item.shop}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="w-1/4 py-1 px-2 inline-block align-middle">
+                      <div className="flex flex-col items-center gap-1 h-16 justify-center">
+                        <span className="font-bold text-accent">
+                          {item.quantity} {t('product.units.unit', { count: item.quantity })}
+                        </span>
+                        {index === 0 && (
+                          <div className="bg-primary text-secondary text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+                            {t('product.ourRecommendation')}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+
+                    <td className="w-1/4 py-1 px-2 inline-block align-middle">
+                      <div className="flex items-center justify-center h-16">
+                        {/* Price Info */}
+                        <div className="text-right">
+                          <div className="text-lg font-bold text-accent">
+                            ${item.price.toFixed(2)}
+                          </div>
+                          <div className="text-xs text-primary-dark">
+                            {t('product.pricePerUnit', {
+                              price: item.pricePerUnit.toFixed(2),
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="w-1/6 py-1 px-2 inline-block align-middle">
+                      <div className="flex items-center justify-center h-16">
+                        {/* Buy Button */}
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => window.open(item.link, '_blank')}
+                        >
+                          {t('actions.buy')}
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {hasMoreProviders && (
+              <div className="flex justify-center pt-2">
+                <Button
+                  variant="ghost-secondary"
+                  onClick={() => setShowAllProviders(!showAllProviders)}
+                  className="text-sm font-medium hover:font-bold hover:underline focus:outline-none focus:underline transition-colors"
+                >
+                  {showAllProviders ? t('product.showLess') : t('product.showMore')}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 

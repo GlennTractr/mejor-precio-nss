@@ -10,7 +10,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { User2, Monitor, LogOut, Menu, Lock, LogIn, Search } from 'lucide-react';
+import {
+  User2,
+  Monitor,
+  LogOut,
+  Menu,
+  Lock,
+  LogIn,
+  Search,
+  Grid3X3,
+  ChevronRight,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -19,6 +29,9 @@ import { SettingsModal } from '@/components/settings-modal';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useQueryClient } from '@tanstack/react-query';
 import { Logo } from '@/components/ui/logo';
+import { useCategories } from '@/hooks/use-categories';
+import { SheetClose } from '@/components/ui/sheet';
+import { X } from 'lucide-react';
 
 const items: {
   titleKey: string;
@@ -38,11 +51,12 @@ export function MainNav() {
   const currentUser = useCurrentUser();
   const pathname = usePathname();
   const [showSettings, setShowSettings] = useState(false);
-  const [openMobile, setOpenMobile] = useState(false);
+  const [openCategories, setOpenCategories] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
   const queryClient = useQueryClient();
   const t = useTranslations();
+  const { data: categories, isLoading: categoriesLoading } = useCategories();
 
   // Update authentication state when currentUser changes
   useEffect(() => {
@@ -116,23 +130,23 @@ export function MainNav() {
         hasScrolled && 'shadow-md'
       )}
     >
-      <Sheet open={openMobile} onOpenChange={setOpenMobile}>
+      <Sheet open={openCategories} onOpenChange={setOpenCategories}>
         <div className="flex h-16 items-center px-6 justify-between">
           <div className="flex items-center">
-            {/* Burger Menu (Mobile) */}
+            {/* Burger Menu Button - works for both mobile and desktop */}
             <SheetTrigger asChild>
               <Button
                 variant="ghost-secondary"
                 size="icon"
-                className="md:hidden"
-                aria-label={t('navigation.mobile.menu')}
+                className="flex items-center justify-center"
+                aria-label="Categorías"
               >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
 
             {/* Logo */}
-            <Logo size="lg" className="ml-2 md:ml-0" />
+            <Logo size="lg" className="ml-2" />
 
             {/* Main Menu (Desktop only) */}
             <nav
@@ -147,7 +161,7 @@ export function MainNav() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                      'flex items-center space-x-2 px-3 h-9 text-sm font-medium transition-colors hover:text-primary rounded-md',
+                      'flex items-center space-x-2 px-3 h-9 text-sm font-medium transition-colors hover:text-secondary rounded-md',
                       'text-muted-foreground'
                     )}
                   >
@@ -159,8 +173,8 @@ export function MainNav() {
                     key={item.url}
                     href={item.url}
                     className={cn(
-                      'flex items-center space-x-2 px-3 h-9 text-sm font-medium transition-colors hover:text-primary rounded-md',
-                      pathname === item.url ? 'text-primary' : 'text-muted-foreground'
+                      'flex items-center space-x-2 px-3 h-9 text-sm font-medium transition-colors hover:text-secondary rounded-md',
+                      pathname === item.url ? 'text-secondary' : 'text-muted-foreground'
                     )}
                   >
                     <item.icon className="h-4 w-4" />
@@ -171,117 +185,127 @@ export function MainNav() {
             </nav>
           </div>
 
-          {/* Search Bar (centered middle) */}
-          <div className="flex-1 max-w-md mx-8 hidden md:block">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Buscar productos..."
-                className="w-full pl-10 pr-4 py-2 bg-muted/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                readOnly
-              />
+            {/* Search Bar (centered middle) */}
+            <div className="flex-1 max-w-md mx-8 hidden md:block">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Buscar productos..."
+                  className="w-full pl-10 pr-4 py-2 bg-muted/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  readOnly
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Profile Menu or Sign In (moved to right side) */}
-          <div className="flex items-center">
-            {isAuthenticated ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost-secondary"
-                    className="flex items-center space-x-2 h-9 px-3 text-sm font-medium"
-                  >
-                    <User2 className="h-4 w-4" />
-                    <span>{currentUser?.data?.email || t('navigation.profile')}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link href="/change-password">
-                      <Lock className="mr-2 h-4 w-4" />
-                      <span>{t('navigation.changePassword')}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={logout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>{t('navigation.logout')}</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button variant="ghost-secondary" className="flex items-center space-x-2" asChild>
-                <Link href="/auth/login">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  <span>{t('actions.login')}</span>
-                </Link>
-              </Button>
-            )}
-          </div>
+            {/* Profile Menu or Sign In (moved to right side) */}
+            <div className="flex items-center">
+              {isAuthenticated ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost-secondary"
+                      className="flex items-center space-x-2 h-9 px-3 text-sm font-medium"
+                    >
+                      <User2 className="h-4 w-4" />
+                      <span>{currentUser?.data?.email || t('navigation.profile')}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href="/change-password">
+                        <Lock className="mr-2 h-4 w-4" />
+                        <span>{t('navigation.changePassword')}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={logout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>{t('navigation.logout')}</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button variant="ghost-secondary" className="flex items-center space-x-2" asChild>
+                  <Link href="/auth/login">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    <span>{t('actions.login')}t3</span>
+                  </Link>
+                </Button>
+              )}
+            </div>
         </div>
 
-        {/* Mobile Menu */}
-        <SheetContent side="left" className="w-[280px] p-0">
+        {/* Categories Sheet - unified for both mobile and desktop */}
+        <SheetContent
+          side="left"
+          className="w-full md:w-[320px] p-0 bg-secondary border-0 [&>button:first-child]:hidden"
+        >
+          {/* Custom close button with white text */}
+          <SheetClose asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none text-white hover:text-white z-10"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </Button>
+          </SheetClose>
           <div className="flex flex-col h-full">
-            <div className="p-4 border-b">
-              <Logo size="md" />
+            <div className="p-4 border-b border-secondary-foreground/10">
+              <div className="flex items-center space-x-2">
+                <Grid3X3 className="h-5 w-5 text-primary" />
+                <h2 className="text-lg font-semibold text-primary">Categorías</h2>
+              </div>
             </div>
-            <nav className="flex-1 p-4" aria-label={t('navigation.mobile.menu')}>
-              {items.map(item => (
-                <Link
-                  key={item.url}
-                  href={item.url}
-                  target={item.external ? '_blank' : undefined}
-                  rel={item.external ? 'noopener noreferrer' : undefined}
-                  className={cn(
-                    'flex items-center space-x-2 px-3 h-9 text-sm font-medium transition-colors hover:text-primary rounded-md mb-2',
-                    pathname === item.url ? 'text-primary' : 'text-muted-foreground'
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{t(item.titleKey)}</span>
-                </Link>
-              ))}
-            </nav>
-            <div className="border-t p-4">
-              {isAuthenticated ? (
-                <>
-                  <div className="flex items-center justify-between">
-                    <Button
-                      variant="secondary"
-                      className="w-full flex items-center justify-between h-9 px-3 text-sm font-medium text-muted-foreground hover:text-primary"
-                      onClick={() => setShowSettings(true)}
-                    >
-                      <div className="flex items-center">
-                        <Monitor className="h-4 w-4 mr-2" />
-                        <span>{t('navigation.settings')}</span>
-                      </div>
-                    </Button>
-                  </div>
-                  <Link
-                    href="/change-password"
-                    className="w-full flex items-center justify-between h-9 px-3 text-sm font-medium text-muted-foreground hover:text-primary mt-2"
-                  >
-                    <div className="flex items-center">
-                      <Lock className="h-4 w-4 mr-2" />
-                      <span>{t('navigation.changePassword')}</span>
-                    </div>
-                  </Link>
-                  <Button
-                    variant="secondary"
-                    className="w-full flex items-center justify-between h-9 px-3 text-sm font-medium text-muted-foreground hover:text-primary mt-2"
-                    onClick={logout}
-                  >
-                    <div className="flex items-center">
-                      <LogOut className="h-4 w-4 mr-2" />
-                      <span>{t('navigation.logout')}</span>
-                    </div>
-                  </Button>
-                </>
+            <nav className="flex-1 p-4" aria-label="Categorías">
+              {categoriesLoading ? (
+                <div className="space-y-2">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="h-9 bg-primary/10 rounded-md animate-pulse" />
+                  ))}
+                </div>
               ) : (
-                <Button variant="secondary" className="w-full flex items-center" asChild>
-                  <Link href="/auth/login">
+                <div className="space-y-1">
+                  {categories?.map(category => (
+                    <Link
+                      key={category.id}
+                      href={`/categoria/${category.slug}`}
+                      className="flex items-center justify-between px-3 h-9 text-sm font-medium transition-colors hover:text-primary hover:bg-primary/10 rounded-md"
+                      onClick={() => setOpenCategories(false)}
+                    >
+                      <span className="text-primary/80">{category.label}</span>
+                      <ChevronRight className="h-4 w-4 text-primary/60" />
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </nav>
+
+            {/* Login/Logout Section */}
+            <div className="border-t border-primary/20 p-4">
+              {isAuthenticated ? (
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center justify-center border-primary/30 text-primary hover:bg-primary hover:text-secondary"
+                  onClick={() => {
+                    logout();
+                    setOpenCategories(false);
+                  }}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  <span>{t('navigation.logout')}</span>
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center justify-center border-primary/30 text-primary hover:bg-primary hover:text-secondary"
+                  asChild
+                >
+                  <Link
+                    href="/auth/login"
+                    onClick={() => setOpenCategories(false)}
+                  >
                     <LogIn className="h-4 w-4 mr-2" />
                     <span>{t('actions.login')}</span>
                   </Link>
