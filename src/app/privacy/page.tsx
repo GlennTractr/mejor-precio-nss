@@ -6,117 +6,121 @@ export default async function PrivacyPolicyPage() {
 
   return (
     <div className="mx-auto max-w-4xl p-6 my-6">
-      <h1 className="text-3xl text-accent mb-8 highlight-secondary">Privacy Policy</h1>
+      <h1 className="text-3xl text-accent mb-8 highlight-secondary">Política de Privacidad</h1>
 
       <div className="space-y-8">
         <section className="space-y-4">
           <p className="text-gray-600 text-sm mb-6">
-            <strong>Last updated:</strong> Lorem ipsum dolor sit amet, 2024
+            <strong>Última actualización:</strong> 16 de septiembre de 2025
           </p>
 
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              En SaveOnBaby, nos comprometemos a proteger la privacidad y los datos personales de nuestros usuarios. 
+              Esta Política de Privacidad describe cómo recopilamos, utilizamos, compartimos y protegemos la información 
+              personal cuando utiliza nuestro sitio web de comparación de precios para productos de bebé, conforme a la Ley Federal de Protección 
+              de Datos Personales en Posesión de los Particulares (LFPDPPP) de México.
             </p>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-accent mb-4">1. Information We Collect</h2>
+          <h2 className="text-xl font-semibold text-accent mb-4">1. Información que Recopilamos</h2>
           <div className="prose prose-gray max-w-none space-y-4">
-            <h3 className="text-lg font-medium text-accent">1.1 Personal Information</h3>
+            <h3 className="text-lg font-medium text-accent">1.1 Información Personal</h3>
             <p className="text-gray-700 leading-relaxed">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-              laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-              architecto beatae vitae dicta sunt explicabo.
-            </p>
-
-            <h3 className="text-lg font-medium text-accent">1.2 Usage Data</h3>
-            <p className="text-gray-700 leading-relaxed">
-              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-              consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+              Recopilamos información personal que usted nos proporciona directamente cuando se registra en SaveOnBaby, 
+              crea una cuenta, se suscribe a nuestras alertas de precios para productos de bebé, o se comunica con nosotros. Esta información puede incluir:
             </p>
 
             <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-              <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-              <li>Sed do eiusmod tempor incididunt ut labore et dolore</li>
-              <li>Ut enim ad minim veniam, quis nostrud exercitation</li>
-              <li>Duis aute irure dolor in reprehenderit in voluptate</li>
+              <li>Nombre completo y dirección de correo electrónico</li>
+              <li>Número de teléfono (opcional)</li>
+              <li>Preferencias de productos para bebé y categorías de interés</li>
+              <li>Historial de búsquedas de productos para bebé y productos favoritos</li>
+            </ul>
+
+            <h3 className="text-lg font-medium text-accent">1.2 Datos de Uso</h3>
+            <p className="text-gray-700 leading-relaxed">
+              Automáticamente recopilamos cierta información cuando utiliza nuestro sitio web, incluyendo:
+            </p>
+
+            <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
+              <li>Dirección IP y ubicación geográfica aproximada</li>
+              <li>Tipo de navegador y dispositivo utilizado</li>
+              <li>Páginas visitadas y tiempo de permanencia</li>
+              <li>Términos de búsqueda y patrones de navegación</li>
             </ul>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-accent mb-4">2. How We Use Your Information</h2>
+          <h2 className="text-xl font-semibold text-accent mb-4">2. Cómo Utilizamos su Información</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-              voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-              occaecati cupiditate non provident.
+              Utilizamos la información recopilada para los siguientes propósitos legítimos:
             </p>
 
             <div className="bg-gray-50 border-l-4 border-primary p-4 my-4">
               <p className="text-gray-700">
-                <strong>Important:</strong> Similique sunt in culpa qui officia deserunt mollitia
-                animi, id est laborum et dolorum fuga.
+                <strong>Importante:</strong> Todos los tratamientos de datos personales se realizan con base en el 
+                consentimiento expreso del titular o en alguna de las excepciones previstas en la LFPDPPP.
               </p>
             </div>
 
             <ul className="list-disc list-inside text-gray-700 space-y-2">
-              <li>Lorem ipsum dolor sit amet, consectetur adipiscing</li>
-              <li>Sed do eiusmod tempor incididunt ut labore</li>
-              <li>Ut enim ad minim veniam, quis nostrud</li>
-              <li>Duis aute irure dolor in reprehenderit</li>
+              <li>Proporcionar y mejorar nuestros servicios de comparación de precios para productos de bebé</li>
+              <li>Personalizar la experiencia del usuario y las recomendaciones de productos para bebé</li>
+              <li>Enviar alertas de precios y notificaciones relevantes</li>
+              <li>Comunicarnos con usted sobre actualizaciones del servicio</li>
+              <li>Analizar el uso del sitio para mejorar nuestros servicios</li>
+              <li>Cumplir con obligaciones legales y regulatorias</li>
             </ul>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-accent mb-4">3. Data Sharing and Disclosure</h2>
+          <h2 className="text-xl font-semibold text-accent mb-4">3. Compartir y Divulgación de Datos</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum
-              soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat
-              facere possimus.
+              No vendemos, alquilamos ni compartimos su información personal con terceros para fines comerciales. 
+              Podemos compartir información en las siguientes circunstancias limitadas:
             </p>
 
-            <h3 className="text-lg font-medium text-accent">3.1 Third-Party Services</h3>
+            <h3 className="text-lg font-medium text-accent">3.1 Proveedores de Servicios</h3>
             <p className="text-gray-700 leading-relaxed">
-              Omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et
-              aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates
-              repudiandae sint.
+              Compartimos información con proveedores de servicios de confianza que nos ayudan a operar nuestro sitio web, 
+              incluyendo servicios de hosting, análisis web, y envío de correos electrónicos. Estos proveedores están 
+              contractualmente obligados a proteger su información.
             </p>
 
-            <h3 className="text-lg font-medium text-accent">3.2 Legal Requirements</h3>
+            <h3 className="text-lg font-medium text-accent">3.2 Requerimientos Legales</h3>
             <p className="text-gray-700 leading-relaxed">
-              Et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut
-              aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus
-              asperiores repellat.
+              Podemos divulgar su información personal cuando sea requerido por ley, orden judicial, o por autoridades 
+              gubernamentales competentes, o cuando sea necesario para proteger nuestros derechos legales.
             </p>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-accent mb-4">4. Data Security</h2>
+          <h2 className="text-xl font-semibold text-accent mb-4">4. Seguridad de los Datos</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-              laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
+              Implementamos medidas de seguridad técnicas, físicas y administrativas apropiadas para proteger 
+              su información personal contra acceso no autorizado, alteración, divulgación o destrucción.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-white rounded-lg border border-secondary/20 p-4 shadow-sm">
-                <h4 className="font-semibold text-accent mb-2">Encryption</h4>
+                <h4 className="font-semibold text-accent mb-2">Cifrado</h4>
                 <p className="text-gray-700 text-sm">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+                  Utilizamos cifrado SSL/TLS para proteger la transmisión de datos sensibles entre su dispositivo y nuestros servidores.
                 </p>
               </div>
               <div className="bg-white rounded-lg border border-secondary/20 p-4 shadow-sm">
-                <h4 className="font-semibold text-accent mb-2">Access Control</h4>
+                <h4 className="font-semibold text-accent mb-2">Control de Acceso</h4>
                 <p className="text-gray-700 text-sm">
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.
+                  Limitamos el acceso a información personal solo al personal autorizado que necesita esta información para cumplir sus funciones.
                 </p>
               </div>
             </div>
@@ -124,40 +128,40 @@ export default async function PrivacyPolicyPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-accent mb-4">5. Your Rights</h2>
+          <h2 className="text-xl font-semibold text-accent mb-4">5. Sus Derechos (Derechos ARCO)</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt.
+              Conforme a la LFPDPPP, usted tiene los siguientes derechos sobre sus datos personales, 
+              conocidos como derechos ARCO:
             </p>
 
             <ul className="list-disc list-inside text-gray-700 space-y-2">
               <li>
-                <strong>Access:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing
+                <strong>Acceso:</strong> Conocer qué datos personales tenemos sobre usted y los propósitos de su uso
               </li>
               <li>
-                <strong>Rectification:</strong> Sed do eiusmod tempor incididunt ut labore
+                <strong>Rectificación:</strong> Solicitar la corrección de datos incorrectos o incompletos
               </li>
               <li>
-                <strong>Erasure:</strong> Ut enim ad minim veniam, quis nostrud exercitation
+                <strong>Cancelación:</strong> Solicitar la eliminación de sus datos personales de nuestros registros
               </li>
               <li>
-                <strong>Portability:</strong> Duis aute irure dolor in reprehenderit
+                <strong>Oposición:</strong> Oponerse al tratamiento de sus datos para propósitos específicos
               </li>
               <li>
-                <strong>Objection:</strong> Excepteur sint occaecat cupidatat non proident
+                <strong>Revocación del Consentimiento:</strong> Retirar su consentimiento para el tratamiento de datos
               </li>
             </ul>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-accent mb-4">6. Cookies and Tracking</h2>
+          <h2 className="text-xl font-semibold text-accent mb-4">6. Cookies y Tecnologías de Seguimiento</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
-              voluptatem accusantium doloremque laudantium.
+              Utilizamos cookies y tecnologías similares para mejorar su experiencia en SaveOnBaby, 
+              analizar el tráfico y personalizar las recomendaciones de productos para bebé. Puede controlar las cookies a través de la 
+              configuración de su navegador.
             </p>
 
             <div className="overflow-x-auto">
@@ -165,31 +169,31 @@ export default async function PrivacyPolicyPage() {
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="border border-gray-300 px-4 py-2 text-left font-medium text-accent">
-                      Cookie Type
+                      Tipo de Cookie
                     </th>
                     <th className="border border-gray-300 px-4 py-2 text-left font-medium text-accent">
-                      Purpose
+                      Propósito
                     </th>
                     <th className="border border-gray-300 px-4 py-2 text-left font-medium text-accent">
-                      Duration
+                      Duración
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="border border-gray-300 px-4 py-2">Essential</td>
-                    <td className="border border-gray-300 px-4 py-2">Lorem ipsum dolor</td>
-                    <td className="border border-gray-300 px-4 py-2">Session</td>
+                    <td className="border border-gray-300 px-4 py-2">Esenciales</td>
+                    <td className="border border-gray-300 px-4 py-2">Funcionalidad básica del sitio</td>
+                    <td className="border border-gray-300 px-4 py-2">Sesión</td>
                   </tr>
                   <tr>
-                    <td className="border border-gray-300 px-4 py-2">Analytics</td>
-                    <td className="border border-gray-300 px-4 py-2">Consectetur adipiscing</td>
-                    <td className="border border-gray-300 px-4 py-2">30 days</td>
+                    <td className="border border-gray-300 px-4 py-2">Analíticas</td>
+                    <td className="border border-gray-300 px-4 py-2">Análisis de uso y mejoras</td>
+                    <td className="border border-gray-300 px-4 py-2">30 días</td>
                   </tr>
                   <tr>
-                    <td className="border border-gray-300 px-4 py-2">Marketing</td>
-                    <td className="border border-gray-300 px-4 py-2">Sed do eiusmod</td>
-                    <td className="border border-gray-300 px-4 py-2">90 days</td>
+                    <td className="border border-gray-300 px-4 py-2">Preferencias</td>
+                    <td className="border border-gray-300 px-4 py-2">Personalización de contenido</td>
+                    <td className="border border-gray-300 px-4 py-2">90 días</td>
                   </tr>
                 </tbody>
               </table>
@@ -198,36 +202,48 @@ export default async function PrivacyPolicyPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-accent mb-4">7. Updates to This Policy</h2>
+          <h2 className="text-xl font-semibold text-accent mb-4">7. Actualizaciones de esta Política</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed">
-              Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
-              beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-              aspernatur aut odit aut fugit.
+              SaveOnBaby puede actualizar esta Política de Privacidad ocasionalmente para reflejar cambios en nuestras 
+              prácticas de información o en la legislación aplicable. Le notificaremos sobre cambios significativos 
+              mediante aviso en nuestro sitio web o por correo electrónico. La fecha de la última actualización 
+              se muestra en la parte superior de esta política.
             </p>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-accent mb-4">8. Contact Us</h2>
+          <h2 className="text-xl font-semibold text-accent mb-4">8. Contacto</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt, neque
-              porro quisquam est, qui dolorem ipsum quia dolor sit amet.
+              Si tiene preguntas sobre esta Política de Privacidad de SaveOnBaby o desea ejercer sus derechos ARCO, 
+              puede contactarnos a través de los siguientes medios:
             </p>
 
             <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <div className="space-y-2">
                 <p className="text-gray-700">
-                  <strong>Email:</strong> privacy@mejorprecio.com
+                  <strong>Responsable del Tratamiento:</strong> SaveOnBaby México
                 </p>
                 <p className="text-gray-700">
-                  <strong>Address:</strong> Lorem Ipsum Street, 123, Dolor City, 45678
+                  <strong>Email:</strong> privacidad@saveonbaby.mx
                 </p>
                 <p className="text-gray-700">
-                  <strong>Phone:</strong> +1 (555) 123-4567
+                  <strong>Dirección:</strong> Ciudad de México, México
+                </p>
+                <p className="text-gray-700">
+                  <strong>Atención:</strong> Lunes a Viernes, 9:00 - 18:00 hrs (GMT-6)
                 </p>
               </div>
+            </div>
+
+            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-gray-700 text-sm">
+                <strong>Jurisdicción:</strong> Esta Política de Privacidad se rige por las leyes de México. 
+                Cualquier disputa relacionada con el tratamiento de datos personales será resuelta conforme 
+                a la legislación mexicana aplicable y ante los tribunales competentes de México.
+              </p>
             </div>
           </div>
         </section>

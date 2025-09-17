@@ -32,7 +32,9 @@
       "specs": "Especificaciones",
       "resetFilters": "Restablecer filtros",
       "brand": "Marca",
-      "model": "Modelo"
+      "model": "Modelo",
+      "step": "Paso",
+      "gender": "Género"
     }
   },
   "product": {

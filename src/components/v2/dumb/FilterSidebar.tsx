@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { memo, useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -33,16 +33,44 @@ function FilterSidebarComponent({
   const [searchInputValue, setSearchInputValue] = useState(searchQuery);
   const [localPriceRange, setLocalPriceRange] = useState<[number, number]>(priceRange);
 
-  // Debounced search handler
-  const debouncedSearchChange = debounce((value: string) => {
-    onSearchChange(value);
-  }, 300);
+  // Synchronize local search input with external searchQuery changes
+  // Only when search is deleted (empty), not on every change
+  useEffect(() => {
+    if (searchQuery === '' && searchInputValue !== '') {
+      setSearchInputValue(searchQuery);
+    }
+  }, [searchQuery, searchInputValue]);
 
-  // Handle search input changes
+  // Synchronize local price range with external priceRange changes
+  // This ensures the price slider resets when price filter is removed from ActiveFiltersBar
+  useEffect(() => {
+    setLocalPriceRange(priceRange);
+  }, [priceRange]);
+
+  // Debounced search handler - only for sending to filter system
+  const debouncedSearchChange = useMemo(
+    () => {
+      let timeoutId: NodeJS.Timeout | null = null;
+      
+      return (value: string) => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        
+        timeoutId = setTimeout(() => {
+          console.log('debouncedSearchChange', value);
+          onSearchChange(value);
+        }, 500);
+      };
+    },
+    [onSearchChange]
+  );
+
+  // Handle search input changes - immediate UI update, debounced filter update
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setSearchInputValue(value);
-    debouncedSearchChange(value);
+    setSearchInputValue(value); // Immediate UI update
+    debouncedSearchChange(value); // Debounced filter update
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -83,7 +111,7 @@ function FilterSidebarComponent({
             value={searchInputValue}
             onChange={handleSearchInput}
             placeholder={t('filters.searchPlaceholder')}
-            className="pr-10 border-secondary/50 hover:border-secondary/80 focus:border-secondary transition-all duration-300 focus:ring-secondary/50"
+            className="pr-10 shadow-none border-secondary/50 hover:border-secondary/80 focus:border-secondary transition-all duration-300 focus:ring-secondary/50 focus-visible:ring-secondary/10"
           />
           <Button
             type="submit"
@@ -128,6 +156,7 @@ function FilterSidebarComponent({
             selectedItems={brandFilters.selectedItems}
             onToggle={handleBrandToggle}
             sortBy="count"
+            variant="secondary"
           />
         )}
 
@@ -140,7 +169,7 @@ function FilterSidebarComponent({
             selectedItems={modelFilters.selectedItems}
             onToggle={handleModelToggle}
             sortBy="count"
-            variant="secondary"
+            variant="primary"
           />
         )}
 
@@ -149,7 +178,7 @@ function FilterSidebarComponent({
           specFilters={specFilters}
           onToggle={handleSpecToggle}
           maxHeight={160}
-          startVariant="primary"
+          startVariant="secondary"
         />
       </Accordion>
 

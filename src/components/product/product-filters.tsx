@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -56,6 +56,16 @@ export function ProductFilters({
   const t = useTranslations('category');
   const [searchInputValue, setSearchInputValue] = useState(searchQuery);
   const [localPriceRange, setLocalPriceRange] = useState<[number, number]>(priceRange);
+
+  // Synchronize local search input with external searchQuery changes
+  useEffect(() => {
+    setSearchInputValue(searchQuery);
+  }, [searchQuery]);
+
+  // Synchronize local price range with external priceRange changes
+  useEffect(() => {
+    setLocalPriceRange(priceRange);
+  }, [priceRange]);
 
   // Check if any filters are applied
   const hasActiveFilters =

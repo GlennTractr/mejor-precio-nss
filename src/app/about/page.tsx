@@ -6,90 +6,107 @@ export default async function AboutPage() {
 
   return (
     <div className="mx-auto max-w-4xl p-6 my-6">
-      <h1 className="text-3xl text-accent mb-8 highlight-primary">About Save On Baby</h1>
+      <h1 className="text-3xl text-accent mb-8 highlight-primary">Acerca de Nosotros</h1>
 
       <div className="space-y-8">
         <section className="space-y-4">
-          <h2 className="text-xl text-accent mb-4 highlight-secondary">Our Mission</h2>
+          <h2 className="text-xl text-accent mb-4 highlight-secondary">Nuestra Historia</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              Somos una <strong>familia</strong> franco-mexicana con 3 hijos, incluyendo gemelas.
+              Después del nacimiento de nuestras gemelas, luchamos para encontrar las mejores
+              opciones de productos para bebés.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum.
+              Después de esta mala experiencia, decidimos crear este sitio web para{' '}
+              <strong>ayudar</strong> a cada <strong>familia</strong> mexicana a encontrar el mejor
+              producto al mejor precio.
             </p>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl text-accent mb-4 highlight-secondary">What We Do</h2>
+          <h2 className="text-xl text-accent mb-4 highlight-secondary">Nuestra Misión</h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-              laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-              architecto beatae vitae dicta sunt explicabo.
+              Creemos en la importancia de la <strong>proximidad</strong> con nuestras{' '}
+              <strong>familias</strong> mexicanas. Entendemos los desafíos que enfrentan los padres
+              al <strong>buscar</strong> productos de calidad para sus hijos a precios accesibles.
             </p>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-              consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+              Nuestra misión es ofrecer <strong>descuentos</strong> excepcionales y facilitar la{' '}
+              <strong>búsqueda</strong> de los mejores productos para bebés y niños.
             </p>
             <ul className="list-disc list-inside text-gray-700 space-y-2">
-              <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-              <li>Sed do eiusmod tempor incididunt ut labore et dolore</li>
-              <li>Ut enim ad minim veniam, quis nostrud exercitation</li>
-              <li>Duis aute irure dolor in reprehenderit in voluptate</li>
+              <li>
+                <strong>Búsqueda</strong> inteligente de productos con los mejores{' '}
+                <strong>descuentos</strong>
+              </li>
+              <li>
+                <strong>Ayuda</strong> personalizada para encontrar exactamente lo que necesitas
+              </li>
+              <li>
+                <strong>Proximidad</strong> con <strong>familias</strong> mexicanas que comparten
+                experiencias similares
+              </li>
+              <li>
+                Comparación de precios para garantizar el mejor <strong>descuento</strong> posible
+              </li>
             </ul>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl text-accent mb-4 highlight-secondary">Our Team</h2>
+          <h2 className="text-xl text-accent mb-4 highlight-secondary">
+            ¿Por Qué Elegir Mejor Precio?
+          </h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-              voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-              occaecati cupiditate non provident.
+              Como <strong>familia</strong>, entendemos las necesidades reales de los padres
+              mexicanos. Nuestra <strong>proximidad</strong> con la comunidad nos permite ofrecer{' '}
+              <strong>ayuda</strong> verdaderamente útil y relevante.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum
-              fuga. Et harum quidem rerum facilis est et expedita distinctio.
+              Facilitamos la <strong>búsqueda</strong> de productos mediante herramientas intuitivas
+              que ahorran tiempo y garantizan los mejores <strong>descuentos</strong> para tu{' '}
+              <strong>familia</strong>.
             </p>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl text-accent mb-4 highlight-secondary">Our Values</h2>
+          <h2 className="text-xl text-accent mb-4 highlight-secondary">Nuestros Valores</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <h3 className="font-semibold text-accent">Quality</h3>
+              <h3 className="font-semibold text-accent">Familia</h3>
               <p className="text-gray-700 text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore.
+                Entendemos las necesidades de las <strong>familias</strong> porque somos una{' '}
+                <strong>familia</strong>. Cada decisión está pensada en <strong>ayudar</strong> a
+                otras <strong>familias</strong> como la nuestra.
               </p>
             </div>
             <div className="space-y-2">
-              <h3 className="font-semibold text-accent">Innovation</h3>
+              <h3 className="font-semibold text-accent">Proximidad</h3>
               <p className="text-gray-700 text-sm">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo.
+                Mantenemos una relación cercana con nuestros usuarios, ofreciendo{' '}
+                <strong>ayuda</strong>
+                personalizada y comprensión de sus necesidades específicas.
               </p>
             </div>
             <div className="space-y-2">
-              <h3 className="font-semibold text-accent">Trust</h3>
+              <h3 className="font-semibold text-accent">Descuentos</h3>
               <p className="text-gray-700 text-sm">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla.
+                Nos comprometemos a encontrar los mejores <strong>descuentos</strong> para que las
+                <strong>familias</strong> accedan a productos de calidad sin comprometer su
+                presupuesto.
               </p>
             </div>
             <div className="space-y-2">
-              <h3 className="font-semibold text-accent">Excellence</h3>
+              <h3 className="font-semibold text-accent">Búsqueda y Ayuda</h3>
               <p className="text-gray-700 text-sm">
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim.
+                Facilitamos la <strong>búsqueda</strong> con herramientas intuitivas y brindamos{' '}
+                <strong>ayuda</strong>
+                para que cada <strong>familia</strong> tome las mejores decisiones de compra.
               </p>
             </div>
           </div>

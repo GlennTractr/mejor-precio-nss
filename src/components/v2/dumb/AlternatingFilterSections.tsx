@@ -3,6 +3,7 @@
 import { memo } from 'react';
 import { FilterAccordionSection } from './FilterAccordionSection';
 import { FilterItem } from '../types';
+import { useTranslations } from 'next-intl';
 
 interface SpecFilter {
   type: string;
@@ -40,6 +41,7 @@ function AlternatingFilterSectionsComponent({
   startVariant = 'primary',
   className,
 }: AlternatingFilterSectionsProps) {
+  const t = useTranslations('category');
   return (
     <div className={className}>
       {specFilters.map((specFilter, index) => {
@@ -57,7 +59,7 @@ function AlternatingFilterSectionsComponent({
         return (
           <FilterAccordionSection
             key={specFilter.type}
-            title={specFilter.type}
+            title={t(`filters.${specFilter.type}` as any) || specFilter.type}
             internalId={`spec-${specFilter.type}`}
             items={specFilter.labels}
             selectedItems={specFilter.selectedItems}
