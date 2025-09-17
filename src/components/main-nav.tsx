@@ -12,11 +12,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { User2, LogOut, Menu, Lock, LogIn, Search, Grid3X3, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { SettingsModal } from '@/components/settings-modal';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from '@/components/ui/sheet';
 import { useQueryClient } from '@tanstack/react-query';
 import { Logo } from '@/components/ui/logo';
 import { useCategories } from '@/hooks/use-categories';
@@ -40,10 +40,12 @@ const items: {
 export function MainNav() {
   const currentUser = useCurrentUser();
   const pathname = usePathname();
+  const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
   const [openCategories, setOpenCategories] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const queryClient = useQueryClient();
   const t = useTranslations();
   const { data: categories, isLoading: categoriesLoading } = useCategories();
@@ -93,6 +95,20 @@ export function MainNav() {
       authListener?.subscription.unsubscribe();
     };
   }, [queryClient]);
+
+  // Handle search functionality
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit(e as any);
+    }
+  };
 
   const logout = async () => {
     try {
@@ -177,15 +193,26 @@ export function MainNav() {
 
           {/* Search Bar (centered middle) */}
           <div className="flex-1 max-w-md mx-8 hidden md:block">
-            <div className="relative">
+            <form onSubmit={handleSearchSubmit} className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
                 placeholder="Buscar productos..."
-                className="w-full pl-10 pr-4 py-2 bg-muted/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                readOnly
+                className="w-full pl-10 pr-12 py-2 bg-muted/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               />
-            </div>
+              <Button
+                type="submit"
+                size="icon"
+                variant="ghost"
+                className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 text-muted-foreground hover:text-primary"
+                aria-label="Buscar"
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+            </form>
           </div>
 
           {/* Profile Menu or Sign In (moved to right side) */}
@@ -218,7 +245,7 @@ export function MainNav() {
               <Button variant="ghost-secondary" className="flex items-center space-x-2" asChild>
                 <Link href="/auth/login">
                   <LogIn className="h-4 w-4 mr-2" />
-                  <span>{t('actions.login')}t3</span>
+                  <span>{t('actions.login')}</span>
                 </Link>
               </Button>
             )}
@@ -242,12 +269,12 @@ export function MainNav() {
             </Button>
           </SheetClose>
           <div className="flex flex-col h-full">
-            <div className="p-4 border-b border-secondary-foreground/10">
-              <div className="flex items-center space-x-2">
+            <SheetHeader className="p-4 border-b border-secondary-foreground/10">
+              <SheetTitle className="flex items-center space-x-2 text-lg font-semibold text-primary">
                 <Grid3X3 className="h-5 w-5 text-primary" />
-                <h2 className="text-lg font-semibold text-primary">Categorías</h2>
-              </div>
-            </div>
+                <span>Categorías</span>
+              </SheetTitle>
+            </SheetHeader>
             <nav className="flex-1 p-4" aria-label="Categorías">
               {categoriesLoading ? (
                 <div className="space-y-2">

@@ -35,6 +35,8 @@ export interface FilterSidebarProps {
   onResetFilters: () => void;
   hasActiveFilters: boolean;
   className?: string;
+  hideSpecFilters?: boolean; // Hide spec filters for global search
+  context?: 'category' | 'global'; // Context for conditional rendering
 }
 
 // ActiveFiltersBar component props

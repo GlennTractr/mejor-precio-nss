@@ -28,6 +28,8 @@ function FilterSidebarComponent({
   onResetFilters,
   hasActiveFilters,
   className,
+  hideSpecFilters = false,
+  context = 'category',
 }: FilterSidebarProps) {
   const t = useTranslations('category');
   const [searchInputValue, setSearchInputValue] = useState(searchQuery);
@@ -48,23 +50,20 @@ function FilterSidebarComponent({
   }, [priceRange]);
 
   // Debounced search handler - only for sending to filter system
-  const debouncedSearchChange = useMemo(
-    () => {
-      let timeoutId: NodeJS.Timeout | null = null;
-      
-      return (value: string) => {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-        }
-        
-        timeoutId = setTimeout(() => {
-          console.log('debouncedSearchChange', value);
-          onSearchChange(value);
-        }, 500);
-      };
-    },
-    [onSearchChange]
-  );
+  const debouncedSearchChange = useMemo(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    return (value: string) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(() => {
+        console.log('debouncedSearchChange', value);
+        onSearchChange(value);
+      }, 500);
+    };
+  }, [onSearchChange]);
 
   // Handle search input changes - immediate UI update, debounced filter update
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,18 +172,20 @@ function FilterSidebarComponent({
           />
         )}
 
-        {/* Spec Filters with Alternating Variants */}
-        <AlternatingFilterSections
-          specFilters={specFilters}
-          onToggle={handleSpecToggle}
-          maxHeight={160}
-          startVariant="secondary"
-        />
+        {/* Spec Filters with Alternating Variants - Hidden for global search */}
+        {!hideSpecFilters && specFilters.length > 0 && (
+          <AlternatingFilterSections
+            specFilters={specFilters}
+            onToggle={handleSpecToggle}
+            maxHeight={160}
+            startVariant="secondary"
+          />
+        )}
       </Accordion>
 
       {/* Reset Filters Button */}
       {hasActiveFilters && (
-        <Button onClick={onResetFilters} variant="outline" className="w-full">
+        <Button onClick={onResetFilters} variant="outline-secondary" className="w-full">
           {t('filters.resetFilters')}
         </Button>
       )}
