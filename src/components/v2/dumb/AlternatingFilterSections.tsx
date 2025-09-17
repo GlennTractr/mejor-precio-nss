@@ -59,7 +59,7 @@ function AlternatingFilterSectionsComponent({
         return (
           <FilterAccordionSection
             key={specFilter.type}
-            title={t(`filters.${specFilter.type}` as any) || specFilter.type}
+            title={t(`filters.${specFilter.type}`) || specFilter.type}
             internalId={`spec-${specFilter.type}`}
             items={specFilter.labels}
             selectedItems={specFilter.selectedItems}

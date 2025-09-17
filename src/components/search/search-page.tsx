@@ -28,9 +28,7 @@ export function SearchPage({
   initialMinPrice,
   initialMaxPrice,
 }: SearchPageProps) {
-  const displayTitle = query 
-    ? `Resultados de búsqueda: "${query}"`
-    : 'Buscar productos';
+  const displayTitle = query ? `Resultados de búsqueda: "${query}"` : 'Buscar productos';
 
   const displayDescription = query
     ? 'Encuentra los mejores productos al mejor precio comparando entre todas las categorías'

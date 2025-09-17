@@ -106,7 +106,7 @@ export function MainNav() {
 
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleSearchSubmit(e as any);
+      handleSearchSubmit(e as React.FormEvent);
     }
   };
 

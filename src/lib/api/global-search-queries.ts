@@ -34,21 +34,18 @@ export async function getGlobalInitialFilters(): Promise<GlobalSearchFilters> {
   try {
     // Get global counts from Typesense (all categories)
     const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
-    const facetsResponse = (await typesenseClient
-      .collections(collectionName)
-      .documents()
-      .search(
-        {
-          q: '*',
-          query_by: 'title',
-          filter_by: '', // No category filter - global search
-          facet_by: 'brand,model,best_price_per_unit',
-          max_facet_values: 100,
-          page: 1,
-          per_page: 0,
-        },
-        {}
-      )) as SearchResponse;
+    const facetsResponse = (await typesenseClient.collections(collectionName).documents().search(
+      {
+        q: '*',
+        query_by: 'title',
+        filter_by: '', // No category filter - global search
+        facet_by: 'brand,model,best_price_per_unit',
+        max_facet_values: 100,
+        page: 1,
+        per_page: 0,
+      },
+      {}
+    )) as SearchResponse;
 
     const facetCounts = facetsResponse.facet_counts || [];
 
@@ -101,21 +98,14 @@ export function buildGlobalFilterString(
 }
 
 // Get products with filters for global search
-export async function getGlobalFilteredProducts(
-  filterParams: FilterParams
-): Promise<{
+export async function getGlobalFilteredProducts(filterParams: FilterParams): Promise<{
   products: Product[];
   totalItems: number;
   facetCounts: FacetCount[];
 }> {
   const { page, perPage, query, brands, models, minPrice, maxPrice } = filterParams;
 
-  const filterString = buildGlobalFilterString(
-    brands,
-    models,
-    minPrice,
-    maxPrice
-  );
+  const filterString = buildGlobalFilterString(brands, models, minPrice, maxPrice);
 
   const searchParams = {
     q: query || '*',
@@ -146,16 +136,12 @@ export async function getGlobalFilteredProducts(
 }
 
 // Get global search data with merged filters and products
-export async function getGlobalSearchData(
-  filterParams: FilterParams
-): Promise<GlobalSearchData> {
+export async function getGlobalSearchData(filterParams: FilterParams): Promise<GlobalSearchData> {
   // Get initial filters (this will not change with filter updates)
   const initialFilters = await getGlobalInitialFilters();
 
   // Get filtered products with counts
-  const { products, totalItems, facetCounts } = await getGlobalFilteredProducts(
-    filterParams
-  );
+  const { products, totalItems, facetCounts } = await getGlobalFilteredProducts(filterParams);
 
   // Update filter counts based on current filter selection
   const updatedFilters = {
@@ -170,7 +156,7 @@ export async function getGlobalSearchData(
         facetCounts.find(f => f.field_name === 'model')?.counts || []
       ),
     },
-    specs_facets: [], // Always empty for global search
+    specs_facets: [] as [], // Always empty for global search
   };
 
   return {

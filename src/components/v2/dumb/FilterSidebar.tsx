@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { FilterSidebarProps } from '../types';
 import { FilterAccordionSection } from './FilterAccordionSection';
 import { AlternatingFilterSections } from './AlternatingFilterSections';
-import { formatPrice, debounce } from '../utils';
+import { formatPrice } from '../utils';
 
 function FilterSidebarComponent({
   searchQuery,
@@ -29,7 +29,6 @@ function FilterSidebarComponent({
   hasActiveFilters,
   className,
   hideSpecFilters = false,
-  context = 'category',
 }: FilterSidebarProps) {
   const t = useTranslations('category');
   const [searchInputValue, setSearchInputValue] = useState(searchQuery);

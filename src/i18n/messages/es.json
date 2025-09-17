@@ -33,7 +33,7 @@
       "resetFilters": "Restablecer filtros",
       "brand": "Marca",
       "model": "Modelo",
-      "step": "Paso",
+      "step": "Etapa",
       "gender": "Género"
     }
   },
@@ -61,7 +61,7 @@
   "filters": {
     "brands": "Marcas",
     "models": "Modelos",
-    "step": "Paso",
+    "step": "Etapa",
     "gender": "Género",
     "priceRange": {
       "title": "Rango de precio por unidad",

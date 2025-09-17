@@ -34,23 +34,17 @@ interface GlobalSearchContainerProps {
 }
 
 export function GlobalSearchContainer({
-  query,
   initialFilters,
   minPossiblePrice,
   maxPossiblePrice,
   initialPage = 1,
   initialItemsPerPage = 20,
-  initialBrands = [],
-  initialModels = [],
-  initialMinPrice,
-  initialMaxPrice,
 }: GlobalSearchContainerProps) {
   // Filter state management - parameters are read from URL automatically
   const {
     filters,
     toggleBrand,
     toggleModel,
-    toggleSpec, // Keep for compatibility but won't be used
     setPage,
     setItemsPerPage,
     setQuery,

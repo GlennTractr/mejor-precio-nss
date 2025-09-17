@@ -32,20 +32,17 @@ export async function GET(request: NextRequest) {
     )) as SearchResponse;
 
     // Get facets with all possible values (without filters) - global across all categories
-    const facetsResponse = await typesenseClient
-      .collections(collectionName)
-      .documents()
-      .search(
-        {
-          q: '*',
-          query_by: 'title',
-          filter_by: '', // No category filter - global search
-          facet_by: 'brand,model,best_price_per_unit',
-          max_facet_values: 100,
-          per_page: 0,
-        },
-        {}
-      );
+    const facetsResponse = await typesenseClient.collections(collectionName).documents().search(
+      {
+        q: '*',
+        query_by: 'title',
+        filter_by: '', // No category filter - global search
+        facet_by: 'brand,model,best_price_per_unit',
+        max_facet_values: 100,
+        per_page: 0,
+      },
+      {}
+    );
 
     // Get filtered facet counts
     const filteredFacetsResponse = await typesenseClient
