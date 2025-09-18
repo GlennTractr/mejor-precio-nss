@@ -62,21 +62,10 @@ interface ProductPageProps {
 function ProductPageSkeleton() {
   return (
     <div>
-      <div className="bg-white border-b border-primary-light/20">
-        <div className="container mx-auto py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <Skeleton className="h-7 w-48 mb-2" />
-              <Skeleton className="h-5 w-96" />
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left column - Image skeleton */}
-          <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-md border border-primary-light/20">
+          <div className="relative aspect-square bg-white rounded-lg overflow-hidden hover:border hover:border-secondary/50">
             <div className="absolute inset-0 flex items-center justify-center bg-primary-light/5">
               <div className="w-16 h-16 rounded-full bg-primary-light/20" />
             </div>
@@ -84,11 +73,18 @@ function ProductPageSkeleton() {
 
           {/* Right column - Product details skeleton */}
           <div className="space-y-6">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Skeleton className="h-5 w-24 highlight-secondary" />
-                <Skeleton className="h-5 w-24 highlight-primary" />
-                <Skeleton className="h-5 w-24" />
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-9 w-80" />
+                {/* Notification bell button skeleton */}
+                <Skeleton className="h-10 w-10 rounded-full" />
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-1" />
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-1" />
+                <Skeleton className="h-4 w-24" />
               </div>
               <div className="flex flex-wrap gap-1.5 pt-2">
                 <Skeleton className="h-5 w-20 rounded-full" />
@@ -97,51 +93,89 @@ function ProductPageSkeleton() {
               </div>
             </div>
 
-            {/* Price card skeleton */}
-            <div className="border-t border-b border-primary-light/20 py-6 space-y-3 bg-white/50 rounded-lg px-4 shadow-sm">
-              <Skeleton className="h-6 w-32 highlight-secondary mb-2" />
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-baseline gap-3">
-                    <Skeleton className="h-10 w-32" />
-                    <Skeleton className="h-5 w-24" />
+            {/* Compare prices title skeleton */}
+            <Skeleton className="h-6 w-32 highlight-secondary" />
+            
+            {/* Price comparison table skeleton */}
+            <table className="w-full border-collapse table-fixed">
+              <tbody>
+                {[1, 2, 3, 4, 5].map(i => (
+                  <tr
+                    key={i}
+                    className="border border-secondary/20 hover:border-secondary/50 hover:scale-[1.02] transition-all duration-200 ease-in-out shadow-sm hover:shadow-md text-white mb-1 block"
+                    style={{ marginBottom: '4px' }}
+                  >
+                    <td className="w-1/3 py-1 px-2 inline-block align-middle">
+                      <div className="flex items-center gap-4 h-16">
+                        {/* Shop Logo - 48px circular */}
+                        <Skeleton className="relative w-12 h-12 flex-shrink-0 rounded-full" />
+                        {/* Shop Info */}
+                        <div className="space-y-1">
+                          <Skeleton className="h-4 w-24" />
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="w-1/4 py-1 px-2 inline-block align-middle">
+                      <div className="flex flex-col items-center gap-1 h-16 justify-center">
+                        <Skeleton className="h-4 w-16" />
+                        {i === 1 && (
+                          <Skeleton className="h-5 w-24 rounded-full" />
+                        )}
+                      </div>
+                    </td>
+
+                    <td className="w-1/4 py-1 px-2 inline-block align-middle">
+                      <div className="flex items-center justify-center h-16">
+                        <div className="text-right space-y-1">
+                          <Skeleton className="h-5 w-20" />
+                          <Skeleton className="h-3 w-16" />
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="w-1/6 py-1 px-2 inline-block align-middle">
+                      <div className="flex items-center justify-center h-16">
+                        <Skeleton className="h-8 w-full rounded-md" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Show more/less button skeleton */}
+            <div className="flex justify-center pt-2">
+              <Skeleton className="h-6 w-24" />
+            </div>
+          </div>
+        </div>
+
+        {/* Similar Products Carousel skeleton */}
+        <div className="mt-12">
+          <Skeleton className="h-7 w-48 mb-6" />
+          <div className="flex gap-4 overflow-hidden">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="flex-shrink-0 w-64">
+                <div className="animate-pulse h-[320px] flex flex-col border rounded-lg border-primary-light/20">
+                  <div className="relative w-full h-36 bg-primary-light/20">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-primary-light/30" />
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Skeleton className="h-5 w-28" />
-                    <Skeleton className="h-5 w-20" />
+                  <div className="flex-grow space-y-1 py-2 px-4">
+                    <div className="h-3 bg-primary-light/20 rounded w-3/4"></div>
+                    <div className="h-3 bg-primary-light/20 rounded w-1/2 mt-1"></div>
+                  </div>
+                  <div className="py-1 px-4">
+                    <div className="h-4 bg-primary-light/20 rounded w-1/3"></div>
+                  </div>
+                  <div className="pt-0 pb-2 px-4">
+                    <div className="h-3 bg-primary-light/20 rounded w-2/3"></div>
                   </div>
                 </div>
-                <Skeleton className="h-12 w-28 rounded-md" />
               </div>
-            </div>
-
-            {/* Product list skeleton */}
-            <div className="bg-white rounded-lg shadow-sm border border-primary-light/20 p-4 space-y-4">
-              <Skeleton className="h-7 w-48 highlight-secondary" />
-              <div className="space-y-3">
-                {[1, 2, 3].map(i => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between p-4 bg-primary-light/5 rounded-lg"
-                  >
-                    <div className="flex items-center gap-4">
-                      <Skeleton className="h-12 w-12 rounded-lg" />
-                      <div className="space-y-2">
-                        <Skeleton className="h-5 w-24" />
-                        <Skeleton className="h-4 w-16" />
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right space-y-1">
-                        <Skeleton className="h-6 w-20" />
-                        <Skeleton className="h-4 w-16" />
-                      </div>
-                      <Skeleton className="h-9 w-20 rounded-md" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
