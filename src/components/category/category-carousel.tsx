@@ -1,46 +1,10 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import Image from 'next/image';
-import createClient from '@/lib/supabase/client';
-
-interface Category {
-  id: string;
-  label: string;
-  slug?: string;
-  image_url?: string;
-}
-
-async function getCategories(): Promise<Category[]> {
-  const supabase = createClient();
-  const { data: categories, error } = await supabase
-    .from('ProductCategory')
-    .select('*')
-    .order('label');
-
-  if (error) {
-    throw error;
-  }
-
-  return await Promise.all(
-    categories.map(
-      async category =>
-        ({
-          id: category.id,
-          label: category.label,
-          slug: category.slug,
-          image_url:
-            category.image_bucket && category.image_path
-              ? await supabase.storage.from(category.image_bucket).getPublicUrl(category.image_path)
-                  ?.data?.publicUrl
-              : undefined,
-        }) as Category
-    )
-  );
-}
+import { useCategories } from '@/hooks/use-categories';
 
 function CategorySkeleton() {
   return (
@@ -54,10 +18,7 @@ function CategorySkeleton() {
 }
 
 export function CategoryCarousel() {
-  const { data: categories, isLoading } = useQuery({
-    queryKey: ['categories'],
-    queryFn: getCategories,
-  });
+  const { data: categories, isLoading } = useCategories();
 
   if (isLoading) {
     return (

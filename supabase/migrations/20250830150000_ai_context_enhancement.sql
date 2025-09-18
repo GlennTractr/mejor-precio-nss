@@ -276,6 +276,15 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE "matching"."QuantityTypePrompt" TO
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE "matching"."ProductSpecsPrompt" TO "service_role";
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE "matching"."CategoryPrompt" TO "service_role";
 
+-- Phase 16: Enable RLS for Country table and allow public read access
+
+-- Enable RLS for Country table
+ALTER TABLE "public"."Country" ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policy to allow everyone to read countries
+CREATE POLICY "Enable read access for all users" ON "public"."Country" 
+FOR SELECT USING (true);
+
 -- Migration completed successfully
 -- Remember to run: npm run gen:types to update TypeScript definitions
 

@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import createClient from '@/lib/supabase/client';
+import { useCountry } from './use-country';
 
 export interface Category {
   id: string;
@@ -10,12 +11,15 @@ export interface Category {
   image_url?: string;
 }
 
-async function getCategories(): Promise<Category[]> {
+async function getCategories(countryId: string): Promise<Category[]> {
   const supabase = createClient();
   const { data: categories, error } = await supabase
     .from('ProductCategory')
     .select('*')
+    .eq('country', countryId)
     .order('label');
+
+  console.log('categories', countryId, categories);
 
   if (error) {
     throw error;
@@ -39,8 +43,16 @@ async function getCategories(): Promise<Category[]> {
 }
 
 export function useCategories() {
+  const { data: country, isLoading: countryLoading } = useCountry();
+
   return useQuery({
-    queryKey: ['categories'],
-    queryFn: getCategories,
+    queryKey: ['categories', country?.id],
+    queryFn: () => {
+      if (!country?.id) {
+        throw new Error('Country not available');
+      }
+      return getCategories(country.id);
+    },
+    enabled: !!country?.id && !countryLoading,
   });
 }

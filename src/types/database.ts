@@ -1493,6 +1493,7 @@ export type Database = {
           brand: string | null;
           category: string | null;
           category_slug: string | null;
+          country: string | null;
           id: string | null;
           main_image_bucket: string | null;
           main_image_path: string | null;

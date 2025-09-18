@@ -124,47 +124,94 @@ ON product_normal_price_view (product_id);
 -- 3. Update existing product_view to include normal_price
 -- ============================================================================
 
-CREATE OR REPLACE VIEW "public"."product_view" WITH ("security_invoker"='on') AS
-SELECT 
-    pv2.*,
-    pnp.normal_price_per_unit
-FROM (
-    SELECT "pv"."id",
-        "pv"."best_price_per_unit",
-        "pv"."max_price_per_unit",
-        "pv"."shop_names",
-        "pv"."price_list",
-        COALESCE("json_agg"("json_build_object"('label', "ps"."label", 'type', "ps"."type")) FILTER (WHERE ("ps"."label" IS NOT NULL)), '[]'::"json") AS "specs",
-        "p"."title",
-        "regexp_replace"("lower"("public"."unaccent"("p"."title")), ' '::"text", '-'::"text", 'g'::"text") AS "product_slug",
-        "pm"."label" AS "model",
-        "pb"."label" AS "brand",
-        "pc"."label" AS "category",
-        "f"."file_bucket" AS "main_image_bucket",
-        "f"."file_path" AS "main_image_path",
-        "regexp_replace"("lower"("public"."unaccent"("pc"."label")), ' '::"text", '-'::"text", 'g'::"text") AS "category_slug"
-    FROM (
-        SELECT "ppv"."product_id" AS "id",
-            "min"("ppv"."best_price_per_unit") AS "best_price_per_unit",
-            "max"("ppv"."max_price_per_unit") AS "max_price_per_unit",
-            "array_agg"(DISTINCT "shop_name"."shop_name") AS "shop_names",
-            "array_agg"(DISTINCT "inner_price_list"."inner_price_list") AS "price_list"
-        FROM (("public"."product_packaging_view" "ppv"
-            LEFT JOIN LATERAL "unnest"("ppv"."shop_names") "shop_name"("shop_name") ON (true))
-            LEFT JOIN LATERAL "unnest"("ppv"."price_list") "inner_price_list"("inner_price_list") ON (true))
-        GROUP BY "ppv"."product_id"
-    ) "pv"
-    LEFT JOIN "public"."ProductSpecsMapping" "psm" ON ("pv"."id" = "psm"."product_id")
-    LEFT JOIN "public"."ProductSpecs" "ps" ON ("psm"."spec_id" = "ps"."id")
-    LEFT JOIN "public"."Product" "p" ON ("pv"."id" = "p"."id")
-    LEFT JOIN "public"."ProductModel" "pm" ON ("pm"."id" = "p"."model")
-    LEFT JOIN "public"."ProductBrand" "pb" ON ("pb"."id" = "pm"."brand")
-    LEFT JOIN "public"."ProductCategory" "pc" ON ("pc"."id" = "pm"."category")
-    LEFT JOIN "public"."File" "f" ON ("f"."id" = "p"."image")
-    GROUP BY "pv"."id", "pv"."best_price_per_unit", "pv"."max_price_per_unit", "pv"."shop_names", "pv"."price_list", 
-             "p"."title", "pm"."label", "pb"."label", "pc"."label", "f"."file_bucket", "f"."file_path"
-) pv2
-LEFT JOIN product_normal_price_view pnp ON pnp.product_id = pv2.id;
+
+create or replace view "public"."product_view"
+with
+  ("security_invoker" = 'on') as
+select
+  pv2.*,
+  pnp.normal_price_per_unit
+from
+  (
+    select
+      "pv"."id",
+      "pv"."best_price_per_unit",
+      "pv"."max_price_per_unit",
+      "pv"."shop_names",
+      "pv"."price_list",
+      "c"."label" as "country",
+      COALESCE(
+        "json_agg" (
+          "json_build_object" ('label', "ps"."label", 'type', "ps"."type")
+        ) filter (
+          where
+            ("ps"."label" is not null)
+        ),
+        '[]'::"json"
+      ) as "specs",
+      "p"."title",
+      "regexp_replace" (
+        "lower" ("public"."unaccent" ("p"."title")),
+        ' '::"text",
+        '-'::"text",
+        'g'::"text"
+      ) as "product_slug",
+      "pm"."label" as "model",
+      "pb"."label" as "brand",
+      "pc"."label" as "category",
+      "f"."file_bucket" as "main_image_bucket",
+      "f"."file_path" as "main_image_path",
+      "regexp_replace" (
+        "lower" ("public"."unaccent" ("pc"."label")),
+        ' '::"text",
+        '-'::"text",
+        'g'::"text"
+      ) as "category_slug",
+      "qt"."unit_label" as "quantity_type"
+    from
+      (
+        select
+          "ppv"."product_id" as "id",
+          "min" ("ppv"."best_price_per_unit") as "best_price_per_unit",
+          "max" ("ppv"."max_price_per_unit") as "max_price_per_unit",
+          "array_agg" (distinct "shop_name"."shop_name") as "shop_names",
+          "array_agg" (distinct "inner_price_list"."inner_price_list") as "price_list"
+        from
+          (
+            (
+              "public"."product_packaging_view" "ppv"
+              left join lateral "unnest" ("ppv"."shop_names") "shop_name" ("shop_name") on (true)
+            )
+            left join lateral "unnest" ("ppv"."price_list") "inner_price_list" ("inner_price_list") on (true)
+          )
+        group by
+          "ppv"."product_id"
+      ) "pv"
+      left join "public"."ProductSpecsMapping" "psm" on ("pv"."id" = "psm"."product_id")
+      left join "public"."ProductSpecs" "ps" on ("psm"."spec_id" = "ps"."id")
+      left join "public"."Product" "p" on ("pv"."id" = "p"."id")
+      left join "public"."ProductModel" "pm" on ("pm"."id" = "p"."model")
+      left join "public"."ProductBrand" "pb" on ("pb"."id" = "pm"."brand")
+      left join "public"."ProductCategory" "pc" on ("pc"."id" = "pm"."category")
+      left join "public"."Country" "c" on ("pc"."country" = "c"."id")
+      left join "public"."File" "f" on ("f"."id" = "p"."image")
+      left join "public"."QuantityType" "qt" on ("qt"."id" = "pc"."quantity_type")
+    group by
+      "pv"."id",
+      "pv"."best_price_per_unit",
+      "pv"."max_price_per_unit",
+      "pv"."shop_names",
+      "pv"."price_list",
+      "p"."title",
+      "pm"."label",
+      "pb"."label",
+      "pc"."label",
+      "f"."file_bucket",
+      "f"."file_path",
+      "c"."label",
+      "qt"."unit_label"
+  ) pv2
+  left join product_normal_price_view pnp on pnp.product_id = pv2.id;
 
 -- ============================================================================
 -- 4. Grant appropriate permissions

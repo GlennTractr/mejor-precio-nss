@@ -1,5 +1,6 @@
 import { typesenseClient } from '@/lib/typesense-client';
 import createClient from '@/lib/supabase/client';
+import { env } from '@/lib/env';
 import type { SearchResponse, SpecFacet, FacetValue, Product, FacetCount } from '@/types/product';
 
 interface SpecsGroupedByType {
@@ -37,7 +38,7 @@ export interface CategoryData {
   filters: CategoryFilters;
 }
 
-// Get category name from slug
+// Get category name from slug, ensuring it belongs to current country
 export async function getCategoryName(categorySlug: string): Promise<string> {
   const supabase = await createClient();
   const { data: category } = await supabase
@@ -47,17 +48,18 @@ export async function getCategoryName(categorySlug: string): Promise<string> {
     .single();
 
   if (!category) {
-    throw new Error('Category not found');
+    throw new Error(`Category "${categorySlug}" not found`);
   }
 
   return category.label;
 }
 
-// Get initial filters for a category
+// Get initial filters for a category, ensuring it belongs to current country
 export async function getInitialFilters(categorySlug: string): Promise<CategoryFilters> {
   try {
     const supabase = await createClient();
-    // 1. Get category ID and name from slug
+
+    // 1. Get category ID and name from slug, filtered by country
     const { data: category } = await supabase
       .from('ProductCategory')
       .select('id, label')
@@ -65,7 +67,7 @@ export async function getInitialFilters(categorySlug: string): Promise<CategoryF
       .single();
 
     if (!category) {
-      throw new Error('Category not found');
+      throw new Error(`Category "${categorySlug}" not found`);
     }
 
     // 2. Get specs structure from Supabase
@@ -87,6 +89,7 @@ export async function getInitialFilters(categorySlug: string): Promise<CategoryF
     );
 
     // 3. Get counts from Typesense
+    const countryCode = env().NEXT_PUBLIC_COUNTRY_CODE;
     const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
     const facetsResponse = (await typesenseClient
       .collections(collectionName)
@@ -95,7 +98,7 @@ export async function getInitialFilters(categorySlug: string): Promise<CategoryF
         {
           q: '*',
           query_by: 'title',
-          filter_by: `category_slug:=${categorySlug}`,
+          filter_by: `category_slug:=${categorySlug} && country:=${countryCode}`,
           facet_by: 'brand,model,specs.type,specs.label,best_price_per_unit',
           max_facet_values: 100,
           page: 1,
@@ -155,7 +158,8 @@ export function buildFilterString(
   maxPrice?: number,
   specLabels?: string[]
 ): string {
-  const filters = [`category_slug:=${categorySlug}`];
+  const countryCode = env().NEXT_PUBLIC_COUNTRY_CODE;
+  const filters = [`category_slug:=${categorySlug}`, `country:=${countryCode}`];
 
   if (brands && brands.length > 0) {
     filters.push(`brand:=[${brands.map(b => `'${b}'`).join(',')}]`);
