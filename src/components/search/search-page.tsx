@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { GlobalSearchContainer } from '@/components/search/global-search-container';
 import type { GlobalSearchFilters } from '@/lib/api/global-search-queries';
 
@@ -33,6 +34,15 @@ export function SearchPage({
   const displayDescription = query
     ? 'Encuentra los mejores productos al mejor precio comparando entre todas las categorías'
     : 'Busca productos en todas las categorías y compara precios por unidad para encontrar las mejores ofertas';
+
+  // Track search in Google Analytics
+  useEffect(() => {
+    if (query && typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'search', {
+        search_term: query
+      });
+    }
+  }, [query]);
 
   return (
     <>

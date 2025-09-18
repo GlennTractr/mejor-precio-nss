@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { CategoryProductListContainer } from '@/components/v2/smart/CategoryProductListContainer';
 import type { CategoryFilters } from '@/lib/api/category-queries';
 
@@ -25,6 +26,17 @@ export function CategoryPage({
   maxPossiblePrice,
 }: CategoryPageProps) {
   const displayName = categoryName || initialFilters.category_name;
+
+  // Track category page view in Google Analytics
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'view_item_list', {
+        item_list_id: categorySlug,
+        item_list_name: displayName,
+        items: [] // Items will be tracked individually when they load
+      });
+    }
+  }, [categorySlug, displayName]);
 
   return (
     <>

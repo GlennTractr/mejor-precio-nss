@@ -11,5 +11,5 @@ export function GoogleAnalyticsScript({ gaId }: GoogleAnalyticsProps) {
     return null;
   }
 
-  return <GoogleAnalytics gaId={gaId} debugMode={true} />;
+  return <GoogleAnalytics gaId={gaId} />;
 }

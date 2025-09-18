@@ -258,6 +258,35 @@ export function ProductPage({ productSlug }: ProductPageProps) {
         const product = productData as unknown as ProductResponse;
         setProduct(product);
 
+        // Track product view in Google Analytics
+        if (typeof window !== 'undefined' && window.gtag) {
+          const priceData = product.ProductPackaging?.flatMap(
+            pkg => pkg.ProductSellContext?.map(ctx => ({
+              pricePerUnit: ctx.price / pkg.quantity,
+              shop: ctx.Shop?.label || 'Unknown'
+            })) || []
+          ) || [];
+          
+          const bestPriceData = priceData.reduce((best, current) => 
+            current.pricePerUnit < best.pricePerUnit ? current : best,
+            priceData[0] || { pricePerUnit: 0, shop: 'Unknown' }
+          );
+
+          window.gtag('event', 'view_item', {
+            currency: 'MXN',
+            value: bestPriceData.pricePerUnit || 0,
+            items: [{
+              item_id: product.id,
+              item_name: product.title,
+              item_category: product.model?.category?.label || 'Unknown',
+              item_brand: product.model?.brand?.label || 'Unknown',
+              price: bestPriceData.pricePerUnit || 0,
+              quantity: 1,
+              affiliation: bestPriceData.shop // Best price shop
+            }]
+          });
+        }
+
         // Get image URL from Supabase storage
         if (product.image) {
           const { data } = supabaseClient.storage
@@ -516,7 +545,25 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                           variant="outline-secondary"
                           size="sm"
                           className="w-full"
-                          onClick={() => window.open(item.link, '_blank')}
+                          onClick={() => {
+                            // Track purchase intent
+                            if (typeof window !== 'undefined' && window.gtag) {
+                              window.gtag('event', 'purchase_intent', {
+                                currency: 'MXN',
+                                value: item.price,
+                                items: [{
+                                  item_id: product.id,
+                                  item_name: product.title,
+                                  item_category: product.model?.category?.label || 'Unknown',
+                                  item_brand: product.model?.brand?.label || 'Unknown',
+                                  price: item.price,
+                                  quantity: 1,
+                                  affiliation: item.shop // Shop name
+                                }]
+                              });
+                            }
+                            window.open(item.link, '_blank');
+                          }}
                         >
                           {t('actions.buy')}
                         </Button>
