@@ -58,7 +58,6 @@ function FilterSidebarComponent({
       }
 
       timeoutId = setTimeout(() => {
-        console.log('debouncedSearchChange', value);
         onSearchChange(value);
       }, 500);
     };

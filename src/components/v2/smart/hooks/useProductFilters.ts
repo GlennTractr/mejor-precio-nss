@@ -36,9 +36,6 @@ export function useProductFilters({
     maxPossiblePrice
   );
 
-  console.log('🚀 [useProductFilters] Initializing with URL params:', searchParams?.toString());
-  console.log('🎯 [useProductFilters] Initial filters parsed:', initialFilters);
-
   // Validate and set initial filters
   const [filters, setFilters] = useState<FilterState>(() =>
     validateFilterState(initialFilters, minPossiblePrice, maxPossiblePrice)
@@ -101,9 +98,6 @@ export function useProductFilters({
 
   // Update URL when filters change
   useEffect(() => {
-    console.log('🔄 [useProductFilters] URL update effect triggered');
-    console.log('📊 [useProductFilters] Current filters:', filters);
-
     const params = filtersToUrlParams(
       filters,
       minPossiblePrice,
@@ -115,9 +109,6 @@ export function useProductFilters({
     const url = queryString ? `${pathname}?${queryString}` : pathname;
     const currentUrl = `${pathname}?${searchParams?.toString() || ''}`;
 
-    console.log('🌐 [useProductFilters] New URL would be:', url);
-    console.log('🌐 [useProductFilters] Current URL is:', currentUrl);
-
     // Normalize URLs by removing trailing empty params for comparison
     const normalizeUrl = (url: string) => url.replace(/\?$/, '');
     const normalizedNewUrl = normalizeUrl(url);
@@ -125,10 +116,7 @@ export function useProductFilters({
 
     // Only push if URL would actually change
     if (normalizedNewUrl !== normalizedCurrentUrl) {
-      console.log('✅ [useProductFilters] URL is different, pushing:', url);
       router.push(url, { scroll: false });
-    } else {
-      console.log('⏭️  [useProductFilters] URLs are same, skipping push');
     }
   }, [filters, pathname, router, minPossiblePrice, maxPossiblePrice, initialItemsPerPage]); // Removed searchParams to prevent circular updates
 
@@ -139,9 +127,6 @@ export function useProductFilters({
 
   // Sync with URL params when they change externally
   useEffect(() => {
-    console.log('📥 [useProductFilters] URL sync effect triggered');
-    console.log('🔗 [useProductFilters] Current searchParams:', searchParams?.toString());
-
     const urlFilters = parseUrlToFilters(
       searchParams || new URLSearchParams(),
       initialItemsPerPage,
@@ -151,16 +136,8 @@ export function useProductFilters({
 
     const validatedUrlFilters = validateFilterState(urlFilters, minPossiblePrice, maxPossiblePrice);
 
-    console.log('🆚 [useProductFilters] URL filters vs current filters:');
-    console.log('📊 URL filters:', validatedUrlFilters);
-    console.log('📊 Current filters:', filters);
-    console.log('🎯 Filters equal?', areFiltersEqual(filters, validatedUrlFilters));
-
     if (!areFiltersEqual(filters, validatedUrlFilters)) {
-      console.log('🔄 [useProductFilters] Filters different, updating state');
       setFilters(validatedUrlFilters);
-    } else {
-      console.log('⏭️  [useProductFilters] Filters same, no state update');
     }
   }, [searchParams, initialItemsPerPage, minPossiblePrice, maxPossiblePrice]); // Removed 'filters' to prevent circular dependency
 

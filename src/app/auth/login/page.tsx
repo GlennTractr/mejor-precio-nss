@@ -62,7 +62,7 @@ export default function LoginPage() {
       if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
         return;
       }
-      console.log(error);
+      console.error(error);
       form.setError('root', {
         message: (error as Error).message,
       });

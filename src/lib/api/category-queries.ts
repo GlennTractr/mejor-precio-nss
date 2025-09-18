@@ -1,11 +1,7 @@
-import { typesenseClient } from '@/lib/typesense-client';
 import createClient from '@/lib/supabase/client';
-import { env } from '@/lib/env';
-import type { SearchResponse, SpecFacet, FacetValue, Product, FacetCount } from '@/types/product';
+import type { SpecFacet, FacetValue, Product, FacetCount } from '@/types/product';
+import { apiFetch } from '@/lib/api/fetch-helper';
 
-interface SpecsGroupedByType {
-  [key: string]: string[];
-}
 
 interface FilterParams {
   page: number;
@@ -57,128 +53,25 @@ export async function getCategoryName(categorySlug: string): Promise<string> {
 // Get initial filters for a category, ensuring it belongs to current country
 export async function getInitialFilters(categorySlug: string): Promise<CategoryFilters> {
   try {
-    const supabase = await createClient();
+    const response = await apiFetch('/api/typesense/category/filters', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ categorySlug }),
+    });
 
-    // 1. Get category ID and name from slug, filtered by country
-    const { data: category } = await supabase
-      .from('ProductCategory')
-      .select('id, label')
-      .eq('slug', categorySlug)
-      .single();
-
-    if (!category) {
-      throw new Error(`Category "${categorySlug}" not found`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch category filters: ${response.statusText}`);
     }
 
-    // 2. Get specs structure from Supabase
-    const { data: specs } = await supabase
-      .from('ProductSpecs')
-      .select('type, label')
-      .eq('category', category.id);
-
-    // Group specs by type
-    const specsGroupedByType = (specs || []).reduce(
-      (acc: SpecsGroupedByType, spec: { type: string; label: string }) => {
-        if (!acc[spec.type]) {
-          acc[spec.type] = [];
-        }
-        acc[spec.type].push(spec.label);
-        return acc;
-      },
-      {} as SpecsGroupedByType
-    );
-
-    // 3. Get counts from Typesense
-    const countryCode = env().NEXT_PUBLIC_COUNTRY_CODE;
-    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
-    const facetsResponse = (await typesenseClient
-      .collections(collectionName)
-      .documents()
-      .search(
-        {
-          q: '*',
-          query_by: 'title',
-          filter_by: `category_slug:=${categorySlug} && country:=${countryCode}`,
-          facet_by: 'brand,model,specs.type,specs.label,best_price_per_unit',
-          max_facet_values: 100,
-          page: 1,
-          per_page: 0,
-        },
-        {}
-      )) as SearchResponse;
-
-    const facetCounts = facetsResponse.facet_counts || [];
-
-    // Get price range
-    const priceStats = facetCounts.find(f => f.field_name === 'best_price_per_unit')?.stats;
-    const priceRange = {
-      min: priceStats?.min || 0,
-      max: priceStats?.max || 0,
-    };
-
-    // Get brand and model facets
-    const brandFacets = facetCounts.find(f => f.field_name === 'brand')?.counts || [];
-    const modelFacets = facetCounts.find(f => f.field_name === 'model')?.counts || [];
-
-    // Get all specs label counts
-    const specLabelCounts = facetCounts.find(f => f.field_name === 'specs.label')?.counts || [];
-
-    // Create specs facets using Supabase structure and Typesense counts
-    const specTypesWithLabels = Object.entries(specsGroupedByType).map(
-      ([type, labels]: [string, string[]]) => ({
-        type,
-        count: labels.length,
-        labels: labels.map(label => ({
-          value: label,
-          count: specLabelCounts.find(c => c.value === label)?.count || 0,
-        })),
-      })
-    );
-
-    return {
-      price_range: priceRange,
-      facets: {
-        brand: brandFacets,
-        model: modelFacets,
-      },
-      specs_facets: specTypesWithLabels,
-      category_name: category.label,
-    };
+    const data = await response.json();
+    return data;
   } catch (error) {
     throw error;
   }
 }
 
-// Build filter string for Typesense query
-export function buildFilterString(
-  categorySlug: string,
-  brands?: string[],
-  models?: string[],
-  minPrice?: number,
-  maxPrice?: number,
-  specLabels?: string[]
-): string {
-  const countryCode = env().NEXT_PUBLIC_COUNTRY_CODE;
-  const filters = [`category_slug:=${categorySlug}`, `country:=${countryCode}`];
-
-  if (brands && brands.length > 0) {
-    filters.push(`brand:=[${brands.map(b => `'${b}'`).join(',')}]`);
-  }
-
-  if (models && models.length > 0) {
-    filters.push(`model:=[${models.map(m => `'${m}'`).join(',')}]`);
-  }
-
-  if (minPrice !== undefined && maxPrice !== undefined) {
-    filters.push(`best_price_per_unit:>=${minPrice} && best_price_per_unit:<=${maxPrice}`);
-  }
-
-  if (specLabels && specLabels.length > 0) {
-    filters.push(`specs.label:=[${specLabels.map(s => `'${s}'`).join(',')}]`);
-  }
-
-  return filters.join(' && ');
-}
 
 // Get products with filters
 export async function getFilteredProducts(
@@ -189,40 +82,21 @@ export async function getFilteredProducts(
   totalItems: number;
   facetCounts: FacetCount[];
 }> {
-  const { page, perPage, query, brands, models, minPrice, maxPrice, specLabels } = filterParams;
-
-  const filterString = buildFilterString(
-    categorySlug,
-    brands,
-    models,
-    minPrice,
-    maxPrice,
-    specLabels
-  );
-
-  const searchParams = {
-    q: query || '*',
-    query_by: 'title,brand,model',
-    filter_by: filterString,
-    facet_by: 'brand,model,specs.type,specs.label,best_price_per_unit',
-    max_facet_values: 100,
-    page,
-    per_page: perPage,
-    sort_by: 'best_price_per_unit:asc',
-  };
-
   try {
-    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
-    const response = (await typesenseClient
-      .collections(collectionName)
-      .documents()
-      .search(searchParams, {})) as SearchResponse;
+    const response = await apiFetch('/api/typesense/category/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ categorySlug, filterParams }),
+    });
 
-    return {
-      products: response.hits.map(hit => hit.document),
-      totalItems: response.found,
-      facetCounts: response.facet_counts || [],
-    };
+    if (!response.ok) {
+      throw new Error(`Failed to fetch category products: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
     throw error;
   }

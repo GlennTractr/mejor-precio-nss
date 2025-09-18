@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { typesenseClient } from '@/lib/typesense-client';
+import { typesenseServerClient, getCollectionName } from '@/lib/typesense-server-client';
 
 interface FacetStats {
   min: number;
@@ -27,11 +27,11 @@ export async function GET(request: NextRequest) {
   const filterBy = searchParams.get('filter_by') || '';
 
   try {
-    // Get collection name from environment or fallback to 'product'
-    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
+    // Get collection name from secure server configuration
+    const collectionName = getCollectionName();
 
     // Get all basic facets and price range in one query
-    const basicFacetsResponse = (await typesenseClient
+    const basicFacetsResponse = (await typesenseServerClient
       .collections(collectionName)
       .documents()
       .search(
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
       facetCounts
         .find((f: FacetCount) => f.field_name === 'specs.type')
         ?.counts.map(async specType => {
-          const labelResponse = await typesenseClient
+          const labelResponse = await typesenseServerClient
             .collections(collectionName)
             .documents()
             .search(

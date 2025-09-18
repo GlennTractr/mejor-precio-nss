@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import type { SearchResponse, FacetCount } from '@/types/product';
-import { typesenseClient } from '@/lib/typesense-client';
+import { typesenseServerClient, getCollectionName } from '@/lib/typesense-server-client';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -11,11 +11,11 @@ export async function GET(request: NextRequest) {
   const sortBy = searchParams.get('sort_by') || 'best_price_per_unit:asc';
 
   try {
-    // Get collection name from environment or fallback to 'product'
-    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
+    // Get collection name from secure server configuration
+    const collectionName = getCollectionName();
 
     // Get search results with facet counts for updating filter counts
-    const searchResults = (await typesenseClient.collections(collectionName).documents().search(
+    const searchResults = (await typesenseServerClient.collections(collectionName).documents().search(
       {
         q: query,
         query_by: 'title,brand,model',
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     )) as SearchResponse;
 
     // Get facets with all possible values (without filters)
-    const facetsResponse = await typesenseClient
+    const facetsResponse = await typesenseServerClient
       .collections(collectionName)
       .documents()
       .search(
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
       );
 
     // Get filtered facet counts
-    const filteredFacetsResponse = await typesenseClient
+    const filteredFacetsResponse = await typesenseServerClient
       .collections(collectionName)
       .documents()
       .search(
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
     const specTypesWithLabels = await Promise.all(
       specTypes.map(async specType => {
         // Get all possible labels for this type
-        const allLabelsResponse = await typesenseClient
+        const allLabelsResponse = await typesenseServerClient
           .collections(collectionName)
           .documents()
           .search(
@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
           );
 
         // Get filtered label counts
-        const filteredLabelsResponse = await typesenseClient
+        const filteredLabelsResponse = await typesenseServerClient
           .collections(collectionName)
           .documents()
           .search(

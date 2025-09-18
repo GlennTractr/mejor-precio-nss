@@ -1,15 +1,10 @@
 // Server Component
 import { CategoryPage } from '@/components/category/category-page';
-import { createClient } from '@supabase/supabase-js';
-import { typesenseClient } from '@/lib/typesense-client';
 import type { Metadata } from 'next';
 import createServerClient from '@/lib/supabase/server';
+import { getInitialFilters } from '@/lib/api/category-queries';
 import { env } from '@/lib/env';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface PageProps {
   params: Promise<{
@@ -21,16 +16,14 @@ interface PageProps {
   }>;
 }
 
-interface SpecsGroupedByType {
-  [key: string]: string[];
-}
 
 async function getInitialFiltersAndName(categorySlug: string) {
   try {
-    // 1. Get category ID and name from slug
+    // Get category information from Supabase
+    const supabase = await createServerClient();
     const { data: category } = await supabase
       .from('ProductCategory')
-      .select('id, label, description')
+      .select('label, description')
       .eq('slug', categorySlug)
       .single();
 
@@ -38,80 +31,11 @@ async function getInitialFiltersAndName(categorySlug: string) {
       throw new Error('Category not found');
     }
 
-    // 2. Get specs structure from Supabase
-    const { data: specs } = await supabase
-      .from('ProductSpecs')
-      .select('type, label')
-      .eq('category', category.id);
-
-    // Group specs by type
-    const specsGroupedByType = (specs || []).reduce(
-      (acc: SpecsGroupedByType, spec: { type: string; label: string }) => {
-        if (!acc[spec.type]) {
-          acc[spec.type] = [];
-        }
-        acc[spec.type].push(spec.label);
-        return acc;
-      },
-      {} as SpecsGroupedByType
-    );
-
-    // 3. Get counts from Typesense
-    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
-    const facetsResponse = await typesenseClient
-      .collections(collectionName)
-      .documents()
-      .search(
-        {
-          q: '*',
-          query_by: 'title',
-          filter_by: `category_slug:=${categorySlug}`,
-          facet_by: 'brand,model,specs.type,specs.label,best_price_per_unit',
-          max_facet_values: 100,
-          page: 1,
-          per_page: 0,
-        },
-        {}
-      );
-
-    const facetCounts = facetsResponse.facet_counts || [];
-
-    // Get price range
-    const priceStats = facetCounts.find(f => f.field_name === 'best_price_per_unit')?.stats;
-    const priceRange = {
-      min: priceStats?.min || 0,
-      max: priceStats?.max || 0,
-    };
-
-    // Get brand and model facets
-    const brandFacets = facetCounts.find(f => f.field_name === 'brand')?.counts || [];
-    const modelFacets = facetCounts.find(f => f.field_name === 'model')?.counts || [];
-
-    // Get all specs label counts
-    const specLabelCounts = facetCounts.find(f => f.field_name === 'specs.label')?.counts || [];
-
-    // Create specs facets using Supabase structure and Typesense counts
-    const specTypesWithLabels = Object.entries(specsGroupedByType).map(
-      ([type, labels]: [string, string[]]) => ({
-        type,
-        count: labels.length,
-        labels: labels.map(label => ({
-          value: label,
-          count: specLabelCounts.find(c => c.value === label)?.count || 0,
-        })),
-      })
-    );
+    // Get initial filters from the API
+    const initialFilters = await getInitialFilters(categorySlug);
 
     return {
-      initialFilters: {
-        price_range: priceRange,
-        facets: {
-          brand: brandFacets,
-          model: modelFacets,
-        },
-        specs_facets: specTypesWithLabels,
-        category_name: category.label,
-      },
+      initialFilters,
       categoryName: category.label,
       categoryDescription: category.description,
     };

@@ -1,15 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { typesenseServerClient, getCollectionName } from '@/lib/typesense-server-client';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const perPage = parseInt(searchParams.get('per_page') || '10');
 
-    // Get collection name from secure server configuration
     const collectionName = getCollectionName();
-
     const searchParameters = {
       q: '*',
       query_by: 'title',
@@ -23,9 +21,9 @@ export async function GET(request: Request) {
       .documents()
       .search(searchParameters, {});
 
-    return NextResponse.json(searchResults);
+    return Response.json(searchResults);
   } catch (error) {
-    console.error('All products search error:', error);
-    return NextResponse.json({ error: 'Failed to search products' }, { status: 500 });
+    console.error('Home products search error:', error);
+    return Response.json({ error: 'Failed to search home products' }, { status: 500 });
   }
 }

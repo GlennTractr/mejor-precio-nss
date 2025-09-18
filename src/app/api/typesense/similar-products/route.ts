@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { typesenseClient } from '@/lib/typesense-client';
+import { typesenseServerClient, getCollectionName } from '@/lib/typesense-server-client';
 import type { SearchResponse } from '@/types/product';
 
 export async function GET(request: NextRequest) {
@@ -55,11 +55,11 @@ export async function GET(request: NextRequest) {
     // Combine all filters with AND operator
     const finalFilter = filters.join(' && ');
 
-    // Get collection name from environment or fallback to 'product'
-    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
+    // Get collection name from secure server configuration
+    const collectionName = getCollectionName();
 
     // Get similar products based on the query and filters
-    const searchResults = (await typesenseClient.collections(collectionName).documents().search(
+    const searchResults = (await typesenseServerClient.collections(collectionName).documents().search(
       {
         q: query,
         query_by: 'title,brand,model,category',

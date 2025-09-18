@@ -174,9 +174,6 @@ export function SimilarProductsCarousel({
     }
   };
 
-  console.log('similar products carousel totalFound', totalFound);
-  console.log('similar products carousel isLoading', isLoading);
-
   // Don't render if no similar products found
   if (!isLoading && totalFound === 0) {
     return null;

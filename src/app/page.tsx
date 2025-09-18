@@ -4,7 +4,6 @@ import { Suspense } from 'react';
 import { CategoryCarousel } from '@/components/category/category-carousel';
 import { HomeProductList } from '@/components/product/home-product-list';
 import { FavoritesList } from '@/components/product/favorites-list';
-import { typesenseClient } from '@/lib/typesense-client';
 import { getTranslations } from 'next-intl/server';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { Banner } from '@/components/ui/banner';
@@ -15,16 +14,16 @@ interface SearchParams {
 }
 
 async function getProducts(page: number, perPage: number) {
-  const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
-  const searchParameters = {
-    q: '*',
-    query_by: 'title',
-    page,
-    per_page: perPage,
-    sort_by: 'best_price_per_unit:asc',
-  };
+  const { apiFetch } = await import('@/lib/api/fetch-helper');
+  const response = await apiFetch(`/api/typesense/home/products?page=${page}&per_page=${perPage}`, {
+    method: 'GET',
+  });
 
-  return typesenseClient.collections(collectionName).documents().search(searchParameters, {});
+  if (!response.ok) {
+    throw new Error(`Failed to fetch products: ${response.statusText}`);
+  }
+
+  return response.json();
 }
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<SearchParams> }) {

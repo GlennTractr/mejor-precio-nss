@@ -1,5 +1,5 @@
-import { typesenseClient } from '@/lib/typesense-client';
-import type { SearchResponse, FacetValue, Product, FacetCount } from '@/types/product';
+import type { FacetValue, Product, FacetCount } from '@/types/product';
+import { apiFetch } from '@/lib/api/fetch-helper';
 
 interface FilterParams {
   page: number;
@@ -32,70 +32,21 @@ export interface GlobalSearchData {
 // Get initial filters for global search (cross-category)
 export async function getGlobalInitialFilters(): Promise<GlobalSearchFilters> {
   try {
-    // Get global counts from Typesense (all categories)
-    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
-    const facetsResponse = (await typesenseClient.collections(collectionName).documents().search(
-      {
-        q: '*',
-        query_by: 'title',
-        filter_by: '', // No category filter - global search
-        facet_by: 'brand,model,best_price_per_unit',
-        max_facet_values: 100,
-        page: 1,
-        per_page: 0,
-      },
-      {}
-    )) as SearchResponse;
+    const response = await apiFetch('/api/typesense/global/filters', {
+      method: 'GET',
+    });
 
-    const facetCounts = facetsResponse.facet_counts || [];
+    if (!response.ok) {
+      throw new Error(`Failed to fetch global filters: ${response.statusText}`);
+    }
 
-    // Get global price range
-    const priceStats = facetCounts.find(f => f.field_name === 'best_price_per_unit')?.stats;
-    const priceRange = {
-      min: priceStats?.min || 0,
-      max: priceStats?.max || 0,
-    };
-
-    // Get brand and model facets
-    const brandFacets = facetCounts.find(f => f.field_name === 'brand')?.counts || [];
-    const modelFacets = facetCounts.find(f => f.field_name === 'model')?.counts || [];
-
-    return {
-      price_range: priceRange,
-      facets: {
-        brand: brandFacets,
-        model: modelFacets,
-      },
-      specs_facets: [], // No specs for global search
-    };
+    const data = await response.json();
+    return data;
   } catch (error) {
     throw error;
   }
 }
 
-// Build filter string for global search (no category constraint)
-export function buildGlobalFilterString(
-  brands?: string[],
-  models?: string[],
-  minPrice?: number,
-  maxPrice?: number
-): string {
-  const filters: string[] = [];
-
-  if (brands && brands.length > 0) {
-    filters.push(`brand:=[${brands.map(b => `'${b}'`).join(',')}]`);
-  }
-
-  if (models && models.length > 0) {
-    filters.push(`model:=[${models.map(m => `'${m}'`).join(',')}]`);
-  }
-
-  if (minPrice !== undefined && maxPrice !== undefined) {
-    filters.push(`best_price_per_unit:>=${minPrice} && best_price_per_unit:<=${maxPrice}`);
-  }
-
-  return filters.join(' && ');
-}
 
 // Get products with filters for global search
 export async function getGlobalFilteredProducts(filterParams: FilterParams): Promise<{
@@ -103,33 +54,21 @@ export async function getGlobalFilteredProducts(filterParams: FilterParams): Pro
   totalItems: number;
   facetCounts: FacetCount[];
 }> {
-  const { page, perPage, query, brands, models, minPrice, maxPrice } = filterParams;
-
-  const filterString = buildGlobalFilterString(brands, models, minPrice, maxPrice);
-
-  const searchParams = {
-    q: query || '*',
-    query_by: 'title,brand,model',
-    filter_by: filterString,
-    facet_by: 'brand,model,best_price_per_unit',
-    max_facet_values: 100,
-    page,
-    per_page: perPage,
-    sort_by: 'best_price_per_unit:asc',
-  };
-
   try {
-    const collectionName = process.env.TYPESENSE_COLLECTION_NAME || 'product';
-    const response = (await typesenseClient
-      .collections(collectionName)
-      .documents()
-      .search(searchParams, {})) as SearchResponse;
+    const response = await apiFetch('/api/typesense/global/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ filterParams }),
+    });
 
-    return {
-      products: response.hits.map(hit => hit.document),
-      totalItems: response.found,
-      facetCounts: response.facet_counts || [],
-    };
+    if (!response.ok) {
+      throw new Error(`Failed to fetch global products: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
     throw error;
   }

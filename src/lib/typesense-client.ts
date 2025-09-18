@@ -1,43 +1,26 @@
-import TypesenseInstantsearchAdapter from 'typesense-instantsearch-adapter';
+// SECURITY NOTICE: This file has been deprecated for security reasons.
+// Direct Typesense client access has been removed to prevent exposure of admin credentials.
+// 
+// All Typesense operations are now handled through secure API endpoints:
+// - Category operations: /api/typesense/category/*
+// - Global search: /api/typesense/global/*
+// - Home products: /api/typesense/home/*
+// - Other operations: /api/typesense/*
+//
+// Use the corresponding query functions in:
+// - src/lib/api/category-queries.ts (for category-specific operations)
+// - src/lib/api/global-search-queries.ts (for global search operations)
+//
+// DO NOT import or use this file. It will throw an error if accessed.
 
-const getTypesenseConfig = () => {
-  // Try client-side (NEXT_PUBLIC_) first, then server-side
-  const apiKey =
-    process.env.NEXT_PUBLIC_TYPESENSE_ADMIN_API_KEY || process.env.TYPESENSE_ADMIN_API_KEY;
-  const host = process.env.NEXT_PUBLIC_TYPESENSE_HOST || process.env.TYPESENSE_HOST;
-  const port = process.env.NEXT_PUBLIC_TYPESENSE_PORT || process.env.TYPESENSE_PORT;
-  const protocol = process.env.NEXT_PUBLIC_TYPESENSE_PROTOCOL || process.env.TYPESENSE_PROTOCOL;
-
-  if (!apiKey) {
+export const typesenseClient = new Proxy({}, {
+  get() {
     throw new Error(
-      'Typesense API key is not configured. Please set NEXT_PUBLIC_TYPESENSE_ADMIN_API_KEY or TYPESENSE_ADMIN_API_KEY'
+      'Direct Typesense client access is disabled for security reasons. ' +
+      'Use API endpoints instead: /api/typesense/* or query functions in src/lib/api/'
     );
   }
-
-  return {
-    apiKey,
-    host: host || 'localhost',
-    port: parseInt(port || '443'),
-    protocol: protocol || 'https',
-  };
-};
-
-const config = getTypesenseConfig();
-
-const typesenseAdapter = new TypesenseInstantsearchAdapter({
-  server: {
-    apiKey: config.apiKey,
-    nodes: [
-      {
-        host: config.host,
-        port: config.port,
-        protocol: config.protocol,
-      },
-    ],
-  },
-  additionalSearchParameters: {
-    query_by: 'title,brand,model',
-  },
 });
 
-export const typesenseClient = typesenseAdapter.typesenseClient;
+// This export is maintained for backward compatibility but will throw on use
+export default typesenseClient;

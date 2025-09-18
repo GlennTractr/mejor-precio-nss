@@ -19,8 +19,6 @@ async function getCategories(countryId: string): Promise<Category[]> {
     .eq('country', countryId)
     .order('label');
 
-  console.log('categories', countryId, categories);
-
   if (error) {
     throw error;
   }
