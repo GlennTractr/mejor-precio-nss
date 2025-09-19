@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { fn } from 'storybook/test';
 import { FilterSidebar } from '@/components/ui/filter-sidebar';
-import { FilterSection, SpecFilterSection } from '@/types/v2';
+import { FilterSection, SpecFilterSection } from '@/types';
 
 // Mock filter data
 const mockBrandFilters: FilterSection = {

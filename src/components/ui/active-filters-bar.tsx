@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
-import { ActiveFiltersBarProps } from '@/types/v2/components';
+import { ActiveFiltersBarProps } from '@/types/components';
 
 function ActiveFiltersBarComponent({
   activeFilters,

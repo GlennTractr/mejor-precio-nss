@@ -5,20 +5,15 @@ import { useQuery } from '@tanstack/react-query';
 import { getCategoryData, getInitialFilters } from '@/lib/api/category-queries';
 import type { CategoryFilters } from '@/lib/api/category-queries';
 import { ProductGrid } from '@/components/product/product-grid';
-import {
-  FilterSidebar,
-  ActiveFiltersBar,
-  ResultsHeader,
-  ProductPagination,
-} from '@/components/ui';
+import { FilterSidebar, ActiveFiltersBar, ResultsHeader, ProductPagination } from '@/components/ui';
 import { useProductFilters } from '@/hooks/use-product-filters';
 import {
   getActiveFilters,
   hasActiveFilters,
   createDefaultFormatters,
   removeFilterById,
-} from '@/lib/v2';
-import { FilterType } from '@/types/v2';
+} from '@/lib';
+import { FilterType } from '@/types/filters';
 
 interface CategoryProductListContainerProps {
   categorySlug: string;
@@ -124,7 +119,7 @@ export function CategoryProductListContainer({
           count: label.count,
           disabled: label.count === 0,
         })),
-        selectedItems: filters.selectedSpecLabels.filter(selectedSpec =>
+        selectedItems: filters.selectedSpecLabels.filter((selectedSpec: string) =>
           specFacet.labels.some(label => label.value === selectedSpec)
         ),
       })),

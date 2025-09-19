@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { ResultsHeaderProps } from '@/types/v2/components';
+import { ResultsHeaderProps } from '@/types/components';
 
 function ResultsHeaderComponent({
   totalItems,

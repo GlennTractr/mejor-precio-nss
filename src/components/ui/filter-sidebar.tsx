@@ -9,10 +9,10 @@ import { Accordion } from '@/components/ui/accordion';
 import { Card } from '@/components/ui/card';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
-import { FilterSidebarProps } from '@/types/v2';
+import { FilterSidebarProps } from '@/types';
 import { FilterAccordionSection } from './filter-accordion-section';
 import { AlternatingFilterSections } from './alternating-filter-sections';
-import { formatPrice } from '@/lib/v2';
+import { formatPrice } from '@/lib';
 
 function FilterSidebarComponent({
   searchQuery,

@@ -2,8 +2,8 @@ import { memo } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
-import { FilterAccordionSectionProps } from '@/types/v2/components';
-import { FilterItem } from '@/types/v2/filters';
+import { FilterAccordionSectionProps } from '@/types/components';
+import { FilterItem } from '@/types/filters';
 
 function FilterAccordionSectionComponent({
   title,

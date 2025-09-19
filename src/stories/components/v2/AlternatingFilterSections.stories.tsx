@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { AlternatingFilterSections } from '../../../components/v2/dumb/AlternatingFilterSections';
+import { AlternatingFilterSections } from '@/components/ui/alternating-filter-sections';
 import { Accordion } from '@/components/ui/accordion';
 
 const meta = {
-  title: 'Components/v2/AlternatingFilterSections',
+  title: 'Components/AlternatingFilterSections',
   component: AlternatingFilterSections,
   parameters: {
     layout: 'centered',

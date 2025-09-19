@@ -5,20 +5,15 @@ import { useQuery } from '@tanstack/react-query';
 import { getGlobalSearchData, getGlobalInitialFilters } from '@/lib/api/global-search-queries';
 import type { GlobalSearchFilters } from '@/lib/api/global-search-queries';
 import { ProductGrid } from '@/components/product/product-grid';
-import {
-  FilterSidebar,
-  ActiveFiltersBar,
-  ResultsHeader,
-  ProductPagination,
-} from '@/components/ui';
+import { FilterSidebar, ActiveFiltersBar, ResultsHeader, ProductPagination } from '@/components/ui';
 import { useProductFilters } from '@/hooks/use-product-filters';
 import {
   getActiveFilters,
   hasActiveFilters,
   createDefaultFormatters,
   removeFilterById,
-} from '@/lib/v2';
-import { FilterType } from '@/types/v2';
+} from '@/lib';
+import { FilterType } from '@/types';
 
 interface GlobalSearchContainerProps {
   query: string;

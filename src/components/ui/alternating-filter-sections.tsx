@@ -2,7 +2,7 @@
 
 import { memo } from 'react';
 import { FilterAccordionSection } from './filter-accordion-section';
-import { FilterItem } from '@/types/v2';
+import { FilterItem } from '@/types';
 import { useTranslations } from 'next-intl';
 
 interface SpecFilter {

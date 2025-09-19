@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { SharedPagination } from '@/components/ui/shared-pagination';
-import { ProductPaginationProps } from '@/types/v2/components';
+import { ProductPaginationProps } from '@/types/components';
 
 function ProductPaginationComponent({
   currentPage,
