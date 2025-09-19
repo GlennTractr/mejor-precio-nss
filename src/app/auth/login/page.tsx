@@ -78,7 +78,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex w-full items-center justify-center p-6 my-6">
+    <div className="flex w-full items-center justify-center px-4 py-6 md:px-6 md:py-8 my-4 md:my-6">
       <Card className="max-w-md w-full">
         <CardHeader className="flex justify-center items-center gap-4">
           <CardTitle className="text-center text-lg font-extrabold">

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { fn } from 'storybook/test';
 import { Accordion } from '@/components/ui/accordion';
-import { FilterAccordionSection } from '@/components/v2/dumb/FilterAccordionSection';
-import { FilterItem } from '@/components/v2/types';
+import { FilterAccordionSection } from '@/components/ui/filter-accordion-section';
+import { FilterItem } from '@/types/v2';
 
 // Mock filter items
 const mockBrandItems: FilterItem[] = [

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FilterType, PriceFormatterOptions } from '../types';
+import { FilterType } from '@/types/v2/filters';
+import { PriceFormatterOptions } from '@/types/v2/formatters';
 
 // Default price formatter (matches existing implementation)
 export function formatPrice(price: number, options: PriceFormatterOptions = {}): string {

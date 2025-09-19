@@ -12,7 +12,8 @@
       "add": "Add to favorites",
       "remove": "Remove from favorites"
     },
-    "goHome": "Go to Home"
+    "goHome": "Go to Home",
+    "changePassword": "Change Password"
   },
   "category": {
     "results": "{count, plural, =0 {No products found} =1 {1 product found} other {# products found}}",
@@ -105,7 +106,21 @@
     "passwordPlaceholder": "Password",
     "passwordRequired": "Password is required",
     "passwordMinLength": "Password must be at least 6 characters",
-    "loginToFavorite": "Login to add to favorites"
+    "loginToFavorite": "Login to add to favorites",
+    "currentPasswordRequired": "Current password is required",
+    "confirmPasswordRequired": "Confirm password is required",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "currentPasswordLabel": "Current Password",
+    "currentPasswordPlaceholder": "Enter your current password",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "Enter your new password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "Confirm your new password",
+    "passwordChangedSuccessfully": "Password Changed Successfully",
+    "passwordChangeSuccess": "Your password has been updated successfully.",
+    "changeAnotherPassword": "Change Password Again",
+    "changingPassword": "Changing password...",
+    "checkingAuthentication": "Checking Authentication"
   },
   "home": {
     "welcome": "Welcome back, {email}",

@@ -4,21 +4,21 @@ import { useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getGlobalSearchData, getGlobalInitialFilters } from '@/lib/api/global-search-queries';
 import type { GlobalSearchFilters } from '@/lib/api/global-search-queries';
+import { ProductGrid } from '@/components/product/product-grid';
 import {
-  ProductGrid,
   FilterSidebar,
   ActiveFiltersBar,
   ResultsHeader,
   ProductPagination,
-} from '../v2/dumb';
-import { useProductFilters } from '../v2/smart/hooks';
+} from '@/components/ui';
+import { useProductFilters } from '@/hooks/use-product-filters';
 import {
   getActiveFilters,
   hasActiveFilters,
   createDefaultFormatters,
   removeFilterById,
-} from '../v2/utils';
-import { FilterType } from '../v2/types';
+} from '@/lib/v2';
+import { FilterType } from '@/types/v2';
 
 interface GlobalSearchContainerProps {
   query: string;

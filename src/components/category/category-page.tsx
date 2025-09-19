@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { CategoryProductListContainer } from '@/components/v2/smart/CategoryProductListContainer';
+import { CategoryProductListContainer } from '@/components/product/category-product-list-container';
 import type { CategoryFilters } from '@/lib/api/category-queries';
 
 interface CategoryPageProps {
@@ -41,7 +41,7 @@ export function CategoryPage({
   return (
     <>
       <div className="bg-secondary-light">
-        <div className="mx-auto w-full max-w-7xl py-[25px]">
+        <div className="mx-auto w-full max-w-7xl py-6 md:py-[25px] px-4 md:px-6">
           <div className="mb-6 text-center">
             <h1 className="text-2xl highlight-sand mb-4">{displayName}</h1>
             {description && (
@@ -52,7 +52,7 @@ export function CategoryPage({
           </div>
         </div>
       </div>
-      <div className="mx-auto w-full max-w-7xl pt-[25px] pb-[75px]">
+      <div className="mx-auto w-full max-w-7xl pt-6 md:pt-[25px] pb-8 md:pb-[75px] px-4 md:px-6">
         <div className="space-y-6">
           <CategoryProductListContainer
             categorySlug={categorySlug}

@@ -108,7 +108,7 @@ export default function ProcessFavoritePage() {
   }, [currentUser.data?.id, currentUser.isLoading, toast, t]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+    <div className="flex flex-col items-center justify-center min-h-[50vh] text-center px-4 md:px-6">
       {status === 'loading' && (
         <>
           <Loader2 className="h-8 w-8 animate-spin mb-4" />

@@ -62,8 +62,8 @@ interface ProductPageProps {
 function ProductPageSkeleton() {
   return (
     <div>
-      <div className="container mx-auto py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="container mx-auto py-4 px-4 md:py-8 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {/* Left column - Image skeleton */}
           <div className="relative aspect-square bg-white rounded-lg overflow-hidden hover:border hover:border-secondary/50">
             <div className="absolute inset-0 flex items-center justify-center bg-primary-light/5">
@@ -72,7 +72,7 @@ function ProductPageSkeleton() {
           </div>
 
           {/* Right column - Product details skeleton */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Skeleton className="h-9 w-80" />
@@ -399,8 +399,8 @@ export function ProductPage({ productSlug }: ProductPageProps) {
 
   return (
     <div>
-      <div className="container mx-auto py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="container mx-auto py-4 px-4 md:py-8 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {/* Left column - Image */}
           <div className="relative aspect-square bg-white rounded-lg overflow-hidden hover:border hover:border-secondary/50">
             {imageUrl && (
@@ -416,7 +416,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
           </div>
 
           {/* Right column - Product details */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold text-accent">{product.title}</h1>
@@ -480,7 +480,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
             <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary ">
               {t('product.comparePrices')}
             </h2>
-            <table className="w-full border-collapse table-fixed">
+            <table className="w-full border-collapse">
               <tbody>
                 {displayedProviders.map((item, index) => (
                   <tr
@@ -488,10 +488,10 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                     className="border border-secondary/20 hover:border-secondary/50 hover:scale-[1.02] transition-all duration-200 ease-in-out shadow-sm hover:shadow-md text-white mb-1 block"
                     style={{ marginBottom: '4px' }}
                   >
-                    <td className="w-1/3 py-1 px-2 inline-block align-middle">
-                      <div className="flex items-center gap-4 h-16">
-                        {/* Shop Logo */}
-                        <div className="relative w-12 h-12 flex-shrink-0 rounded-lg p-1">
+                    {/* Shop Logo Cell */}
+                    <td className="w-[60px] sm:w-1/4 py-2 px-2 sm:py-1 sm:px-2 inline-block align-middle">
+                      <div className="flex items-center justify-center h-12 sm:h-16">
+                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 rounded-lg p-1">
                           <Image
                             src={item.shopImg}
                             alt={item.shop}
@@ -500,36 +500,31 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                             sizes="48px"
                           />
                         </div>
-                        {/* Shop Info */}
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-accent">{item.shop}</span>
-                          </div>
-                        </div>
                       </div>
                     </td>
 
-                    <td className="w-1/4 py-1 px-2 inline-block align-middle">
-                      <div className="flex flex-col items-center gap-1 h-16 justify-center">
-                        <span className="font-bold text-accent">
+                    {/* Quantity Cell */}
+                    <td className="w-[90px] sm:w-1/4 py-2 px-1 sm:py-1 sm:px-2 inline-block align-middle">
+                      <div className="flex flex-col items-center gap-1 h-12 sm:h-16 justify-center">
+                        <span className="font-bold text-accent text-xs sm:text-sm text-center">
                           {item.quantity} {t('product.units.unit', { count: item.quantity })}
                         </span>
                         {index === 0 && (
-                          <div className="bg-primary text-secondary text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+                          <div className="bg-primary text-secondary text-[10px] sm:text-xs font-bold px-1 sm:px-2 py-0.5 sm:py-1 rounded-full shadow-sm">
                             {t('product.ourRecommendation')}
                           </div>
                         )}
                       </div>
                     </td>
 
-                    <td className="w-1/4 py-1 px-2 inline-block align-middle">
-                      <div className="flex items-center justify-center h-16">
-                        {/* Price Info */}
-                        <div className="text-right">
-                          <div className="text-lg font-bold text-accent">
+                    {/* Price Cell */}
+                    <td className="w-[100px] sm:w-1/4 py-2 px-1 sm:py-1 sm:px-2 inline-block align-middle">
+                      <div className="flex items-center justify-center h-12 sm:h-16">
+                        <div className="text-center">
+                          <div className="text-sm sm:text-lg font-bold text-accent">
                             ${item.price.toFixed(2)}
                           </div>
-                          <div className="text-xs text-primary-dark">
+                          <div className="text-[10px] sm:text-xs text-primary-dark">
                             {t('product.pricePerUnit', {
                               price: item.pricePerUnit.toFixed(2),
                             })}
@@ -538,13 +533,13 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                       </div>
                     </td>
 
-                    <td className="w-1/6 py-1 px-2 inline-block align-middle">
-                      <div className="flex items-center justify-center h-16">
-                        {/* Buy Button */}
+                    {/* Buy Button Cell */}
+                    <td className="w-[calc(100%-250px)] sm:w-1/4 py-2 px-1 sm:py-1 sm:px-2 inline-block align-middle">
+                      <div className="flex items-center justify-center h-12 sm:h-16">
                         <Button
                           variant="outline-secondary"
                           size="sm"
-                          className="w-full"
+                          className="w-full text-xs sm:text-sm px-2 sm:px-3"
                           onClick={() => {
                             // Track purchase intent
                             if (typeof window !== 'undefined' && window.gtag) {

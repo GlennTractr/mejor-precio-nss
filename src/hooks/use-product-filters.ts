@@ -1,12 +1,12 @@
 import { useCallback, useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { FilterState } from '../../types';
+import { FilterState } from '@/types/v2';
 import {
   parseUrlToFilters,
   filtersToUrlParams,
   areFiltersEqual,
   validateFilterState,
-} from '../../utils';
+} from '@/lib/v2';
 
 interface UseProductFiltersProps {
   initialPage?: number;

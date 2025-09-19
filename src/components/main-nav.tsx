@@ -101,6 +101,8 @@ export function MainNav() {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      // Close categories sheet if search is performed from there
+      setOpenCategories(false);
     }
   };
 
@@ -275,6 +277,36 @@ export function MainNav() {
                 <span>Categorías</span>
               </SheetTitle>
             </SheetHeader>
+            
+            {/* Search Bar in Sheet */}
+            <div className="p-4 border-b border-secondary-foreground/10">
+              <form onSubmit={handleSearchSubmit} className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-secondary/60" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder="Buscar productos..."
+                  className="w-full pl-10 pr-12 py-2 bg-white/80 border border-secondary rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary text-secondary placeholder:text-secondary/60"
+                />
+                <Button
+                  type="submit"
+                  size="icon"
+                  variant="ghost"
+                  className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 text-secondary/60 hover:text-secondary"
+                  aria-label="Buscar"
+                  onClick={() => {
+                    if (searchQuery.trim()) {
+                      setOpenCategories(false);
+                    }
+                  }}
+                >
+                  <Search className="h-4 w-4" />
+                </Button>
+              </form>
+            </div>
+            
             <nav className="flex-1 p-4" aria-label="Categorías">
               {categoriesLoading ? (
                 <div className="space-y-2">

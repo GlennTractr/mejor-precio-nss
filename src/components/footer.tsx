@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Twitter, Facebook, Instagram } from 'lucide-react';
+import { Facebook, Instagram } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
 
 export function Footer() {
@@ -86,15 +86,6 @@ export function Footer() {
       <div className="mt-8 px-4 py-2 flex flex-col gap-4 border-t border-white/20 sm:flex-row sm:items-center sm:justify-between">
         {/* Left: Social Icons */}
         <div className="flex items-center gap-4 text-sm">
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full p-2 text-primary hover:bg-primary/10 hover:text-gray-200 transition-colors"
-            aria-label="Twitter"
-          >
-            <Twitter size={20} />
-          </a>
           <a
             href="https://facebook.com"
             target="_blank"

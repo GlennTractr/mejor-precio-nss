@@ -1,11 +1,7 @@
-import { getTranslations } from 'next-intl/server';
-
-export default async function PrivacyPolicyPage() {
-  const t = await getTranslations('privacy');
-  console.debug('🚀 [PrivacyPolicyPage] Initializing with t:', t);
+export default function PrivacyPolicyPage() {
 
   return (
-    <div className="mx-auto max-w-4xl p-6 my-6">
+    <div className="mx-auto max-w-4xl px-4 py-6 md:px-6 md:py-8 my-4 md:my-6">
       <h1 className="text-3xl text-accent mb-8 highlight-secondary">Política de Privacidad</h1>
 
       <div className="space-y-8">

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { fn } from 'storybook/test';
-import { ProductPagination } from '@/components/v2/dumb/ProductPagination';
+import { ProductPagination } from '@/components/ui/product-pagination';
 
 const meta: Meta<typeof ProductPagination> = {
   title: 'V2/Dumb Components/ProductPagination',

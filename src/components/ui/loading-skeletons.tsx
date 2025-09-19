@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { LoadingSkeletonsProps } from '../types';
+import { LoadingSkeletonsProps } from '@/types/v2/components';
 
 function LoadingSkeletonsComponent({ count, type, className }: LoadingSkeletonsProps) {
   const renderProductSkeleton = () => (

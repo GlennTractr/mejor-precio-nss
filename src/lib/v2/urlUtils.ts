@@ -1,4 +1,4 @@
-import { FilterState } from '../types';
+import { FilterState } from '@/types/v2/filters';
 
 // Parse URL search params into filter state
 export function parseUrlToFilters(

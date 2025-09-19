@@ -1,4 +1,4 @@
-import { FilterState, ActiveFilter } from '../types';
+import { FilterState, ActiveFilter } from '@/types/v2/filters';
 
 // Check if any filters are currently active
 export function hasActiveFilters(

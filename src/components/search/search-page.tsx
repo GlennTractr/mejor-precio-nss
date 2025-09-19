@@ -47,7 +47,7 @@ export function SearchPage({
   return (
     <>
       <div className="bg-secondary-light">
-        <div className="mx-auto w-full max-w-7xl py-[25px]">
+        <div className="mx-auto w-full max-w-7xl py-6 md:py-[25px] px-4 md:px-6">
           <div className="mb-6 text-center">
             <h1 className="text-2xl highlight-sand mb-4">{displayTitle}</h1>
             <p className="text-secondary mb-6 max-w-2xl mx-auto text-sm font-bold">
@@ -56,7 +56,7 @@ export function SearchPage({
           </div>
         </div>
       </div>
-      <div className="mx-auto w-full max-w-7xl pt-[25px] pb-[75px]">
+      <div className="mx-auto w-full max-w-7xl pt-6 md:pt-[25px] pb-8 md:pb-[75px] px-4 md:px-6">
         <div className="space-y-6">
           <GlobalSearchContainer
             query={query}

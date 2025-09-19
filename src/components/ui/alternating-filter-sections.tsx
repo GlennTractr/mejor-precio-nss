@@ -1,8 +1,8 @@
 'use client';
 
 import { memo } from 'react';
-import { FilterAccordionSection } from './FilterAccordionSection';
-import { FilterItem } from '../types';
+import { FilterAccordionSection } from './filter-accordion-section';
+import { FilterItem } from '@/types/v2';
 import { useTranslations } from 'next-intl';
 
 interface SpecFilter {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { fn } from 'storybook/test';
-import { ResultsHeader } from '@/components/v2/dumb/ResultsHeader';
+import { ResultsHeader } from '@/components/ui/results-header';
 
 const meta: Meta<typeof ResultsHeader> = {
   title: 'V2/Dumb Components/ResultsHeader',

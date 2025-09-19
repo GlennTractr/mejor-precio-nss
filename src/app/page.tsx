@@ -30,7 +30,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const searchParamsAwaited = await searchParams;
   const t = await getTranslations('home');
   const currentPage = parseInt(searchParamsAwaited.page || '1');
-  const itemsPerPage = parseInt(searchParamsAwaited.per_page || '10');
+  const itemsPerPage = parseInt(searchParamsAwaited.per_page || '20');
 
   // Prefetch the data on the server
   const queryClient = new QueryClient();
@@ -44,13 +44,13 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
     <div className="space-y-0">
       <Banner className="w-full" />
 
-      <section className="mx-auto w-full max-w-4xl">
+      <section className="mx-auto w-full max-w-4xl px-4 md:px-6">
         {/* Favorites Section - FavoritesList component handles hiding for non-authenticated users */}
         <FavoritesList />
       </section>
 
       <section className="bg-secondary-light z-1 my-0">
-        <div className="py-[75px] mx-auto w-full max-w-4xl text-center">
+        <div className="py-8 md:py-[75px] mx-auto w-full max-w-4xl px-4 md:px-6 text-center">
           <h2 className="text-2xl text-accent mb-6 highlight-sand">{t('categories')}</h2>
           <Suspense fallback={<CategoryCarouselSkeleton />}>
             <CategoryCarousel />
@@ -58,7 +58,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         </div>
       </section>
 
-      <section className="mt-6 mx-auto w-full max-w-4xl py-[75px]">
+      <section className="mt-6 mx-auto w-full max-w-4xl py-8 md:py-[75px] px-4 md:px-6">
         <div className="text-center">
           <h2 className="text-2xl text-accent mb-6 highlight-primary">{t('allProducts')}</h2>
           <p className="text-secondary mb-6 max-w-md mx-auto text-md">

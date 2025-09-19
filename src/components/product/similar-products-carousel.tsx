@@ -5,6 +5,7 @@ import { Product } from '@/types/product';
 import { ProductCard } from './product-card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/fetch-helper';
 
 interface SimilarProductsCarouselProps {
   title: string;
@@ -53,6 +54,7 @@ export function SimilarProductsCarousel({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     async function fetchSimilarProducts() {
@@ -83,7 +85,7 @@ export function SimilarProductsCarousel({
           params.append('filter_by', filterBy);
         }
 
-        const response = await fetch(`/api/typesense-/similar-products?${params.toString()}`);
+        const response = await apiFetch(`/api/typesense/similar-products?${params.toString()}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -119,6 +121,22 @@ export function SimilarProductsCarousel({
 
     fetchSimilarProducts();
   }, [query, productId, categorySlug, specs, filterBy, perPage]);
+
+  // Auto-scroll for mobile
+  useEffect(() => {
+    if (products.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentSlide(prev => (prev + 1) % products.length);
+      }, 4000); // Auto-scroll every 4 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [products.length]);
+
+  // Mobile slide functions
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
 
   // Function to check if we can scroll left or right
   const checkScrollability = () => {
@@ -174,6 +192,11 @@ export function SimilarProductsCarousel({
     }
   };
 
+  // Reset current slide when products change
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [products]);
+
   // Don't render if no similar products found
   if (!isLoading && totalFound === 0) {
     return null;
@@ -185,13 +208,57 @@ export function SimilarProductsCarousel({
         {title} <span className="text-muted-foreground">({totalFound})</span>
       </h2>
 
-      <div className="relative">
+      {/* Mobile View - Single card with dots */}
+      <div className="block md:hidden">
+        {isLoading ? (
+          <>
+            <div className="flex justify-center px-6">
+              <div className="min-w-[280px]">
+                <ProductSkeleton />
+              </div>
+            </div>
+            <div className="flex justify-center mt-4 space-x-2">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="w-2 h-2 rounded-full bg-white" />
+              ))}
+            </div>
+          </>
+        ) : products.length > 0 ? (
+          <>
+            <div className="flex justify-center px-6">
+              <div className="min-w-[280px]">
+                <ProductCard product={products[currentSlide]} />
+              </div>
+            </div>
+            {/* Dot Pagination */}
+            {products.length > 1 && (
+              <div className="flex justify-center mt-4 space-x-2">
+                {products.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === currentSlide
+                        ? 'bg-primary'
+                        : 'bg-primary/20 hover:bg-primary-light/20'
+                    }`}
+                    aria-label={`Go to product ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        ) : null}
+      </div>
+
+      {/* Desktop View - Horizontal scroll with navigation buttons */}
+      <div className="hidden md:block relative">
         {/* Left navigation button */}
         {canScrollLeft && (
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 rounded-full bg-white shadow-md border-primary-light/20 hover:bg-primary-light/10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 rounded-full bg-white hover:bg-white shadow-lg border border-primary-light/20 hover:border-primary-light/30 text-secondary/50 hover:text-secondary focus:border-none"
             onClick={scrollLeft}
             disabled={isLoading}
           >
@@ -224,7 +291,7 @@ export function SimilarProductsCarousel({
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 rounded-full bg-white shadow-md border-primary-light/20 hover:bg-primary-light/10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 rounded-full bg-white hover:bg-white shadow-lg border border-primary-light/20 hover:border-primary-light/30 text-secondary hover:text-secondary"
             onClick={scrollRight}
             disabled={isLoading}
           >

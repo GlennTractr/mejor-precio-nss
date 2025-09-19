@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { LoadingSkeletons } from '@/components/v2/dumb/LoadingSkeletons';
+import { LoadingSkeletons } from '@/components/ui/loading-skeletons';
 
 const meta: Meta<typeof LoadingSkeletons> = {
   title: 'V2/Dumb Components/LoadingSkeletons',

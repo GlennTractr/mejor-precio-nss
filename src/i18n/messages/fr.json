@@ -12,7 +12,8 @@
       "add": "Ajouter aux favoris",
       "remove": "Retirer des favoris"
     },
-    "goHome": "Aller à l'accueil"
+    "goHome": "Aller à l'accueil",
+    "changePassword": "Changer le mot de passe"
   },
   "category": {
     "results": "{count, plural, =0 {Aucun produit trouvé} =1 {1 produit trouvé} other {# produits trouvés}}",
@@ -105,7 +106,21 @@
     "passwordPlaceholder": "Mot de passe",
     "passwordRequired": "Le mot de passe est requis",
     "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères",
-    "loginToFavorite": "Connectez-vous pour ajouter aux favoris"
+    "loginToFavorite": "Connectez-vous pour ajouter aux favoris",
+    "currentPasswordRequired": "Le mot de passe actuel est requis",
+    "confirmPasswordRequired": "La confirmation du mot de passe est requise",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+    "currentPasswordLabel": "Mot de passe actuel",
+    "currentPasswordPlaceholder": "Entrez votre mot de passe actuel",
+    "newPasswordLabel": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "Entrez votre nouveau mot de passe",
+    "confirmPasswordLabel": "Confirmer le nouveau mot de passe",
+    "confirmPasswordPlaceholder": "Confirmez votre nouveau mot de passe",
+    "passwordChangedSuccessfully": "Mot de passe changé avec succès",
+    "passwordChangeSuccess": "Votre mot de passe a été mis à jour avec succès.",
+    "changeAnotherPassword": "Changer le mot de passe à nouveau",
+    "changingPassword": "Changement du mot de passe...",
+    "checkingAuthentication": "Vérification de l'authentification"
   },
   "home": {
     "welcome": "Bienvenue, {email}",

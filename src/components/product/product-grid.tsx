@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { ProductCard } from '@/components/product/product-card';
 import { Loading } from '@/components/ui/loading';
 import { cn } from '@/lib/utils';
-import { ProductGridProps } from '../types';
+import { ProductGridProps } from '@/types/v2';
 
 function ProductGridComponent({
   products,

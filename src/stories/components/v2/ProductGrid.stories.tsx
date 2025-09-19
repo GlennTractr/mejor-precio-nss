@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { ProductGrid } from '@/components/v2/dumb/ProductGrid';
+import { ProductGrid } from '@/components/product/product-grid';
 import { Product } from '@/types/product';
 
 // Mock product data

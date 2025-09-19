@@ -59,3 +59,35 @@ export async function signup(data: { email: string; password: string }) {
 
   redirect('/');
 }
+
+export async function changePassword(data: { currentPassword: string; newPassword: string }) {
+  const supabase = await createClient();
+
+  // Get the current user
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  
+  if (userError || !user) {
+    throw new Error('User not authenticated');
+  }
+
+  // Verify current password by attempting to sign in
+  const { error: verifyError } = await supabase.auth.signInWithPassword({
+    email: user.email!,
+    password: data.currentPassword,
+  });
+
+  if (verifyError) {
+    throw new Error('Current password is incorrect');
+  }
+
+  // Update the password
+  const { error: updateError } = await supabase.auth.updateUser({
+    password: data.newPassword,
+  });
+
+  if (updateError) {
+    throw updateError;
+  }
+
+  revalidatePath('/', 'layout');
+}

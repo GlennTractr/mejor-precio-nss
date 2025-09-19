@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { fn } from 'storybook/test';
-import { ActiveFiltersBar } from '@/components/v2/dumb/ActiveFiltersBar';
-import { FilterType } from '@/components/v2/types';
+import { ActiveFiltersBar } from '@/components/ui/active-filters-bar';
+import { FilterType } from '@/types/v2';
 
 // Mock formatters
 const mockFormatters = {

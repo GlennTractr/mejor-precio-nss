@@ -12,7 +12,8 @@
       "add": "Añadir a favoritos",
       "remove": "Eliminar de favoritos"
     },
-    "goHome": "Ir a Inicio"
+    "goHome": "Ir a Inicio",
+    "changePassword": "Cambiar Contraseña"
   },
   "category": {
     "results": "{count, plural, =0 {No se encontraron productos} =1 {1 producto encontrado} other {# productos encontrados}}",
@@ -107,7 +108,21 @@
     "passwordPlaceholder": "Contraseña",
     "passwordRequired": "La contraseña es requerida",
     "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
-    "loginToFavorite": "Inicia sesión para añadir a favoritos"
+    "loginToFavorite": "Inicia sesión para añadir a favoritos",
+    "currentPasswordRequired": "La contraseña actual es requerida",
+    "confirmPasswordRequired": "Confirmar contraseña es requerido",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "currentPasswordLabel": "Contraseña Actual",
+    "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+    "newPasswordLabel": "Nueva Contraseña",
+    "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+    "confirmPasswordLabel": "Confirmar Nueva Contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+    "passwordChangedSuccessfully": "Contraseña Cambiada Exitosamente",
+    "passwordChangeSuccess": "Tu contraseña ha sido actualizada exitosamente.",
+    "changeAnotherPassword": "Cambiar Contraseña Nuevamente",
+    "changingPassword": "Cambiando contraseña...",
+    "checkingAuthentication": "Verificando Autenticación"
   },
   "home": {
     "welcome": "Bienvenido de nuevo, {email}",
