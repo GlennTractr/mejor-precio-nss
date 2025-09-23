@@ -10,6 +10,7 @@ const EnvSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
   NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional().default(''),
   NEXT_PUBLIC_COUNTRY_CODE: z.string().min(2).max(3).default('MX'),
+  NEXT_PUBLIC_CURRENCY: z.string().default('MXN'),
 });
 
 let cached: z.infer<typeof EnvSchema> | null = null;
@@ -30,6 +31,7 @@ export const env = () => {
       NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
       NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
       NEXT_PUBLIC_COUNTRY_CODE: process.env.NEXT_PUBLIC_COUNTRY_CODE,
+      NEXT_PUBLIC_CURRENCY: process.env.NEXT_PUBLIC_CURRENCY,
     } as Record<string, string | undefined>;
     if (!raw.NEXT_PUBLIC_SUPABASE_BASE_KEY && raw.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
       raw.NEXT_PUBLIC_SUPABASE_BASE_KEY = raw.NEXT_PUBLIC_SUPABASE_ANON_KEY;

@@ -302,3 +302,9 @@ GRANT EXECUTE ON FUNCTION public.count_sellcontext_for_typesense() TO service_ro
 -- 2. Implement data sync pipeline
 -- 3. Update API endpoints to use group_by queries
 -- 4. Test with real data
+
+
+
+
+ALTER TABLE matching."ProcessIntent"
+  ADD COLUMN tracking_only boolean DEFAULT false;

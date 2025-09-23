@@ -32,4 +32,17 @@ export {
   createDefaultFormatters,
   truncateText,
   capitalizeFirst,
+  getCurrentCurrencySymbol,
+  createCurrencyTranslationParams,
 } from './formatters';
+
+// Export all currency utilities
+export {
+  getCurrentCurrency,
+  getCurrencyLocale,
+  getCurrencySymbol,
+  getCurrencyInfo,
+  isSupportedCurrency,
+  getSupportedCurrencies,
+  formatCurrencyWithEnvironment,
+} from './currency';

@@ -66,8 +66,8 @@
     "gender": "Género",
     "priceRange": {
       "title": "Rango de precio por unidad",
-      "unit": "€{value}/unidad",
-      "filter": "Precio por unidad: €{min} - €{max}"
+      "unit": "{currencySymbol}{value}/unidad",
+      "filter": "Precio por unidad: {currencySymbol}{min} - {currencySymbol}{max}"
     },
     "search": {
       "title": "Buscar",

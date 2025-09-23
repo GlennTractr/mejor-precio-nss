@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterType } from '@/types/filters';
 import { PriceFormatterOptions } from '@/types/formatters';
+import { getCurrentCurrency, getCurrencyLocale, getCurrencySymbol } from '@/lib/currency';
 
-// Default price formatter (matches existing implementation)
+// Default price formatter (uses environment currency)
 export function formatPrice(price: number, options: PriceFormatterOptions = {}): string {
+  const defaultCurrency = getCurrentCurrency();
+  const defaultLocale = getCurrencyLocale(defaultCurrency);
+  
   const {
-    locale = 'es-ES',
-    currency = 'EUR',
+    locale = defaultLocale,
+    currency = defaultCurrency,
     minimumFractionDigits = 2,
     maximumFractionDigits = 2,
   } = options;
@@ -97,6 +101,19 @@ export function createDefaultFormatters(options: PriceFormatterOptions = {}) {
   return {
     price: (price: number) => formatPrice(price, options),
     filterLabel: formatFilterLabel,
+  };
+}
+
+// Get current currency symbol for use in translations
+export function getCurrentCurrencySymbol(): string {
+  return getCurrencySymbol();
+}
+
+// Create translation parameters with currency symbol
+export function createCurrencyTranslationParams(extraParams: Record<string, any> = {}): Record<string, any> {
+  return {
+    currencySymbol: getCurrentCurrencySymbol(),
+    ...extraParams,
   };
 }
 

@@ -64,8 +64,8 @@
     "gender": "Genre",
     "priceRange": {
       "title": "Fourchette de prix par unité",
-      "unit": "€{value}/unité",
-      "filter": "Prix par unité: €{min} - €{max}"
+      "unit": "{currencySymbol}{value}/unité",
+      "filter": "Prix par unité: {currencySymbol}{min} - {currencySymbol}{max}"
     },
     "search": {
       "title": "Rechercher",

@@ -74,8 +74,8 @@ const mockMessages = {
     gender: 'Gender',
     priceRange: {
       title: 'Price per unit range',
-      unit: '€{value}/unit',
-      filter: 'Price per unit: €{min} - €{max}',
+      unit: '{currencySymbol}{value}/unit',
+      filter: 'Price per unit: {currencySymbol}{min} - {currencySymbol}{max}',
     },
     search: {
       title: 'Search',

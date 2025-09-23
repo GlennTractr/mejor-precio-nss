@@ -16,7 +16,7 @@ interface LogoProps {
 const sizeClasses = {
   sm: 'h-7 w-auto', // ~28px for mobile
   md: 'h-9 w-auto', // ~36px for desktop
-  lg: 'h-12 w-auto', // ~48px for larger contexts
+  lg: 'h-[65px] w-auto', // ~48px for larger contexts
 };
 
 export function Logo({
