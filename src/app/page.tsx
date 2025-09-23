@@ -6,7 +6,7 @@ import { HomeProductList } from '@/components/product/home-product-list';
 import { FavoritesList } from '@/components/product/favorites-list';
 import { getTranslations } from 'next-intl/server';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { Banner } from '@/components/ui/banner';
+import { HeroBanner } from '@/components/ui/hero-banner';
 
 interface SearchParams {
   page?: string;
@@ -42,14 +42,14 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   return (
     <div className="space-y-0">
-      <Banner className="w-full" />
+      <HeroBanner className="w-full" />
 
       <section className="mx-auto w-full max-w-4xl px-4 md:px-6">
         {/* Favorites Section - FavoritesList component handles hiding for non-authenticated users */}
         <FavoritesList />
       </section>
 
-      <section className="bg-secondary-light z-1 my-0">
+      <section id="categories-section" className="bg-secondary-light z-1 my-0">
         <div className="py-8 md:py-[75px] mx-auto w-full max-w-4xl px-4 md:px-6 text-center">
           <h2 className="text-2xl text-accent mb-6 highlight-sand">{t('categories')}</h2>
           <Suspense fallback={<CategoryCarouselSkeleton />}>
