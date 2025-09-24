@@ -108,8 +108,8 @@ function ProductPageSkeleton() {
                   >
                     <td className="w-1/3 py-1 px-2 inline-block align-middle">
                       <div className="flex items-center gap-4 h-16">
-                        {/* Shop Logo - 48px circular */}
-                        <Skeleton className="relative w-12 h-12 flex-shrink-0 rounded-full" />
+                        {/* Shop Logo - bigger height */}
+                        <Skeleton className="relative w-16 h-20 flex-shrink-0 rounded-lg" />
                         {/* Shop Info */}
                         <div className="space-y-1">
                           <Skeleton className="h-4 w-24" />
@@ -498,13 +498,13 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                     {/* Shop Logo Cell */}
                     <td className="w-[60px] sm:w-1/4 py-2 px-2 sm:py-1 sm:px-2 inline-block align-middle">
                       <div className="flex items-center justify-center h-12 sm:h-16">
-                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 rounded-lg p-1">
+                        <div className="relative w-12 h-16 sm:w-16 sm:h-20 flex-shrink-0 rounded-lg p-1">
                           <Image
                             src={item.shopImg}
                             alt={item.shop}
                             fill
                             className="object-contain"
-                            sizes="48px"
+                            sizes="64px"
                           />
                         </div>
                       </div>
