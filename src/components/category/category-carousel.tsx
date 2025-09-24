@@ -69,7 +69,7 @@ export function CategoryCarousel() {
 
   // Swipe gesture handler for mobile
   const bind = useDrag(
-    ({ direction: [xDir], distance, last, first, movement, event }) => {
+    ({ direction: [xDir], distance, last, first }) => {
       if (first) {
         setIsDragging(true);
       }
@@ -77,12 +77,12 @@ export function CategoryCarousel() {
       // Only execute slide change on gesture end with sufficient distance
       if (last) {
         setTimeout(() => setIsDragging(false), 100); // Small delay to prevent click
-        
-        if (distance > 50) {
+
+        if (Math.sqrt(distance[0] ** 2 + distance[1] ** 2) > 50) {
           if (xDir > 0 && currentSlide > 0) {
             // Swiping right -> go to previous slide
             setCurrentSlide(prev => prev - 1);
-          } else if (xDir < 0 && currentSlide < categories.length - 1) {
+          } else if (xDir < 0 && categories && currentSlide < categories.length - 1) {
             // Swiping left -> go to next slide
             setCurrentSlide(prev => prev + 1);
           }
@@ -159,6 +159,10 @@ export function CategoryCarousel() {
   const validCurrentSlide = Math.min(currentSlide, categories.length - 1);
   const currentCategory = categories[validCurrentSlide];
 
+  if (!currentCategory || !currentCategory.slug) {
+    return null;
+  }
+
   return (
     <>
       {/* Mobile View - Single card with dots */}
@@ -166,7 +170,7 @@ export function CategoryCarousel() {
         <div className="flex justify-center px-6">
           <div {...bind()} className="w-[280px] touch-pan-y">
             <div
-              onClick={(e) => handleCardClick(e, currentCategory.slug)}
+              onClick={e => handleCardClick(e, currentCategory.slug!)}
               className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none cursor-pointer"
             >
               <Card variant="interactive" className="w-full h-[280px]">
@@ -228,7 +232,7 @@ export function CategoryCarousel() {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           onLoad={checkScrollability}
         >
-          {categories.map(category => (
+          {categories.filter(category => category.slug).map(category => (
             <div key={category.id} className="min-w-[180px] snap-start">
               <Link
                 href={`/categoria/${category.slug}`}

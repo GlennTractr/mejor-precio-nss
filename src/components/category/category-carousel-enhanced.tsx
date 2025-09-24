@@ -33,17 +33,11 @@ export function CategoryCarouselEnhanced() {
 
   // Swipe gesture configuration
   const bind = useDrag(
-    ({ 
-      down, 
-      movement: [mx], 
-      direction: [xDir], 
-      velocity: [vx], 
-      cancel 
-    }) => {
+    ({ down, movement: [mx], direction: [xDir], velocity: [vx] }) => {
       if (!categories || categories.length <= 1) return;
 
       setIsDragging(down);
-      
+
       if (down) {
         // While dragging, show the drag offset
         setDragOffset(mx);
@@ -51,10 +45,9 @@ export function CategoryCarouselEnhanced() {
         // When drag ends, determine if we should change slides
         const threshold = 50; // Minimum distance to trigger slide change
         const velocityThreshold = 0.2; // Minimum velocity for flick gesture
-        
-        const shouldChangeSlide = 
-          Math.abs(mx) > threshold || Math.abs(vx) > velocityThreshold;
-        
+
+        const shouldChangeSlide = Math.abs(mx) > threshold || Math.abs(vx) > velocityThreshold;
+
         if (shouldChangeSlide) {
           if (xDir > 0 && currentSlide > 0) {
             // Swiped right, go to previous slide
@@ -64,7 +57,7 @@ export function CategoryCarouselEnhanced() {
             setCurrentSlide(prev => prev + 1);
           }
         }
-        
+
         // Reset drag offset
         setDragOffset(0);
       }
@@ -168,20 +161,22 @@ export function CategoryCarouselEnhanced() {
       {/* Mobile View - Enhanced with swipe gestures */}
       <div className="block md:hidden">
         <div className="flex justify-center px-6 overflow-hidden">
-          <div 
+          <div
             ref={mobileContainerRef}
             {...bind()}
             className="w-[280px] cursor-grab active:cursor-grabbing select-none"
             style={{
               transform: `translateX(${dragOffset}px)`,
-              transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              transition: isDragging
+                ? 'none'
+                : 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             }}
           >
             <Link
               href={`/categoria/${categories[currentSlide].slug}`}
               className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none"
               // Prevent click during drag
-              onClick={(e) => {
+              onClick={e => {
                 if (isDragging || Math.abs(dragOffset) > 10) {
                   e.preventDefault();
                 }
@@ -216,8 +211,8 @@ export function CategoryCarouselEnhanced() {
               key={index}
               onClick={() => goToSlide(index)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentSlide 
-                  ? 'bg-primary scale-125' 
+                index === currentSlide
+                  ? 'bg-primary scale-125'
                   : 'bg-white hover:bg-primary-light/20 hover:scale-110'
               }`}
               aria-label={`Go to slide ${index + 1} of ${categories.length}`}
@@ -228,9 +223,7 @@ export function CategoryCarouselEnhanced() {
         {/* Swipe hint for first-time users */}
         {categories.length > 1 && (
           <div className="flex justify-center mt-2">
-            <p className="text-xs text-secondary/60 text-center">
-              Desliza para ver más categorías
-            </p>
+            <p className="text-xs text-secondary/60 text-center">Desliza para ver más categorías</p>
           </div>
         )}
       </div>
