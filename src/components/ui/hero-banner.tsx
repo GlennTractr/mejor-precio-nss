@@ -153,20 +153,16 @@ export function HeroBanner({ className }: HeroBannerProps) {
               <div className="pt-2 md:pt-4 flex justify-center md:justify-start">
                 {/* Mobile Search Bar */}
                 <div className="md:hidden w-full max-w-sm mx-auto">
-                  <SearchBar
-                    variant="hero"
-                    placeholder="Buscar productos..."
-                    className="w-full"
-                  />
+                  <SearchBar variant="hero" placeholder="Buscar productos..." className="w-full" />
                 </div>
-                
+
                 {/* Desktop CTA Button */}
                 <div className="hidden md:block">
                   <Button
                     onClick={scrollToCategories}
                     variant="primary"
                     size="lg"
-                    className="text-base md:text-lg px-8 py-4 md:px-10 md:py-5 rounded-full bg-primary hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all duration-300 group border-0 font-medium"
+                    className="text-base md:text-lg px-8 py-4 md:px-10 md:py-5 rounded-full bg-primary hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all duration-300 group border-0 font-bold"
                   >
                     Ver Categorías
                     <ChevronDown className="ml-3 h-4 w-4 md:h-5 md:w-5 group-hover:translate-y-1 transition-transform duration-300" />
