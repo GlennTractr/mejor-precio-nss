@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRouter } from 'next/navigation';
 import { SimilarProductsCarousel } from './similar-products-carousel';
+import { ProductVariants } from './product-variants';
 import { Button } from '../ui/button';
 
 type ProductSellContext = {
@@ -95,7 +96,7 @@ function ProductPageSkeleton() {
 
             {/* Compare prices title skeleton */}
             <Skeleton className="h-6 w-32 highlight-secondary" />
-            
+
             {/* Price comparison table skeleton */}
             <table className="w-full border-collapse table-fixed">
               <tbody>
@@ -119,9 +120,7 @@ function ProductPageSkeleton() {
                     <td className="w-1/4 py-1 px-2 inline-block align-middle">
                       <div className="flex flex-col items-center gap-1 h-16 justify-center">
                         <Skeleton className="h-4 w-16" />
-                        {i === 1 && (
-                          <Skeleton className="h-5 w-24 rounded-full" />
-                        )}
+                        {i === 1 && <Skeleton className="h-5 w-24 rounded-full" />}
                       </div>
                     </td>
 
@@ -260,30 +259,34 @@ export function ProductPage({ productSlug }: ProductPageProps) {
 
         // Track product view in Google Analytics
         if (typeof window !== 'undefined' && window.gtag) {
-          const priceData = product.ProductPackaging?.flatMap(
-            pkg => pkg.ProductSellContext?.map(ctx => ({
-              pricePerUnit: ctx.price / pkg.quantity,
-              shop: ctx.Shop?.label || 'Unknown'
-            })) || []
-          ) || [];
-          
-          const bestPriceData = priceData.reduce((best, current) => 
-            current.pricePerUnit < best.pricePerUnit ? current : best,
+          const priceData =
+            product.ProductPackaging?.flatMap(
+              pkg =>
+                pkg.ProductSellContext?.map(ctx => ({
+                  pricePerUnit: ctx.price / pkg.quantity,
+                  shop: ctx.Shop?.label || 'Unknown',
+                })) || []
+            ) || [];
+
+          const bestPriceData = priceData.reduce(
+            (best, current) => (current.pricePerUnit < best.pricePerUnit ? current : best),
             priceData[0] || { pricePerUnit: 0, shop: 'Unknown' }
           );
 
           window.gtag('event', 'view_item', {
             currency: 'MXN',
             value: bestPriceData.pricePerUnit || 0,
-            items: [{
-              item_id: product.id,
-              item_name: product.title,
-              item_category: product.model?.category?.label || 'Unknown',
-              item_brand: product.model?.brand?.label || 'Unknown',
-              price: bestPriceData.pricePerUnit || 0,
-              quantity: 1,
-              affiliation: bestPriceData.shop // Best price shop
-            }]
+            items: [
+              {
+                item_id: product.id,
+                item_name: product.title,
+                item_category: product.model?.category?.label || 'Unknown',
+                item_brand: product.model?.brand?.label || 'Unknown',
+                price: bestPriceData.pricePerUnit || 0,
+                quantity: 1,
+                affiliation: bestPriceData.shop, // Best price shop
+              },
+            ],
           });
         }
 
@@ -463,19 +466,23 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                   <span className="text-muted-foreground">{product.model.label}</span>
                 )}
               </div>
-              {product.ProductSpecs && product.ProductSpecs.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 pt-2">
-                  {product.ProductSpecs.map((spec, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary text-secondary font-bold"
-                    >
-                      {spec.label}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
+
+            {/* Product Variants */}
+            {product && (
+              <ProductVariants
+                productId={product.id}
+                categorySlug={product.model?.category?.slug || ''}
+                brand={product.model?.brand?.label || ''}
+                model={product.model?.label || ''}
+                currentSpecs={product.ProductSpecs}
+                currentProduct={{
+                  title: product.title,
+                  imageUrl: imageUrl || '',
+                  productSlug: productSlug,
+                }}
+              />
+            )}
 
             <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary ">
               {t('product.comparePrices')}
@@ -546,15 +553,17 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                               window.gtag('event', 'purchase_intent', {
                                 currency: 'MXN',
                                 value: item.price,
-                                items: [{
-                                  item_id: product.id,
-                                  item_name: product.title,
-                                  item_category: product.model?.category?.label || 'Unknown',
-                                  item_brand: product.model?.brand?.label || 'Unknown',
-                                  price: item.price,
-                                  quantity: 1,
-                                  affiliation: item.shop // Shop name
-                                }]
+                                items: [
+                                  {
+                                    item_id: product.id,
+                                    item_name: product.title,
+                                    item_category: product.model?.category?.label || 'Unknown',
+                                    item_brand: product.model?.brand?.label || 'Unknown',
+                                    price: item.price,
+                                    quantity: 1,
+                                    affiliation: item.shop, // Shop name
+                                  },
+                                ],
                               });
                             }
                             window.open(item.link, '_blank');
