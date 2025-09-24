@@ -5,3 +5,4 @@ export { FilterSidebar } from './filter-sidebar';
 export { LoadingSkeletons } from './loading-skeletons';
 export { ProductPagination } from './product-pagination';
 export { ResultsHeader } from './results-header';
+export { SearchBar } from './search-bar';

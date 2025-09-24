@@ -99,6 +99,8 @@ function FilterSidebarComponent({
 
   return (
     <Card variant="interactive" className={cn('space-y-6 p-4 bg-transparent', className)}>
+      <h2 className="mb-2 font-bold text-lg text-center">{t('filters.title')}</h2>
+
       {/* Search Section */}
       <div>
         <h2 className="mb-4 font-medium highlight-secondary text-sm">{t('filters.search')}</h2>

@@ -24,6 +24,7 @@
     "removeFilter": "Supprimer le filtre",
     "clearAll": "Tout effacer",
     "filters": {
+      "title": "Filtres",
       "search": "Rechercher",
       "searchPlaceholder": "Rechercher des produits...",
       "searchButton": "Rechercher",

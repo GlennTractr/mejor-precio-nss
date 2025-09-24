@@ -24,6 +24,7 @@
     "removeFilter": "Eliminar filtro",
     "clearAll": "Limpiar todo",
     "filters": {
+      "title": "Filtros",
       "search": "Buscar",
       "searchPlaceholder": "Buscar productos...",
       "searchButton": "Buscar",
@@ -31,7 +32,7 @@
       "brands": "Marcas",
       "models": "Modelos",
       "specs": "Especificaciones",
-      "resetFilters": "Restablecer filtros",
+      "resetFilters": "Borrar filtros",
       "brand": "Marca",
       "model": "Modelo",
       "step": "Etapa",

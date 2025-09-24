@@ -9,27 +9,73 @@ import Image from 'next/image';
 import { useCategories } from '@/hooks/use-categories';
 import { useEffect, useRef, useState } from 'react';
 import { useDrag } from '@use-gesture/react';
-import { useRouter } from 'next/navigation';
 
 function CategorySkeleton() {
   return (
-    <Card variant="interactive" className="w-[180px] h-[180px] flex-shrink-0">
-      <CardContent className="p-4 space-y-3">
+    <Card variant="interactive" className="w-[280px] h-[280px] flex-shrink-0">
+      <CardContent className="p-6 space-y-4">
         <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-[120px] w-full rounded-lg" />
+        <Skeleton className="h-[200px] w-full rounded-lg" />
       </CardContent>
     </Card>
   );
 }
 
-export function CategoryCarousel() {
+export function CategoryCarouselEnhanced() {
   const { data: categories, isLoading } = useCategories();
-  const router = useRouter();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const mobileContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Swipe gesture configuration
+  const bind = useDrag(
+    ({ 
+      down, 
+      movement: [mx], 
+      direction: [xDir], 
+      velocity: [vx], 
+      cancel 
+    }) => {
+      if (!categories || categories.length <= 1) return;
+
+      setIsDragging(down);
+      
+      if (down) {
+        // While dragging, show the drag offset
+        setDragOffset(mx);
+      } else {
+        // When drag ends, determine if we should change slides
+        const threshold = 50; // Minimum distance to trigger slide change
+        const velocityThreshold = 0.2; // Minimum velocity for flick gesture
+        
+        const shouldChangeSlide = 
+          Math.abs(mx) > threshold || Math.abs(vx) > velocityThreshold;
+        
+        if (shouldChangeSlide) {
+          if (xDir > 0 && currentSlide > 0) {
+            // Swiped right, go to previous slide
+            setCurrentSlide(prev => prev - 1);
+          } else if (xDir < 0 && currentSlide < categories.length - 1) {
+            // Swiped left, go to next slide
+            setCurrentSlide(prev => prev + 1);
+          }
+        }
+        
+        // Reset drag offset
+        setDragOffset(0);
+      }
+    },
+    {
+      axis: 'x',
+      bounds: { left: -100, right: 100 },
+      rubberband: true,
+      preventDefault: true,
+    }
+  );
 
   // Function to check if we can scroll left or right (desktop only)
   const checkScrollability = () => {
@@ -57,44 +103,6 @@ export function CategoryCarousel() {
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
   };
-
-  // Handle card click for navigation
-  const handleCardClick = (e: React.MouseEvent, categorySlug: string) => {
-    if (isDragging) {
-      e.preventDefault();
-      return;
-    }
-    router.push(`/categoria/${categorySlug}`);
-  };
-
-  // Swipe gesture handler for mobile
-  const bind = useDrag(
-    ({ direction: [xDir], distance, last, first, movement, event }) => {
-      if (first) {
-        setIsDragging(true);
-      }
-
-      // Only execute slide change on gesture end with sufficient distance
-      if (last) {
-        setTimeout(() => setIsDragging(false), 100); // Small delay to prevent click
-        
-        if (distance > 50) {
-          if (xDir > 0 && currentSlide > 0) {
-            // Swiping right -> go to previous slide
-            setCurrentSlide(prev => prev - 1);
-          } else if (xDir < 0 && currentSlide < categories.length - 1) {
-            // Swiping left -> go to next slide
-            setCurrentSlide(prev => prev + 1);
-          }
-        }
-      }
-    },
-    {
-      axis: 'x', // Only allow horizontal swiping
-      threshold: 10, // Minimum distance to start gesture
-      preventDefault: true, // Prevent default touch behaviors
-    }
-  );
 
   // Check scrollability for desktop
   useEffect(() => {
@@ -155,29 +163,39 @@ export function CategoryCarousel() {
     return null;
   }
 
-  // Ensure currentSlide is within bounds
-  const validCurrentSlide = Math.min(currentSlide, categories.length - 1);
-  const currentCategory = categories[validCurrentSlide];
-
   return (
     <>
-      {/* Mobile View - Single card with dots */}
+      {/* Mobile View - Enhanced with swipe gestures */}
       <div className="block md:hidden">
-        <div className="flex justify-center px-6">
-          <div {...bind()} className="w-[280px] touch-pan-y">
-            <div
-              onClick={(e) => handleCardClick(e, currentCategory.slug)}
-              className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none cursor-pointer"
+        <div className="flex justify-center px-6 overflow-hidden">
+          <div 
+            ref={mobileContainerRef}
+            {...bind()}
+            className="w-[280px] cursor-grab active:cursor-grabbing select-none"
+            style={{
+              transform: `translateX(${dragOffset}px)`,
+              transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            }}
+          >
+            <Link
+              href={`/categoria/${categories[currentSlide].slug}`}
+              className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none"
+              // Prevent click during drag
+              onClick={(e) => {
+                if (isDragging || Math.abs(dragOffset) > 10) {
+                  e.preventDefault();
+                }
+              }}
             >
-              <Card variant="interactive" className="w-full h-[280px]">
-                <CardContent className="p-6 space-y-4">
+              <Card variant="interactive" className="w-full h-[280px] pointer-events-none">
+                <CardContent className="p-6 space-y-4 pointer-events-auto">
                   <h3 className="text-lg text-center font-medium text-secondary">
-                    <b>{currentCategory.label}</b>
+                    <b>{categories[currentSlide].label}</b>
                   </h3>
                   <div className="relative h-[200px] w-full">
                     <Image
-                      src={currentCategory.image_url || '/images/placeholder.jpg'}
-                      alt={currentCategory.label}
+                      src={categories[currentSlide].image_url || '/images/placeholder.jpg'}
+                      alt={categories[currentSlide].label}
                       fill
                       className="object-cover rounded-lg"
                       sizes="280px"
@@ -187,26 +205,37 @@ export function CategoryCarousel() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </Link>
           </div>
         </div>
 
-        {/* Dot Pagination */}
+        {/* Enhanced Dot Pagination with swipe indicators */}
         <div className="flex justify-center mt-6 space-x-2">
           {categories.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                index === currentSlide ? 'bg-primary' : 'bg-white hover:bg-primary-light/20'
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentSlide 
+                  ? 'bg-primary scale-125' 
+                  : 'bg-white hover:bg-primary-light/20 hover:scale-110'
               }`}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={`Go to slide ${index + 1} of ${categories.length}`}
             />
           ))}
         </div>
+
+        {/* Swipe hint for first-time users */}
+        {categories.length > 1 && (
+          <div className="flex justify-center mt-2">
+            <p className="text-xs text-secondary/60 text-center">
+              Desliza para ver más categorías
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Desktop View - Horizontal scroll with navigation buttons */}
+      {/* Desktop View - Unchanged horizontal scroll with navigation buttons */}
       <div className="hidden md:block relative">
         {/* Left navigation button */}
         {canScrollLeft && (
@@ -216,6 +245,7 @@ export function CategoryCarousel() {
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 rounded-full bg-white hover:bg-white shadow-lg border border-primary-light/20 hover:border-primary-light/30 text-secondary/50 hover:text-secondary focus:border-none"
             onClick={scrollLeft}
             disabled={isLoading}
+            aria-label="Previous categories"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
@@ -265,6 +295,7 @@ export function CategoryCarousel() {
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 rounded-full bg-white hover:bg-white shadow-lg border border-primary-light/20 hover:border-primary-light/30 text-secondary/50 hover:text-secondary focus:border-none"
             onClick={scrollRight}
             disabled={isLoading}
+            aria-label="Next categories"
           >
             <ChevronRight className="h-5 w-5" />
           </Button>
@@ -278,6 +309,12 @@ export function CategoryCarousel() {
 const scrollbarStyles = `
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  
+  /* Improve touch scrolling on mobile */
+  .scrollbar-hide {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 `;
 
