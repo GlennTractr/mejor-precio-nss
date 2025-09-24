@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { SimilarProductsCarousel } from './similar-products-carousel';
 import { ProductVariants } from './product-variants';
 import { Button } from '../ui/button';
+import { PriceComparisonModal } from './price-comparison-modal';
 
 type ProductSellContext = {
   price: number;
@@ -194,6 +195,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
   const [isNotified, setIsNotified] = useState(false);
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
   const [showAllProviders, setShowAllProviders] = useState(false);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
   const currentUser = useCurrentUser();
 
   useEffect(() => {
@@ -484,9 +486,19 @@ export function ProductPage({ productSlug }: ProductPageProps) {
               />
             )}
 
-            <h2 className="text-lg font-medium text-accent mb-4 highlight-secondary ">
-              {t('product.comparePrices')}
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium text-accent highlight-secondary">
+                {t('product.comparePrices')}
+              </h2>
+              <Button
+                variant="link-secondary"
+                size="sm"
+                onClick={() => setIsCompareModalOpen(true)}
+                className="text-xs"
+              >
+                {t('product.compare')}
+              </Button>
+            </div>
             <table className="w-full border-collapse">
               <tbody>
                 {displayedProviders.map((item, index) => (
@@ -601,6 +613,19 @@ export function ProductPage({ productSlug }: ProductPageProps) {
             categorySlug={product.model?.category?.slug}
             specs={product.ProductSpecs}
             perPage={10}
+          />
+        )}
+
+        {/* Price Comparison Modal */}
+        {product && sortedPricePerUnit.length > 0 && (
+          <PriceComparisonModal
+            isOpen={isCompareModalOpen}
+            onOpenChange={setIsCompareModalOpen}
+            bestPricePerUnit={sortedPricePerUnit[0].pricePerUnit}
+            quantityType={product.ProductPackaging?.[0]?.type || ''}
+            productTitle={product.title}
+            bestOfferLink={sortedPricePerUnit[0].link}
+            bestOfferShop={sortedPricePerUnit[0].shop}
           />
         )}
       </div>

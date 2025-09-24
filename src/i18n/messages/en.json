@@ -56,7 +56,20 @@
     "ourRecommendation": "Our recommendation",
     "showMore": "Show more providers",
     "showLess": "Show fewer providers",
-    "similarProducts": "Similar Products"
+    "similarProducts": "Similar Products",
+    "compare": "Compare",
+    "compareModal": {
+      "title": "Compare price",
+      "quantity": "Quantity",
+      "price": "Total price",
+      "yourPrice": "Your price per unit",
+      "bestPrice": "Best available price",
+      "difference": "Difference",
+      "better": "cheaper",
+      "worse": "more expensive",
+      "same": "same price",
+      "buyBest": "Buy best offer"
+    }
   },
   "filters": {
     "brands": "Brands",
@@ -139,7 +152,8 @@
     "pleaseWait": "Please wait...",
     "redirecting": "Redirecting",
     "error": "Error",
-    "unexpectedError": "An unexpected error occurred"
+    "unexpectedError": "An unexpected error occurred",
+    "close": "Close"
   },
   "navigation": {
     "home": "Home",

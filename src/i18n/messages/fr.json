@@ -56,7 +56,20 @@
     "ourRecommendation": "Notre recommandation",
     "showMore": "Afficher plus de fournisseurs",
     "showLess": "Afficher moins de fournisseurs",
-    "similarProducts": "Produits Similaires"
+    "similarProducts": "Produits Similaires",
+    "compare": "Comparer",
+    "compareModal": {
+      "title": "Comparer le prix",
+      "quantity": "Quantité",
+      "price": "Prix total",
+      "yourPrice": "Votre prix par unité",
+      "bestPrice": "Meilleur prix disponible",
+      "difference": "Différence",
+      "better": "moins cher",
+      "worse": "plus cher",
+      "same": "même prix",
+      "buyBest": "Acheter la meilleure offre"
+    }
   },
   "filters": {
     "brands": "Marques",
@@ -139,7 +152,8 @@
     "pleaseWait": "Veuillez patienter...",
     "redirecting": "Redirection en cours",
     "error": "Erreur",
-    "unexpectedError": "Une erreur inattendue s'est produite"
+    "unexpectedError": "Une erreur inattendue s'est produite",
+    "close": "Fermer"
   },
   "navigation": {
     "home": "Accueil",
