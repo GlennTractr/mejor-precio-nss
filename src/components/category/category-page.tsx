@@ -12,7 +12,7 @@ interface CategoryPageProps {
   minPossiblePrice: number;
   maxPossiblePrice: number;
   initialFilters: CategoryFilters;
-  description?: string;
+  description?: string | null;
 }
 
 export function CategoryPage({
@@ -33,7 +33,7 @@ export function CategoryPage({
       window.gtag('event', 'view_item_list', {
         item_list_id: categorySlug,
         item_list_name: displayName,
-        items: [] // Items will be tracked individually when they load
+        items: [], // Items will be tracked individually when they load
       });
     }
   }, [categorySlug, displayName]);
