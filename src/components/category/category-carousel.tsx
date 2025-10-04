@@ -10,6 +10,7 @@ import { useCategories } from '@/hooks/use-categories';
 import { useEffect, useRef, useState } from 'react';
 import { useDrag } from '@use-gesture/react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 function CategorySkeleton() {
   return (
@@ -25,6 +26,7 @@ function CategorySkeleton() {
 export function CategoryCarousel() {
   const { data: categories, isLoading } = useCategories();
   const router = useRouter();
+  const t = useTranslations('category');
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -170,11 +172,15 @@ export function CategoryCarousel() {
         <div className="flex justify-center px-6">
           <div {...bind()} className="w-[280px] touch-pan-y">
             <div
-              onClick={e => handleCardClick(e, currentCategory.slug!)}
-              className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none cursor-pointer"
+              onClick={e => !currentCategory.coming_soon && handleCardClick(e, currentCategory.slug!)}
+              className={`block transition-transform focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none ${
+                currentCategory.coming_soon
+                  ? 'cursor-not-allowed opacity-60'
+                  : 'hover:scale-105 cursor-pointer'
+              }`}
             >
               <Card variant="interactive" className="w-full h-[280px]">
-                <CardContent className="p-6 space-y-4">
+                <CardContent className="p-6 space-y-4 relative">
                   <h3 className="text-lg text-center font-medium text-secondary">
                     <b>{currentCategory.label}</b>
                   </h3>
@@ -183,11 +189,18 @@ export function CategoryCarousel() {
                       src={currentCategory.image_url || '/images/placeholder.jpg'}
                       alt={currentCategory.label}
                       fill
-                      className="object-cover rounded-lg"
+                      className={`object-cover rounded-lg ${currentCategory.coming_soon ? 'grayscale' : ''}`}
                       sizes="280px"
                       priority={false}
                       quality={80}
                     />
+                    {currentCategory.coming_soon && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
+                        <div className="bg-white px-4 py-2 rounded-full shadow-lg">
+                          <span className="text-sm font-semibold text-secondary">{t('comingSoon')}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -234,29 +247,59 @@ export function CategoryCarousel() {
         >
           {categories.filter(category => category.slug).map(category => (
             <div key={category.id} className="min-w-[180px] snap-start">
-              <Link
-                href={`/categoria/${category.slug}`}
-                className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none"
-              >
-                <Card variant="interactive" className="w-[180px] h-[180px] flex-shrink-0">
-                  <CardContent className="p-4 space-y-3">
-                    <h3 className="text-md text-center font-medium truncate text-secondary">
-                      <b>{category.label}</b>
-                    </h3>
-                    <div className="relative h-[120px] w-full">
-                      <Image
-                        src={category.image_url || '/images/placeholder.jpg'}
-                        alt={category.label}
-                        fill
-                        className="object-cover rounded-lg"
-                        sizes="180px"
-                        priority={false}
-                        quality={80}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+              {category.coming_soon ? (
+                <div
+                  className={`block transition-transform focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none cursor-not-allowed opacity-60`}
+                >
+                  <Card variant="interactive" className="w-[180px] h-[180px] flex-shrink-0">
+                    <CardContent className="p-4 space-y-3 relative">
+                      <h3 className="text-md text-center font-medium truncate text-secondary">
+                        <b>{category.label}</b>
+                      </h3>
+                      <div className="relative h-[120px] w-full">
+                        <Image
+                          src={category.image_url || '/images/placeholder.jpg'}
+                          alt={category.label}
+                          fill
+                          className="object-cover rounded-lg grayscale"
+                          sizes="180px"
+                          priority={false}
+                          quality={80}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
+                          <div className="bg-white px-3 py-1.5 rounded-full shadow-lg">
+                            <span className="text-xs font-semibold text-secondary">{t('comingSoon')}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : (
+                <Link
+                  href={`/categoria/${category.slug}`}
+                  className="block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-light/20 rounded-xl motion-reduce:transition-none motion-reduce:hover:transform-none"
+                >
+                  <Card variant="interactive" className="w-[180px] h-[180px] flex-shrink-0">
+                    <CardContent className="p-4 space-y-3">
+                      <h3 className="text-md text-center font-medium truncate text-secondary">
+                        <b>{category.label}</b>
+                      </h3>
+                      <div className="relative h-[120px] w-full">
+                        <Image
+                          src={category.image_url || '/images/placeholder.jpg'}
+                          alt={category.label}
+                          fill
+                          className="object-cover rounded-lg"
+                          sizes="180px"
+                          priority={false}
+                          quality={80}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )}
             </div>
           ))}
         </div>

@@ -889,7 +889,7 @@ CREATE TABLE IF NOT EXISTS "public"."ProductSellContext" (
     "price" real NOT NULL,
     "link" "text" NOT NULL,
     "packaging" "uuid",
-    "validated" boolean DEFAULT false NOT NULL
+    "validated" boolean DEFAULT NULL
 );
 
 

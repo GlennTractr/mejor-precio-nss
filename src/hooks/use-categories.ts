@@ -9,6 +9,7 @@ export interface Category {
   label: string;
   slug?: string;
   image_url?: string;
+  coming_soon?: boolean;
 }
 
 async function getCategories(countryId: string): Promise<Category[]> {
@@ -30,6 +31,7 @@ async function getCategories(countryId: string): Promise<Category[]> {
           id: category.id,
           label: category.label,
           slug: category.slug,
+          coming_soon: category.coming_soon,
           image_url:
             category.image_bucket && category.image_path
               ? await supabase.storage.from(category.image_bucket).getPublicUrl(category.image_path)

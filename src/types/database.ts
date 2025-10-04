@@ -1073,7 +1073,7 @@ export type Database = {
           packaging: string | null;
           price: number;
           shop: string;
-          validated: boolean;
+          validated?: boolean;
         };
         Insert: {
           created_at?: string;
