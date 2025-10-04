@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS "matching"."ProcessIntentAIUsage" (
     time INTEGER NOT NULL DEFAULT 0, -- Time in milliseconds
     
     CONSTRAINT processintentaiusage_type_check 
-    CHECK (type IN ('langchain', 'langgraph', 'openai', 'anthropic', 'other')),
+    CHECK (type IN ('langchain', 'langgraph', 'openai', 'anthropic', 'other', 'without-ai')),
     CONSTRAINT processintentaiusage_tokens_check 
     CHECK (prompt_tokens >= 0 AND completion_tokens >= 0 AND total_tokens >= 0),
     CONSTRAINT processintentaiusage_cost_check 

@@ -216,14 +216,12 @@ INSERT INTO "matching"."CategoryPrompt" ("category", "ai_price_context", "ai_qua
 INSERT INTO "matching"."QuantityTypePrompt" ("quantity_type", "ai_quantity_context") VALUES 
 ('990e8400-e29b-41d4-a716-446655440001', 'Para unidades: Buscar cantidades numéricas simples. Normalmente las carriolas se venden de una en una. Conversiones: "1 carriola" = 1 unidad, "pieza" = 1 unidad, "kit completo" = 1 unidad. Términos: "unidad", "pieza", "carriola", "set", "kit". Ejemplos: "1 carriola" → 1 unidad, "kit de viaje" → 1 unidad.');
 
--- Insert ProductSpecsPrompt data for AI specs context (language-specific)
--- Spanish ProductSpecs (Mexico)
-INSERT INTO "matching"."ProductSpecsPrompt" ("product_spec", "ai_specs_context") VALUES 
-('s1e04c0c-69d3-4225-8b72-b88166f81209', 'Carriola estándar para uso diario y paseos urbanos. Buscar indicadores: "estándar", "urbana", "paseo", "diario", "city", "ciudad". Términos comunes: "para ciudad", "uso diario", "estándar", "básica".'),
-('s2ff8811-a780-4e24-ad72-dcc593b39bdc', 'Carriola jogger para actividades deportivas y terrenos irregulares. Buscar indicadores: "jogger", "deportiva", "running", "correr", "terreno", "todo terreno", "3 ruedas". Términos comunes: "para correr", "jogger", "deportiva", "off-road".'),
-('s3bd61ae-dea5-4cfa-81ff-541641b46ad1', 'Sistema de viaje con asiento de auto incluido. Buscar indicadores: "sistema de viaje", "travel system", "con asiento", "car seat", "desde nacimiento", "4 en 1", "completo". Términos comunes: "sistema completo", "con car seat", "travel system".'),
-('s4166304-cf09-477d-ac3a-c75cad11f20f', 'Carriola tipo paraguas, ligera y compacta. Buscar indicadores: "paraguas", "umbrella", "ligera", "compacta", "plegable", "viaje", "portátil". Términos comunes: "umbrella", "ligera", "compacta", "fácil plegado".'),
-('s5277415-ea1a-588e-bd4b-d86dbe22e310', 'Carriola doble para gemelos o hermanos. Buscar indicadores: "doble", "gemelar", "twins", "hermanos", "2 niños", "side by side", "tándem". Términos comunes: "doble", "gemelar", "para dos".');
+-- Insert ProductSpecsPrompt data for AI specs context (category+type combinations)
+-- Generic prompts for all spec values of each type within a category
+
+-- Spanish/Mexico Carriolas (category: c1bb06cd-b954-498b-a45e-770900f29466)
+INSERT INTO "matching"."ProductSpecsPrompt" ("category", "type", "ai_specs_context") VALUES
+('c1bb06cd-b954-498b-a45e-770900f29466', 'type', 'Carriolas por tipo según uso y características. Buscar indicadores: "Estándar/Urbana/City" (uso diario en ciudad), "Jogger/Deportiva/Running" (actividades deportivas, todo terreno, 3 ruedas), "Sistema de Viaje/Travel System" (con asiento de auto, car seat, desde nacimiento, 4 en 1), "Paraguas/Umbrella" (ligera, compacta, plegable, portátil para viajes), "Doble/Gemelar/Twins" (para gemelos, hermanos, 2 niños, side by side, tándem). Términos clave: tipo, estándar, jogger, sistema, paraguas, doble, ligera, deportiva.');
 
 
 -- ProductRules for Carriolas category (Mexico only)

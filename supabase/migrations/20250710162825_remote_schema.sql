@@ -805,7 +805,8 @@ CREATE TABLE IF NOT EXISTS "public"."Product" (
     "type" "public"."packaging_type" NOT NULL,
     "price_variation" double precision DEFAULT '0'::double precision NOT NULL,
     "image" "uuid" NOT NULL,
-    "model" "uuid" NOT NULL
+    "model" "uuid" NOT NULL,
+    "validated" boolean DEFAULT false NOT NULL
 );
 
 
@@ -839,7 +840,8 @@ CREATE TABLE IF NOT EXISTS "public"."ProductCategory" (
     "image_bucket" "text",
     "image_path" "text",
     "country" "text" NOT NULL,
-    "description" "text"
+    "description" "text",
+    "coming_soon" boolean DEFAULT false NOT NULL
 );
 
 
@@ -886,7 +888,8 @@ CREATE TABLE IF NOT EXISTS "public"."ProductSellContext" (
     "shop" "uuid" NOT NULL,
     "price" real NOT NULL,
     "link" "text" NOT NULL,
-    "packaging" "uuid"
+    "packaging" "uuid",
+    "validated" boolean DEFAULT false NOT NULL
 );
 
 

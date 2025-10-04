@@ -363,7 +363,9 @@ from
       left join "public"."ProductCategory" "pc" on ("pc"."id" = "pm"."category")
       left join "public"."Country" "c" on ("pc"."country" = "c"."id")
       left join "public"."File" "f" on ("f"."id" = "p"."image")
-      left join "public"."QuantityType" "qt" on ("qt"."id" = "pc"."quantity_type")
+      left join "public"."QuantityType" "qt" on ("qt"."id" = "pc"."quantity_type"
+      )
+    WHERE "pc"."coming_soon" = false
     group by
       "pv"."id",
       "pv"."best_price_per_unit",

@@ -165,13 +165,12 @@ INSERT INTO "matching"."CategoryPrompt" ("category", "ai_price_context", "ai_qua
 INSERT INTO "matching"."QuantityTypePrompt" ("quantity_type", "ai_quantity_context") VALUES 
 ('880e8400-e29b-41d4-a716-446655440001', 'Para peso en kg: Buscar cantidades en gramos o kilogramos. IMPORTANTE: Convertir siempre a kg. Conversiones: 500g = 0.5kg, 800g = 0.8kg, 1200g = 1.2kg. Términos: "gramos", "g", "kilogramos", "kg". Ejemplos: "400 gramos" → 0.4kg, "1.5 kg" → 1.5kg, "900g" → 0.9kg.');
 
--- Insert ProductSpecsPrompt data for AI specs context (language-specific)
--- Spanish ProductSpecs (Mexico)
-INSERT INTO "matching"."ProductSpecsPrompt" ("product_spec", "ai_specs_context") VALUES 
-('b1e04c0c-69d3-4225-8b72-b88166f81209', 'Fórmula Etapa 1 para recién nacidos 0-6 meses. Buscar indicadores de edad: "0-6 meses", "recién nacido", "primera etapa", "stage 1", "etapa 1". Términos comunes: "para recién nacidos", "0-6m", "primera fórmula", "inicio".'),
-('b2ff8811-a780-4e24-ad72-dcc593b39bdc', 'Fórmula Etapa 2 para bebés 6-12 meses. Buscar indicadores de edad: "6-12 meses", "continuación", "segunda etapa", "stage 2", "etapa 2". Términos comunes: "continuación", "6-12m", "segunda fórmula".'),
-('b3bd61ae-dea5-4cfa-81ff-541641b46ad1', 'Fórmula Etapa 3 para niños 12+ meses. Buscar indicadores de edad: "12+ meses", "crecimiento", "tercera etapa", "stage 3", "etapa 3". Términos comunes: "crecimiento", "12m+", "tercera fórmula", "transición".'),
-('b4166304-cf09-477d-ac3a-c75cad11f20f', 'Fórmula especial sin etapa específica. Buscar indicadores: "sin lactosa", "soya", "AR", "especializada", "hipoalergénica". Términos: "especial", "sin lactosa", "soya", "antirreflujo".');
+-- Insert ProductSpecsPrompt data for AI specs context (category+type combinations)
+-- Generic prompts for all spec values of each type within a category
+
+-- Spanish/Mexico Formula Infantil (category: f1bb06cd-b954-498b-a45e-770900f29466)
+INSERT INTO "matching"."ProductSpecsPrompt" ("category", "type", "ai_specs_context") VALUES
+('f1bb06cd-b954-498b-a45e-770900f29466', 'step', 'Fórmula infantil por etapa según edad del bebé. Buscar indicadores: "Etapa 1/Stage 1" (recién nacidos 0-6 meses, primera etapa, inicio), "Etapa 2/Stage 2" (bebés 6-12 meses, continuación, segunda fórmula), "Etapa 3/Stage 3" (niños 12+ meses, crecimiento, tercera fórmula, transición), "Sin Etapa/Especializada" (sin lactosa, soya, AR, hipoalergénica, antirreflujo). Términos clave: etapa, stage, meses, edad, 0-6m, 6-12m, 12m+, continuación, crecimiento, especializada.');
 
 
 -- ProductRules for Formula category (Mexico only)

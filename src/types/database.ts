@@ -108,7 +108,7 @@ export type Database = {
           confidence: number;
           created_at: string | null;
           id: string;
-          spec: string;
+          spec: string | null;
           type: string;
         };
         Insert: {
@@ -116,7 +116,7 @@ export type Database = {
           confidence?: number;
           created_at?: string | null;
           id?: string;
-          spec: string;
+          spec?: string | null;
           type: string;
         };
         Update: {
@@ -124,7 +124,7 @@ export type Database = {
           confidence?: number;
           created_at?: string | null;
           id?: string;
-          spec?: string;
+          spec?: string | null;
           type?: string;
         };
         Relationships: [
@@ -257,6 +257,7 @@ export type Database = {
           process_intent: string;
           status: string;
           title: string | null;
+          type: string | null;
           updated_at: string | null;
           url: string | null;
         };
@@ -272,6 +273,7 @@ export type Database = {
           process_intent: string;
           status?: string;
           title?: string | null;
+          type?: string | null;
           updated_at?: string | null;
           url?: string | null;
         };
@@ -287,6 +289,7 @@ export type Database = {
           process_intent?: string;
           status?: string;
           title?: string | null;
+          type?: string | null;
           updated_at?: string | null;
           url?: string | null;
         };
@@ -302,41 +305,50 @@ export type Database = {
       };
       ProcessIntent: {
         Row: {
+          acquisition_enabled: boolean | null;
           created_at: string;
           domain: string;
           html: string;
           id: string;
+          mode: string | null;
           product_url: string | null;
           result: Json | null;
           source_type: string | null;
           source_url: string;
           status: string;
+          tracking_enabled: boolean | null;
           type: string | null;
           updated_at: string | null;
         };
         Insert: {
+          acquisition_enabled?: boolean | null;
           created_at?: string;
           domain: string;
           html: string;
           id?: string;
+          mode?: string | null;
           product_url?: string | null;
           result?: Json | null;
           source_type?: string | null;
           source_url: string;
           status?: string;
+          tracking_enabled?: boolean | null;
           type?: string | null;
           updated_at?: string | null;
         };
         Update: {
+          acquisition_enabled?: boolean | null;
           created_at?: string;
           domain?: string;
           html?: string;
           id?: string;
+          mode?: string | null;
           product_url?: string | null;
           result?: Json | null;
           source_type?: string | null;
           source_url?: string;
           status?: string;
+          tracking_enabled?: boolean | null;
           type?: string | null;
           updated_at?: string | null;
         };
@@ -431,23 +443,26 @@ export type Database = {
       ProductSpecsPrompt: {
         Row: {
           ai_specs_context: string;
+          category: string;
           created_at: string;
           id: string;
-          product_spec: string;
+          type: string;
           updated_at: string;
         };
         Insert: {
           ai_specs_context: string;
+          category: string;
           created_at?: string;
           id?: string;
-          product_spec: string;
+          type: string;
           updated_at?: string;
         };
         Update: {
           ai_specs_context?: string;
+          category?: string;
           created_at?: string;
           id?: string;
-          product_spec?: string;
+          type?: string;
           updated_at?: string;
         };
         Relationships: [];
@@ -714,6 +729,7 @@ export type Database = {
           slug: string;
           title: string;
           type: Database['public']['Enums']['packaging_type'];
+          validated: boolean;
         };
         Insert: {
           brand: string;
@@ -726,6 +742,7 @@ export type Database = {
           slug: string;
           title: string;
           type: Database['public']['Enums']['packaging_type'];
+          validated?: boolean;
         };
         Update: {
           brand?: string;
@@ -738,6 +755,7 @@ export type Database = {
           slug?: string;
           title?: string;
           type?: Database['public']['Enums']['packaging_type'];
+          validated?: boolean;
         };
         Relationships: [
           {
@@ -863,9 +881,10 @@ export type Database = {
       };
       ProductCategory: {
         Row: {
+          coming_soon: boolean;
           country: string;
           created_at: string;
-          description: string;
+          description: string | null;
           id: string;
           image_bucket: string | null;
           image_path: string | null;
@@ -874,9 +893,10 @@ export type Database = {
           slug: string;
         };
         Insert: {
+          coming_soon?: boolean;
           country: string;
           created_at?: string;
-          description: string;
+          description?: string | null;
           id?: string;
           image_bucket?: string | null;
           image_path?: string | null;
@@ -885,9 +905,10 @@ export type Database = {
           slug: string;
         };
         Update: {
+          coming_soon?: boolean;
           country?: string;
           created_at?: string;
-          description?: string;
+          description?: string | null;
           id?: string;
           image_bucket?: string | null;
           image_path?: string | null;
@@ -1052,6 +1073,7 @@ export type Database = {
           packaging: string | null;
           price: number;
           shop: string;
+          validated: boolean;
         };
         Insert: {
           created_at?: string;
@@ -1060,6 +1082,7 @@ export type Database = {
           packaging?: string | null;
           price: number;
           shop: string;
+          validated?: boolean;
         };
         Update: {
           created_at?: string;
@@ -1068,6 +1091,7 @@ export type Database = {
           packaging?: string | null;
           price?: number;
           shop?: string;
+          validated?: boolean;
         };
         Relationships: [
           {
@@ -1502,6 +1526,7 @@ export type Database = {
           normal_price_per_unit: number | null;
           price_list: number[] | null;
           product_slug: string | null;
+          quantity_type: string | null;
           shop_names: string[] | null;
           specs: Json | null;
           title: string | null;

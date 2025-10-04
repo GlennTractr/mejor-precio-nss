@@ -10,7 +10,7 @@ import { useCurrentUser } from '@/hooks/use-current-user';
 import { Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { SimilarProductsCarousel } from './similar-products-carousel';
 import { ProductVariants } from './product-variants';
 import { Button } from '../ui/button';
@@ -378,8 +378,8 @@ export function ProductPage({ productSlug }: ProductPageProps) {
   };
 
   if (loading) return <ProductPageSkeleton />;
-  if (error) return <div>{t('product.error', { message: error })}</div>;
-  if (!product) return <div>{t('product.notFound')}</div>;
+  if (error) return notFound();
+  if (!product) return notFound();
 
   // Calculate price range and best price per unit
   const pricePerUnitData =
