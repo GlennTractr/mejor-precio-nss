@@ -317,15 +317,28 @@ export function MainNav() {
               ) : (
                 <div className="space-y-1">
                   {categories?.map(category => (
-                    <Link
-                      key={category.id}
-                      href={`/categoria/${category.slug}`}
-                      className="flex items-center justify-between px-3 h-9 text-sm font-medium transition-colors hover:text-primary hover:bg-primary/10 rounded-md"
-                      onClick={() => setOpenCategories(false)}
-                    >
-                      <span className="text-primary/80">{category.label}</span>
-                      <ChevronRight className="h-4 w-4 text-primary/60" />
-                    </Link>
+                    category.coming_soon ? (
+                      <div
+                        key={category.id}
+                        className="flex items-center justify-between px-3 h-9 text-sm font-medium rounded-md opacity-60 cursor-not-allowed"
+                        aria-disabled="true"
+                      >
+                        <span className="text-primary/60">{category.label}</span>
+                        <span className="text-xs text-primary/70 bg-primary/10 px-2 py-0.5 rounded-full">
+                          {t('category.comingSoon')}
+                        </span>
+                      </div>
+                    ) : (
+                      <Link
+                        key={category.id}
+                        href={`/categoria/${category.slug}`}
+                        className="flex items-center justify-between px-3 h-9 text-sm font-medium transition-colors hover:text-primary hover:bg-primary/10 rounded-md"
+                        onClick={() => setOpenCategories(false)}
+                      >
+                        <span className="text-primary/80">{category.label}</span>
+                        <ChevronRight className="h-4 w-4 text-primary/60" />
+                      </Link>
+                    )
                   ))}
                 </div>
               )}

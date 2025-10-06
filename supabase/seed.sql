@@ -77,12 +77,14 @@ INSERT INTO "public"."ShopIdentifier" ("id", "shop", "domain") VALUES
 ('7', '192114b2-4c05-4a35-86dc-02c90327720a', 'mercadolibre.com.mx'),
 ('8', '192114b2-4c05-4a35-86dc-02c90327720a', 'listado.mercadolibre.com.mx'),
 ('9', '691a4aab-c095-4b3a-a547-df136e66ce25', 'amazon.com.mx'),
-('10', '9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'soriana.com');
+('10', '9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'soriana.com'),
+('11', '94b9d420-8c12-4b04-9699-a0bfa84649bf', 'despensa.bodegaaurrera.com.mx');
 
 
 -- Seed banned URLs
 INSERT INTO "matching"."BannedUrl" (shop, url) VALUES
-('691a4aab-c095-4b3a-a547-df136e66ce25', 'https://www.amazon.com.mx/sspa/click');
+('691a4aab-c095-4b3a-a547-df136e66ce25', 'https://www.amazon.com.mx/sspa/click'),
+('691a4aab-c095-4b3a-a547-df136e66ce25', 'https://www.amazon.com.mx/s');
 
 
 -- Update existing user to admin role

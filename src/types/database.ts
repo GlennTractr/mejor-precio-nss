@@ -1073,7 +1073,8 @@ export type Database = {
           packaging: string | null;
           price: number;
           shop: string;
-          validated?: boolean;
+          validated: boolean | null;
+          validated_description: string | null;
         };
         Insert: {
           created_at?: string;
@@ -1082,7 +1083,8 @@ export type Database = {
           packaging?: string | null;
           price: number;
           shop: string;
-          validated?: boolean;
+          validated?: boolean | null;
+          validated_description?: string | null;
         };
         Update: {
           created_at?: string;
@@ -1091,7 +1093,8 @@ export type Database = {
           packaging?: string | null;
           price?: number;
           shop?: string;
-          validated?: boolean;
+          validated?: boolean | null;
+          validated_description?: string | null;
         };
         Relationships: [
           {

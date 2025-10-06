@@ -806,7 +806,7 @@ CREATE TABLE IF NOT EXISTS "public"."Product" (
     "price_variation" double precision DEFAULT '0'::double precision NOT NULL,
     "image" "uuid" NOT NULL,
     "model" "uuid" NOT NULL,
-    "validated" boolean DEFAULT false NOT NULL
+    "validated" boolean DEFAULT NULL
 );
 
 
@@ -889,7 +889,8 @@ CREATE TABLE IF NOT EXISTS "public"."ProductSellContext" (
     "price" real NOT NULL,
     "link" "text" NOT NULL,
     "packaging" "uuid",
-    "validated" boolean DEFAULT NULL
+    "validated" boolean DEFAULT NULL,
+    "validated_description" "text" DEFAULT NULL
 );
 
 

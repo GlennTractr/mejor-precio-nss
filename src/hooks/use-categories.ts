@@ -18,7 +18,8 @@ async function getCategories(countryId: string): Promise<Category[]> {
     .from('ProductCategory')
     .select('*')
     .eq('country', countryId)
-    .order('label');
+    .order('coming_soon', { ascending: true })
+    .order('created_at', { ascending: true });
 
   if (error) {
     throw error;
