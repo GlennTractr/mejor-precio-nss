@@ -52,22 +52,32 @@ INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "cate
 ('a1a2c1e6-362c-4572-8575-ad865a081e77', NOW(), 'Expert Pro confort total', 'b1dcc1e6-362c-4572-8575-ad865a081e76', 'f1bb06cd-b954-498b-a45e-770900f29466'),
 ('a1a1c1e6-362c-4572-8575-ad865a081e7d', NOW(), 'Optimal Pro baja lactancia', 'b1dcc1e6-362c-4572-8575-ad865a081e76', 'f1bb06cd-b954-498b-a45e-770900f29466'),
 ('a1a3c1e6-362c-4572-8575-ad865a081e78', NOW(), 'Supreme Pro', 'b1dcc1e6-362c-4572-8575-ad865a081e76', 'f1bb06cd-b954-498b-a45e-770900f29466'),
-('a1b2c1e6-362c-4572-8575-ad865a081e86', NOW(), 'PreNan', 'b1dcc1e6-362c-4572-8575-ad865a081e76', 'f1bb06cd-b954-498b-a45e-770900f29466');
+-- New NAN models
+('a1a4c1e6-362c-4572-8575-ad865a081e79', NOW(), 'Expert Pro Soya', 'b1dcc1e6-362c-4572-8575-ad865a081e76', 'f1bb06cd-b954-498b-a45e-770900f29466'),
+('a1a5c1e6-362c-4572-8575-ad865a081e80', NOW(), 'Expert Pro sin lactosa', 'b1dcc1e6-362c-4572-8575-ad865a081e76', 'f1bb06cd-b954-498b-a45e-770900f29466'),
+('a1a6c1e6-362c-4572-8575-ad865a081e81', NOW(), 'Expert Pro AR', 'b1dcc1e6-362c-4572-8575-ad865a081e76', 'f1bb06cd-b954-498b-a45e-770900f29466'),
+('a1a7c1e6-362c-4572-8575-ad865a081e82', NOW(), 'Prebio', 'b1dcc1e6-362c-4572-8575-ad865a081e76', 'f1bb06cd-b954-498b-a45e-770900f29466');
 
--- Enfamil Models  
-INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "category") VALUES 
+-- Enfamil Models
+INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "category") VALUES
 ('a2a1c1e6-362c-4572-8575-ad865a081e90', NOW(), 'Premium', 'b2ad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'f1bb06cd-b954-498b-a45e-770900f29466'),
 ('a2a3c1e6-362c-4572-8575-ad865a081e92', NOW(), 'Sin Lactosa', 'b2ad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'f1bb06cd-b954-498b-a45e-770900f29466'),
 ('a2a6c1e6-362c-4572-8575-ad865a081e95', NOW(), 'Confort', 'b2ad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'f1bb06cd-b954-498b-a45e-770900f29466'),
 ('a2a6c1e6-362c-4572-8575-ad865a081e96', NOW(), 'Confort pro', 'b2ad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'f1bb06cd-b954-498b-a45e-770900f29466'),
-('a2a8c1e6-362c-4572-8575-ad865a081e97', NOW(), 'Enfacare - Prematuros', 'b2ad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'f1bb06cd-b954-498b-a45e-770900f29466');
+('a2a8c1e6-362c-4572-8575-ad865a081e97', NOW(), 'Enfacare - Prematuros', 'b2ad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'f1bb06cd-b954-498b-a45e-770900f29466'),
+-- New Enfamil models
+('a2a9c1e6-362c-4572-8575-ad865a081e98', NOW(), 'AR', 'b2ad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'f1bb06cd-b954-498b-a45e-770900f29466'),
+('a2aac1e6-362c-4572-8575-ad865a081e99', NOW(), 'Premacare', 'b2ad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'f1bb06cd-b954-498b-a45e-770900f29466');
 
 -- Similac Models
-INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "category") VALUES 
+INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "category") VALUES
 ('a3a1c1e6-362c-4572-8575-ad865a081e99', NOW(), 'Advance', 'b331009f-e566-4b1b-a2ba-ada18ed00f9e', 'f1bb06cd-b954-498b-a45e-770900f29466'),
 ('a3a3c1e6-362c-4572-8575-ad865a081ea1', NOW(), 'Sensitive', 'b331009f-e566-4b1b-a2ba-ada18ed00f9e', 'f1bb06cd-b954-498b-a45e-770900f29466'),
 ('a3a5c1e6-362c-4572-8575-ad865a081ea3', NOW(), 'Total Comfort', 'b331009f-e566-4b1b-a2ba-ada18ed00f9e', 'f1bb06cd-b954-498b-a45e-770900f29466'),
-('a3a8c1e6-362c-4572-8575-ad865a081ea6', NOW(), 'AR', 'b331009f-e566-4b1b-a2ba-ada18ed00f9e', 'f1bb06cd-b954-498b-a45e-770900f29466');
+('a3a8c1e6-362c-4572-8575-ad865a081ea6', NOW(), 'AR', 'b331009f-e566-4b1b-a2ba-ada18ed00f9e', 'f1bb06cd-b954-498b-a45e-770900f29466'),
+-- New Similac models
+('a3a9c1e6-362c-4572-8575-ad865a081ea7', NOW(), 'Isomil', 'b331009f-e566-4b1b-a2ba-ada18ed00f9e', 'f1bb06cd-b954-498b-a45e-770900f29466'),
+('a3aac1e6-362c-4572-8575-ad865a081ea8', NOW(), 'Arroz Advance', 'b331009f-e566-4b1b-a2ba-ada18ed00f9e', 'f1bb06cd-b954-498b-a45e-770900f29466');
 
 -- ==============================================================================
 -- PRODUCT SPECIFICATIONS FOR FORMULA

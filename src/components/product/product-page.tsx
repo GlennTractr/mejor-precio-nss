@@ -39,6 +39,10 @@ type ProductModel = {
   category: {
     label: string;
     slug: string;
+    quantity_type?: {
+      label: string;
+      unit_label: string;
+    };
   };
 };
 
@@ -226,7 +230,11 @@ export function ProductPage({ productSlug }: ProductPageProps) {
               ),
               category (
                 label,
-                slug
+                slug,
+                quantity_type (
+                  label,
+                  unit_label
+                )
               )
             ),
             image (
@@ -526,7 +534,7 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                     <td className="w-[90px] sm:w-1/4 py-2 px-1 sm:py-1 sm:px-2 inline-block align-middle">
                       <div className="flex flex-col items-center gap-1 h-12 sm:h-16 justify-center">
                         <span className="font-bold text-accent text-xs sm:text-sm text-center">
-                          {item.quantity} {t('product.units.unit', { count: item.quantity })}
+                          {item.quantity} {product.model?.category?.quantity_type?.label || 'unidades'}
                         </span>
                         {index === 0 && (
                           <div className="bg-primary text-secondary text-[10px] sm:text-xs font-bold px-1 sm:px-2 py-0.5 sm:py-1 rounded-full shadow-sm">
@@ -544,9 +552,8 @@ export function ProductPage({ productSlug }: ProductPageProps) {
                             ${item.price.toFixed(2)}
                           </div>
                           <div className="text-[10px] sm:text-xs text-primary-dark">
-                            {t('product.pricePerUnit', {
-                              price: item.pricePerUnit.toFixed(2),
-                            })}
+                            ${item.pricePerUnit.toFixed(2)}{' '}
+                            {product.model?.category?.quantity_type?.unit_label || 'por unidad'}
                           </div>
                         </div>
                       </div>

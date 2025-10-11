@@ -22,7 +22,7 @@ ADD COLUMN IF NOT EXISTS type TEXT DEFAULT NULL;
 -- Add check constraint for status values (V2 compatible)
 ALTER TABLE "matching"."ProcessIntent" 
 ADD CONSTRAINT processintent_status_check 
-CHECK (status IN ('waiting', 'to_process', 'queued', 'processing', 'in-progress', 'processed', 'success', 'failed', 'validated', 'unvalidated'));
+CHECK (status IN ('waiting', 'to_process', 'queued', 'processing', 'in-progress', 'processed', 'success', 'failed', 'validated', 'unvalidated', 'skipped'));
 
 -- Add check constraint for type values  
 ALTER TABLE "matching"."ProcessIntent" 

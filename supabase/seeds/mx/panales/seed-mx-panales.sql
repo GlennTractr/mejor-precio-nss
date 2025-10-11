@@ -45,7 +45,16 @@ INSERT INTO "public"."ProductModel" ("id", "created_at", "label", "brand", "cate
 ('6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c', '2024-11-17 05:05:00.000000+00', 'UltraSec', 'f1e5c4a8-9b2d-4c3e-8f7a-1a2b3c4d5e6f', 'a1bb06cd-b954-498b-a45e-770900f29466'),
 ('7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d', '2024-11-17 05:06:00.000000+00', 'FlexProtect', 'f1e5c4a8-9b2d-4c3e-8f7a-1a2b3c4d5e6f', 'a1bb06cd-b954-498b-a45e-770900f29466'),
 ('8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e', '2024-11-17 05:07:00.000000+00', 'Classic', '4bad11d0-8617-4ea9-8889-e6ddd4ed51b6', 'a1bb06cd-b954-498b-a45e-770900f29466'),
-('9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f', '2024-11-17 05:08:00.000000+00', 'Sensitive', '8bb603fd-cef0-4732-9790-82925b987f41', 'a1bb06cd-b954-498b-a45e-770900f29466');   
+('9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f', '2024-11-17 05:08:00.000000+00', 'Sensitive', '8bb603fd-cef0-4732-9790-82925b987f41', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+-- New Huggies models
+('0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a', '2024-11-17 05:09:00.000000+00', 'Little Snugglers', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b', '2024-11-17 05:10:00.000000+00', 'Little Movers', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c', '2024-11-17 05:11:00.000000+00', 'Skin Essentials', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+('3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d', '2024-11-17 05:12:00.000000+00', 'Supreme Platino', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+-- New Pampers models
+('4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e', '2024-11-17 05:13:00.000000+00', 'Swaddlers Overnights', '57d490e7-2bad-4bbd-8d6a-dcc1aa077af7', 'a1bb06cd-b954-498b-a45e-770900f29466'),
+-- Pull-Ups variant
+('5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f', '2024-11-17 05:14:00.000000+00', 'Pull-Ups Steps', '5631009f-e566-4b1b-a2ba-ada18ed00f9e', 'a1bb06cd-b954-498b-a45e-770900f29466');   
 
 
 
