@@ -724,6 +724,7 @@ export type Database = {
           description: string;
           id: string;
           image: string;
+          image_validated: boolean | null;
           model: string;
           price_variation: number;
           slug: string;
@@ -737,6 +738,7 @@ export type Database = {
           description: string;
           id?: string;
           image: string;
+          image_validated?: boolean | null;
           model: string;
           price_variation?: number;
           slug: string;
@@ -750,6 +752,7 @@ export type Database = {
           description?: string;
           id?: string;
           image?: string;
+          image_validated?: boolean | null;
           model?: string;
           price_variation?: number;
           slug?: string;
