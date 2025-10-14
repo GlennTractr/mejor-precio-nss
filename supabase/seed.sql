@@ -67,18 +67,18 @@ INSERT INTO "public"."Shop" ("id", "label", "img_url", "country") VALUES
 ('8f8fc18c-2afb-4838-b262-63d852225bed', 'SuperC', '/shop/superc.png', '440e8400-e29b-41d4-a716-446655440002'),
 ('9ee99dcd-c884-49e0-9a64-c7badd496884', 'Jean-Coutu', '/shop/jean.png', '440e8400-e29b-41d4-a716-446655440002');
 
-INSERT INTO "public"."ShopIdentifier" ("id", "shop", "domain") VALUES 
-('1', '94b9d420-8c12-4b04-9699-a0bfa84649bf', 'bodegaaurrera.com.mx'),
-('2', '86cc689f-f2a6-4350-b88c-60b9d80bf228', 'super.walmart.com.mx'),
-('3', '97610a47-57f5-46b4-882e-71df9b19f4a3', 'fahorro.com'),
-('4', 'f5eb82b7-3d56-45f2-af8a-30d9c6c42779', 'farmaciasguadalajara.com'),
-('5', 'b88cd8b0-bbf6-4226-ab94-fca45b41d02f', 'sams.com.mx'),
-('6', 'aa936c52-90b6-4010-8f4a-f4f368a871b0', 'chedraui.com.mx'),
-('7', '192114b2-4c05-4a35-86dc-02c90327720a', 'mercadolibre.com.mx'),
-('8', '192114b2-4c05-4a35-86dc-02c90327720a', 'listado.mercadolibre.com.mx'),
-('9', '691a4aab-c095-4b3a-a547-df136e66ce25', 'amazon.com.mx'),
-('10', '9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'soriana.com'),
-('11', '94b9d420-8c12-4b04-9699-a0bfa84649bf', 'despensa.bodegaaurrera.com.mx');
+INSERT INTO "public"."ShopIdentifier" ("shop", "domain") VALUES 
+('94b9d420-8c12-4b04-9699-a0bfa84649bf', 'bodegaaurrera.com.mx'),
+('86cc689f-f2a6-4350-b88c-60b9d80bf228', 'super.walmart.com.mx'),
+('97610a47-57f5-46b4-882e-71df9b19f4a3', 'fahorro.com'),
+('f5eb82b7-3d56-45f2-af8a-30d9c6c42779', 'farmaciasguadalajara.com'),
+('b88cd8b0-bbf6-4226-ab94-fca45b41d02f', 'sams.com.mx'),
+('aa936c52-90b6-4010-8f4a-f4f368a871b0', 'chedraui.com.mx'),
+('192114b2-4c05-4a35-86dc-02c90327720a', 'mercadolibre.com.mx'),
+('192114b2-4c05-4a35-86dc-02c90327720a', 'listado.mercadolibre.com.mx'),
+('691a4aab-c095-4b3a-a547-df136e66ce25', 'amazon.com.mx'),
+('9f7fabe7-acca-40b5-a010-bfb2c5f22434', 'soriana.com'),
+('94b9d420-8c12-4b04-9699-a0bfa84649bf', 'despensa.bodegaaurrera.com.mx');
 
 
 -- Seed banned URLs
